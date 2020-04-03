@@ -1,4 +1,4 @@
-# vue-admin-template
+# 后台管理
 
 ## Build Setup
 
@@ -8,10 +8,10 @@
 npm install
 
 # develop
-npm run dev
+npm run serve
 ```
 
-This will automatically open http://localhost:7002
+This will automatically open http://localhost:9528
 
 ## Build
 
