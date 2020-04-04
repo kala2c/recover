@@ -3,10 +3,7 @@
 
 namespace app\admin\controller;
 
-
-use think\Controller;
-
-class User extends Controller
+class User extends Base
 {
     public function info() {
         return success([

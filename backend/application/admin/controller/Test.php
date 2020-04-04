@@ -4,9 +4,13 @@
 namespace app\admin\controller;
 
 
-class Test extends Base
+use app\common\error\ErrorCode;
+use app\common\exception\ApiException;
+use think\Controller;
+
+class Test extends Controller
 {
     public function test() {
-
+        throw new ApiException(ErrorCode::OK);
     }
 }
