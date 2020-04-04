@@ -16,8 +16,8 @@
               主页
             </el-dropdown-item>
           </router-link>
-          <a target="_blank" href="">
-            <el-dropdown-item>可以放链接</el-dropdown-item>
+          <a href="">
+            <el-dropdown-item>账号管理</el-dropdown-item>
           </a>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">退出登录</span>
