@@ -52,16 +52,16 @@ service.interceptors.response.use(
   response => {
     const res = response.data
 
-    // if the custom code is not 200, it is judged as an error.
-    if (res.code !== 200) {
+    // if the custom code is not 10000, it is judged as an error.
+    if (res.code !== 10000) {
       Message({
         message: res.message || 'Error',
         type: 'error',
         duration: 5 * 1000
       })
 
-      // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
+      // 10006: Unauthorized; 10008: Other clients logged in; 10005: Login expired;
+      if (res.code === 10006 || res.code === 10008 || res.code === 10005) {
         // to re-login
         MessageBox.confirm('您的登录已过期，请取消停留在此页面或者重新登录', '退出登录', {
           confirmButtonText: '重新登录',

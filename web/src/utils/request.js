@@ -50,8 +50,8 @@ service.interceptors.response.use(
   response => {
     const res = response.data
 
-    // if the custom code is not 200, it is judged as an error.
-    if (res.code !== 200) {
+    // if the custom code is not 10000, it is judged as an error.
+    if (res.code !== 10000) {
       const defaultMessage = '服务器忙 稍后再试'
       const message = res.data ? res.data.message || defaultMessage : defaultMessage
       Dialog.alert({

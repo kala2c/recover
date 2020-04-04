@@ -13,6 +13,7 @@ class ErrorCode
     const LOGIN_EXPIRED = 10005;
     const UNAUTHORIZED = 10006;
     const TIME_OUT = 10007;
+//    const = 1008; 单点登录
 
     /*************DB 操作错误代码**************/
     const LOST_CONNECT = 20000;
