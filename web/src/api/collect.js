@@ -1,7 +1,7 @@
 // import store from '../store'
 import request from '@/utils/request'
 
-const testApi = (params, data) => request({
+const submitOrder = (params, data) => request({
   url: '/index/test/test',
   method: 'post',
   params,
@@ -9,5 +9,5 @@ const testApi = (params, data) => request({
 })
 
 export default {
-  testApi
+  submitOrder
 }

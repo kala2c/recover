@@ -1,40 +1,20 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+import collect from '@/router/collect'
+import pick from '@/router/pick'
+
 Vue.use(VueRouter)
 
-// const viewsPath = '../views/'
-
-const routes = [
+// 公共路由
+const BaseRoutes = [
   {
     path: '/',
-    component: () => import('../views/home')
-  },
-  {
-    path: '/subscribe',
-    component: () => import('../views/subscribe')
-  },
-  {
-    path: '/order',
-    component: () => import('../views/order')
-  },
-  {
-    path: '/user',
-    component: () => import('../views/user/index')
-  },
-  {
-    path: '/about',
-    component: () => import('../views/user/about')
-  },
-  {
-    path: '/concat',
-    component: () => import('../views/user/concat')
-  },
-  {
-    path: '/feedback',
-    component: () => import('../views/user/feedback')
+    component: () => import('@/views/home')
   }
 ]
+
+const routes = BaseRoutes.concat(collect, pick)
 
 const router = new VueRouter({
   mode: 'history',

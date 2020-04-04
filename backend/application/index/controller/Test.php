@@ -9,7 +9,6 @@ use think\Controller;
 class Test extends Controller
 {
     public function test() {
-        dump($this->request->post());
-        return 'test';
+        return success(array_merge($this->request->get(), $this->request->post()));
     }
 }

@@ -1,22 +1,22 @@
 <template>
   <div class="foot-bar">
     <div class="foot-bar-item" :class="{active: 0 === active}">
-      <router-link class="link" to="/">
+      <router-link class="link" to="/collect">
         <van-icon name="wap-home" />
       </router-link>
     </div>
     <div class="foot-bar-item" :class="{active: 1 === active}">
-      <router-link class="link" to="/shop">
+      <router-link class="link" to="/collect/shop">
         <van-icon name="shop" />
       </router-link>
     </div>
     <div class="foot-bar-item" :class="{active: 2 === active}">
-      <router-link class="link" to="/order">
+      <router-link class="link" to="/collect/order">
         <van-icon name="label" />
       </router-link>
     </div>
     <div class="foot-bar-item" :class="{active: 3 === active}">
-      <router-link class="link" to="/user">
+      <router-link class="link" to="/collect/user">
         <van-icon name="manager" />
       </router-link>
     </div>

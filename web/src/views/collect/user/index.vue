@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import FootBar from '@/components/FootBar'
+import FootBar from '@/views/collect/components/FootBar'
 export default {
   components: {
     FootBar
