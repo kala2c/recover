@@ -7,7 +7,7 @@ namespace app\web\controller;
 use app\common\exception\ApiException;
 use think\exception\ValidateException;
 use think\facade\Validate;
-
+use app\common\model\OrderMaster as OrderMasterModel;
 class Orders extends Base
 {
     public function create()
@@ -47,8 +47,7 @@ class Orders extends Base
             throw new ValidateException($validate->getError());
         }
         $map = ['type' => $param['type']];
-        $orderList = OrderMasterModel::pageUtils();
-
+//        $orderList = OrderMasterModel::pageUtil()->select();
         return success();
     }
 }

@@ -4,9 +4,9 @@
 namespace app\common\model;
 
 
-use think\Model;
+use app\common\BaseModel;
 
-class Base extends Model
+class Base extends BaseModel
 {
     /**
      * 为数据添加时间戳字段
