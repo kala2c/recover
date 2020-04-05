@@ -29,6 +29,8 @@ user：用户信息表
 
 waste：废品信息表
 
+order：订单信息表
+
 config：系统配置
 
 ------
@@ -98,6 +100,34 @@ price:（decimal（10,2））废品的单位价格
 unit：（varchar）废品的单位：斤，个
 
 note：（varchar）备注
+
+
+
+##### order：订单信息表
+
+id:
+
+orderid：用于展示的18位订单号
+
+userid:用户id
+
+wasteid:废品id
+
+createtime：订单创建时间
+
+pickmanid:取货员id
+
+picktime:取货时间
+
+wastenumber：废品的数量（）
+
+wasteprice：废品的单价
+
+discountsmoney：优惠价格
+
+dealmoney:最终成交价格
+
+
 
 
 
