@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 
+use app\admin\model\Administrator;
 use Firebase\JWT\JWT;
 use think\Controller;
 use think\Db;
@@ -19,7 +20,7 @@ class Login extends Controller
     {
         $username = Request::param('username');
         $password = Request::param('password');
-        $query = DB::table('admin')->where("username='$username' and password='$password'")->find();
+        $query = Administrator::where("username='$username' and password='$password'")->find();
         if ($query) {
             $payload = [
                 'uid' => $query['id']
