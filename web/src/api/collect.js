@@ -8,6 +8,13 @@ const submitOrder = (params, data) => request({
   data
 })
 
+const submitFeedback = (data) => request({
+  url: '/collect/feedback',
+  method: 'post',
+  data
+})
+
 export default {
-  submitOrder
+  submitOrder,
+  submitFeedback
 }

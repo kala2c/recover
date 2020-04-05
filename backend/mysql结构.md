@@ -19,7 +19,7 @@
 
 ### 数据库设计
 
-数据库目前有4个表：
+数据库目前有7个表：
 
 admin：管理员信息表
 
@@ -29,9 +29,11 @@ user：用户信息表
 
 waste：废品信息表
 
-order：订单信息表
+order_master：订单信息表
 
 config：系统配置
+
+feedback: 用户反馈
 
 ------
 
@@ -103,32 +105,52 @@ note：（varchar）备注
 
 
 
-##### order：订单信息表
+##### order_master：订单信息表
 
 id:
 
-orderid：用于展示的18位订单号
+order_no：用于展示的18位订单号
 
-userid:用户id
+user_id:用户id
 
-wasteid:废品id
+waste_id:废品id
 
-createtime：订单创建时间
+pickman_id:取货员id
 
-pickmanid:取货员id
+pick_time: 取货时间
 
-picktime:取货时间
+pick_fast: 尽快上门 此时不需要取货时间
 
-wastenumber：废品的数量（）
+waste_number：废品的数量（）
 
-wasteprice：废品的单价
+waste_price：废品的单价
 
-discountsmoney：优惠价格
+discounts_money：优惠价格
 
-dealmoney:最终成交价格
+deal_money:最终成交价格
+
+status: 状态 待处理、服务中、已完成、已取消等
+
+create_time：订单创建时间
+
+update_time：订单修改时间
 
 
+##### feedback: 反馈信息
 
+id: 
+
+user_id: 用户id null表示游客提交（如果有游客）
+
+phone: 联系方式
+
+message：反馈信息
+
+status：状态 （标记已处理、忽略等）
+
+create_time: 创建时间 
+ 
+update_time: 修改时间
 
 
 ##### config：系统配置

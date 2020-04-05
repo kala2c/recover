@@ -17,7 +17,7 @@
         placeholder="请输入您的问题或意见"
       />
       <div class="submit-wrap">
-        <van-button class="submit-btn" round block type="info" native-type="submit">
+        <van-button class="submit-btn" :disabled="disableButton" round block type="info" native-type="submit">
           提交
         </van-button>
       </div>
@@ -26,7 +26,8 @@
 </template>
 
 <script>
-import { Form, Field, Button } from 'vant'
+import { Form, Field, Button, Toast } from 'vant'
+import collectApi from '@/api/collect'
 export default {
   components: {
     VanForm: Form,
@@ -36,12 +37,26 @@ export default {
   data() {
     return {
       phone: '',
-      message: ''
+      message: '',
+      disableButton: false
     }
   },
   methods: {
     onSubmit() {
-      console.log('submit!')
+      const that = this
+      that.disableButton = true
+      collectApi.submitFeedback({
+        phone: this.phone,
+        message: this.message
+      }).then(response => {
+        Toast(response.message)
+        setTimeout(function() {
+          that.$router.push('/collect/user')
+          this.disableButton = false
+        }, 1500)
+      }).catch(() => {
+        this.disableButton = false
+      })
     }
   }
 }

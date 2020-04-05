@@ -26,6 +26,10 @@ class ErrorCode
     const UPDATE_USER_RECORD_FAILED = 30003;
     const GET_USER_INFO_EMPTY = 30004;
 
+    /*************Feedback 错误代码**********/
+    const INSERT_FEEDBACK_FAILED = 40001;
+
+
     // -----------------------error_message分割线-----------------------------------
 
     static $ERROR_MSG = [
@@ -44,5 +48,6 @@ class ErrorCode
         self::UPDATE_USER_RECORD_FAILED => '更新用户信息失败',
         self::GET_USER_INFO_EMPTY => '未找到该用户信息',
 
+        self::INSERT_FEEDBACK_FAILED => '保存反馈信息失败'
     ];
 }
