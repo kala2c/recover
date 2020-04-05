@@ -1,24 +1,14 @@
 <template>
   <div class="foot-bar">
-    <div class="foot-bar-item" :class="{active: 0 === active}">
-      <router-link class="link" to="/collect">
-        <van-icon name="wap-home" />
+    <div
+      v-for="item in tabList"
+      :key="item.id"
+      class="foot-bar-item"
+      :class="{active: $route.path === item.path}">
+      <router-link class="link" :to="item.path">
+        <van-icon :name="item.icon" />
       </router-link>
-    </div>
-    <div class="foot-bar-item" :class="{active: 1 === active}">
-      <router-link class="link" to="/collect/shop">
-        <van-icon name="shop" />
-      </router-link>
-    </div>
-    <div class="foot-bar-item" :class="{active: 2 === active}">
-      <router-link class="link" to="/collect/order">
-        <van-icon name="label" />
-      </router-link>
-    </div>
-    <div class="foot-bar-item" :class="{active: 3 === active}">
-      <router-link class="link" to="/collect/user">
-        <van-icon name="manager" />
-      </router-link>
+      <p class="text">{{item.name}}</p>
     </div>
   </div>
 </template>
@@ -26,14 +16,33 @@
 <script>
 import { Icon } from 'vant'
 export default {
-  props: {
-    active: {
-      type: Number,
-      default: 0
-    }
-  },
   components: {
     VanIcon: Icon
+  },
+  data() {
+    return {
+      tabList: [{
+        id: 1,
+        name: '首页',
+        icon: 'wap-home',
+        path: '/collect'
+      }, {
+        id: 2,
+        name: '积分商城',
+        icon: 'shop',
+        path: '/collect/shop'
+      }, {
+        id: 3,
+        name: '我的订单',
+        icon: 'label',
+        path: '/collect/order'
+      }, {
+        id: 4,
+        name: '个人中心',
+        icon: 'manager',
+        path: '/collect/user'
+      }]
+    }
   }
 }
 </script>
@@ -42,20 +51,21 @@ export default {
 .foot-bar {
   display: flex;
   position: absolute;
-  left: 5%;
-  bottom: 10px;
+  // left: 5%;
+  bottom: 0;
   box-sizing: border-box;
-  width: 90%;
-  height: 40px;
-  padding: 0 20px;
-  border-radius: 20px;
+  width: 100%;
+  height: 50px;
+  // padding: 0 20px;
+  // border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.8);
   .foot-bar-item {
     width: 25%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
+    // align-items: center;
     .link {
       display: flex;
       justify-content: center;
@@ -64,9 +74,13 @@ export default {
       color: #000;
     }
     &.active {
-      .link {
+      .link, .text {
         color: #59c261;
       }
+    }
+    .text {
+      text-align: center;
+      font-size: 12px;
     }
   }
 }

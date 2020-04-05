@@ -31,8 +31,12 @@ const routes = [
     component: () => import('@/views/collect/user/concat')
   },
   {
-    path: '/collect/feedback',
+    path: '/collect/user/feedback',
     component: () => import('@/views/collect/user/feedback')
+  },
+  {
+    path: '/collect/user/address',
+    component: () => import('@/views/collect/user/address')
   }
 ]
 

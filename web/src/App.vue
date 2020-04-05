@@ -21,7 +21,7 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  background-color: #f6f6f6;
+  background-color: #f8f9f9;
   height: 100%;
   overflow: auto;
 }

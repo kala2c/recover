@@ -18,12 +18,15 @@ require __DIR__ . '/../thinkphp/base.php';
 // 支持事先使用静态方法设置Request对象和Config对象
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Allow-Methods: POST, GET, PATCH, DELETE, PUT');
+//header('Access-Control-Allow-Methods: POST, GET, PATCH, DELETE, PUT');
+header('Access-Control-Allow-Methods: *');
 header('Access-Control-Max-Age: 3600');
-header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization');
+//header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization');
+header('Access-Control-Allow-Headers: *');
 
-if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
-    http_response_code(200);
+if ($_SERVER["REQUEST_METHOD"] == "OPTIONS") {
+    http_response_code(204);
+    exit;
 }
 
 // 执行应用并响应

@@ -1,7 +1,7 @@
 <template>
   <div class="shop">
     <p>该功能暂未上线，敬请期待！</p>
-    <foot-bar :active="1"></foot-bar>
+    <foot-bar></foot-bar>
   </div>
 </template>
 
