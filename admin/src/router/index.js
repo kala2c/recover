@@ -56,17 +56,17 @@ export const constantRoutes = [
   },
 
   {
-    path: '/example',
+    path: '/waste',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: '例子', icon: 'example' },
+    redirect: '/waste/index',
+    name: 'Waste',
+    meta: { title: '废品管理', icon: 'example' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: '表格', icon: 'table' }
+        path: 'index',
+        name: 'index',
+        component: () => import('@/views/waste/index'),
+        meta: { title: '废品管理', icon: 'table' }
       },
       {
         path: 'tree',
@@ -85,7 +85,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Form',
         component: () => import('@/views/form/index'),
-        meta: { title: '表单', icon: 'form' }
+        meta: { title: '订单管理', icon: 'form' }
       }
     ]
   },
