@@ -28,9 +28,9 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="200px">
-          <template slot-scope>
+          <template slot-scope="scope">
             <!-- 修改按钮 -->
-            <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
+            <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row.id)"></el-button>
             <!-- 删除按钮 -->
             <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
             <!-- 分配角色按钮 -->
@@ -46,7 +46,7 @@
       </el-pagination>
     </el-card>
 
-    <!-- 添加用户的对话框 -->
+    <!-- 添加废品的对话框 -->
     <el-dialog title="添加废品" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
       <!-- 内容主体区域 -->
       <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="70px">
@@ -68,6 +68,30 @@
         <el-button @click="addDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="addUser">确 定</el-button>
       </span>
+    </el-dialog>
+    <!-- 修改废品的对话框-->
+    <el-dialog
+      title="修改废品信息"
+      :visible.sync="editDialogVisible"
+      width="40%">
+      <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="70px">
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="editForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="图片" prop="image">
+          <el-input v-model="editForm.image"></el-input>
+        </el-form-item>
+        <el-form-item label="单位" prop="unit">
+          <el-input v-model="editForm.unit"></el-input>
+        </el-form-item>
+        <el-form-item label="价格" prop="price">
+          <el-input v-model="editForm.price"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="editDialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="editWasteInfo">确 定</el-button>
+  </span>
     </el-dialog>
   </div>
 </template>
@@ -112,8 +136,10 @@ export default {
       },
       wastelist: [],
       total: 0,
-      // 控制添加用户对话框的显示与隐藏
+      // 控制添加废品对话框的显示与隐藏
       addDialogVisible: false,
+      // 控制修改废品信息对话框的显示与隐藏
+      editDialogVisible: false,
       // 添加用户的表单数据
       addForm: {
         username: '',
@@ -121,6 +147,7 @@ export default {
         email: '',
         mobile: ''
       },
+      editForm: {},
       // 添加表单的验证规则对象
       addFormRules: {
         username: [
@@ -148,6 +175,18 @@ export default {
         mobile: [
           { required: true, message: '请输入手机号', trigger: 'blur' },
           { validator: checkMobile, trigger: 'blur' }
+        ]
+      },
+      // 修改废品表单的验证规则
+      editFormRules: {
+        name: [
+          { required: true, message: '请输入废品名称', trigger: 'blur' }
+        ],
+        price: [
+          { required: true, message: '请输入废品单价', trigger: 'blur' }
+        ],
+        unit: [
+          { required: true, message: '请输入废品单位', trigger: 'blur' }
         ]
       }
     }
@@ -210,6 +249,24 @@ export default {
         // 重新获取用户列表数据
         this.getWasteList()
       })
+    },
+    // 修改废品信息
+    async showEditDialog(id) {
+      var query = { 'id': id }
+      const data = await wasteApi.getWasteInfo(query)
+      if (data.code !== 10000) {
+        this.$message.error('添加废品失败！')
+      }
+      this.editForm = data.data.wasteinfo
+      this.editDialogVisible = true
+    },
+    async editWasteInfo() {
+      const data = await wasteApi.setWasetInfo(this.editForm)
+      if (data.code !== 10000) {
+        this.$message.error('修改废品信息失败！')
+      }
+      this.getWasteList()
+      this.editDialogVisible = false
     }
   }
 }

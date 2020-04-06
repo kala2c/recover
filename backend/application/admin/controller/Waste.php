@@ -2,6 +2,7 @@
 
 namespace app\admin\controller;
 
+use Cassandra\Float_;
 use think\Controller;
 use think\facade\Request;
 use app\common\exception\ApiException;
@@ -13,7 +14,7 @@ class Waste extends Controller
 {
 
 
-    public function getWasteList()
+    public function WasteList()
     {
         //用于模糊查询
         $keyword = Request::param('query') . '%';
@@ -30,4 +31,36 @@ class Waste extends Controller
             'total' => $count
         ]);
     }
+
+    public function WasteInfo()
+    {
+        if (Request::isGet()) {
+
+            $id = Request::param('id');
+
+            $waste = WasteModel::get($id);
+
+            return success([
+                'wasteinfo' => $waste,
+            ]);
+        }
+        if (Request::isPut()) {
+            $id = Request::param('id');
+            $name = Request::param('name');
+            $price = Request::param('price');
+            $unit = Request::param('unit');
+            $waste = WasteModel::get($id);
+            $waste->name = $name;
+            $waste->price = $price;
+            $waste->unit = $unit;
+            $waste->save();
+            $waste = WasteModel::get($id);
+            return success([
+                'wasteinfo' => $waste,
+            ]);
+        }
+        if (Request::isDelete()) {
+    }
+
+
 }

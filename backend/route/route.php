@@ -12,8 +12,11 @@
 Route::post('/admin/user/login', 'admin/Login/login');
 Route::post('/admin/user/logout', 'admin/Login/logout');
 Route::get('/admin/user/info', 'admin/User/info');
-Route::get('/admin/waste/getWasteList', 'admin/waste/getWasteList');
+Route::get('/admin/waste/WasteList', 'admin/waste/WasteList');
+Route::get('/admin/waste/WasteInfo', 'admin/waste/WasteInfo');
 Route::get('/admin/weixin/check', '/index/weixin/check');
+Route::get('/admin/waste/setWasteInfo', 'admin/waste/setWasteInfo');
+
 
 /* 微信端 接口路由*/
 Route::post('/collect/feedback', 'web/FeedBack/create');
