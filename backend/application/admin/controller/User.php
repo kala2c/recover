@@ -15,4 +15,7 @@ class User extends Base
             'name' => '超级管理员',
         ]);
     }
+    public function updateinfo(){
+
+    }
 }

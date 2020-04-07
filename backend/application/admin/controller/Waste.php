@@ -2,7 +2,6 @@
 
 namespace app\admin\controller;
 
-use Cassandra\Float_;
 use think\Controller;
 use think\facade\Request;
 use app\common\exception\ApiException;
@@ -60,7 +59,8 @@ class Waste extends Controller
             ]);
         }
         if (Request::isDelete()) {
+        }
+
+
     }
-
-
 }
