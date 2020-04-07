@@ -14,7 +14,12 @@ const submitFeedback = (data) => request({
   data
 })
 
+const getUserInfo = () => request({
+  url: '/web/user/info'
+})
+
 export default {
   submitOrder,
-  submitFeedback
+  submitFeedback,
+  getUserInfo
 }

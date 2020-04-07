@@ -18,7 +18,9 @@
     "require": {
         "php": ">=7.0",
         "topthink/framework": "5.1.*",
-        "firebase/php-jwt": "^5.2"
+        "firebase/php-jwt": "^5.2",
+        "rmccue/requests": "^1.7",
+      "ext-json": "*"
     },
     "autoload": {
         "psr-4": {

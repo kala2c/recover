@@ -23,7 +23,10 @@ Route::post('/admin/dashboard', 'admin/Base/dashboard');
 Route::get('/admin/weixin/check', '/index/weixin/check');
 
 
+//微信登录
+Route::get('/wx/oauth', 'index/weixin/oauth');
 /* 微信端 接口路由*/
+Route::get('/web/user/info', 'web/User/info');
 Route::post('/collect/feedback', 'web/FeedBack/create');
 Route::post('/collect/order', 'web/Order/create');
 Route::get('/collect/orders', 'web/Order/getList');

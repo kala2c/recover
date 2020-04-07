@@ -8,6 +8,11 @@ const testApi = (params, data) => request({
   data
 })
 
+const getUserInfo = () => request({
+  url: '/web/user/info'
+})
+
 export default {
-  testApi
+  testApi,
+  getUserInfo
 }

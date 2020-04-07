@@ -1,8 +1,10 @@
 <template>
   <div class="user">
     <div class="userinfo">
-      <div class="avatar"></div>
-      <div class="nickname">远野</div>
+      <div class="avatar">
+        <img :src="avatar" alt="">
+      </div>
+      <div class="nickname">{{username}}</div>
     </div>
     <div class="grid">
       <div
@@ -20,6 +22,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import FootBar from '@/views/collect/components/FootBar'
 import { Toast } from 'vant'
 export default {
@@ -61,6 +64,9 @@ export default {
       }]
     }
   },
+  computed: {
+    ...mapGetters(['username', 'avatar'])
+  },
   methods: {
     toPath(path) {
       if (path) {
@@ -80,12 +86,18 @@ export default {
     padding-top: 20px;
     .avatar {
       display: block;
+      box-sizing: border-box;
       width: 80px;
       height: 80px;
       border: 2px solid #eee;
       border-radius: 50%;
       margin-left: auto;
       margin-right: auto;
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
     }
     .nickname {
       display: inline-block;

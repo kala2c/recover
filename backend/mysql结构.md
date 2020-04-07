@@ -83,12 +83,15 @@ id：
 
 username：
 
-openid：（varchar）用户的微信id
+password:
 
-createtime：（datetime）用户创建时间
+openid：（varchar）用户的微信id
 
 score：（int）用户的积分
 
+create_time：（datetime）用户创建时间
+
+update_time: (datetime) 用户信息修改时间
 
 
 ##### waste：废品信息表

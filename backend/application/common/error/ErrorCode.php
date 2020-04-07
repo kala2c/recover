@@ -25,6 +25,8 @@ class ErrorCode
     const INSERT_USER_RECORD_FAILED = 30002;
     const UPDATE_USER_RECORD_FAILED = 30003;
     const GET_USER_INFO_EMPTY = 30004;
+    const WX_OAUTH_FAILED = 30005;
+    const WX_GET_INFO_FAILED = 30006;
 
     /*************Feedback 错误代码**********/
     const INSERT_FEEDBACK_FAILED = 40001;
@@ -47,6 +49,8 @@ class ErrorCode
         self::INSERT_USER_RECORD_FAILED => '插入用户记录失败',
         self::UPDATE_USER_RECORD_FAILED => '更新用户信息失败',
         self::GET_USER_INFO_EMPTY => '未找到该用户信息',
+        self::WX_OAUTH_FAILED => '微信授权失败',
+        self::WX_GET_INFO_FAILED => '获取微信信息失败',
 
         self::INSERT_FEEDBACK_FAILED => '保存反馈信息失败'
     ];
