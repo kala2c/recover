@@ -29,7 +29,7 @@ export default {
       type: String,
       default: 'time'
     },
-    open: {
+    toggle: {
       type: Boolean,
       default: false
     }
@@ -51,7 +51,7 @@ export default {
     }
   },
   watch: {
-    open() {
+    toggle() {
       this.pickerShow = !this.pickerShow
     }
   },

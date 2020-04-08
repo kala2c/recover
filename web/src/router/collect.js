@@ -42,6 +42,10 @@ const routes = [
       {
         path: 'user/address',
         component: () => import('@/views/collect/user/address')
+      },
+      {
+        path: 'user/new/address',
+        component: () => import('@/views/collect/user/newAddress')
       }
     ]
   }

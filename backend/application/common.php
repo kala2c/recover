@@ -28,7 +28,8 @@ function result($code = OK_CODE, $status = "success", $message = "OK", $data = [
         "message" => $message,
         "data" => $data
     ];
-    return json($template)->code($status);
+    return json($template);
+//    return json($template)->code($status);
 }
 
 function successWithMsg($message = "OK", $data = []) {

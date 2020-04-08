@@ -53,7 +53,7 @@ service.interceptors.response.use(
     // if the custom code is not 10000, it is judged as an error.
     if (res.code !== 10000) {
       const defaultMessage = '服务器忙 稍后再试'
-      const message = res.data ? res.data.message || defaultMessage : defaultMessage
+      const message = res.message || defaultMessage
       Dialog.alert({
         title: '提示',
         message

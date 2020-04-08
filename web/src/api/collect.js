@@ -18,8 +18,40 @@ const getUserInfo = () => request({
   url: '/web/user/info'
 })
 
+const getAddressById = (id) => request({
+  url: '/collect/address',
+  params: {
+    id: id
+  }
+})
+
+const getAddressList = () => request({
+  url: '/collect/addresses'
+})
+
+const saveAddress = (data) => request({
+  url: '/collect/address/set',
+  method: 'post',
+  data
+})
+
+const setDefaultAddress = (data) => request({
+  url: '/collect/address/setdefault',
+  method: 'post',
+  data
+})
+
+const getOrderInfo = () => request({
+  url: '/collect/orderinfo'
+})
+
 export default {
   submitOrder,
   submitFeedback,
-  getUserInfo
+  getUserInfo,
+  getAddressById,
+  getAddressList,
+  saveAddress,
+  setDefaultAddress,
+  getOrderInfo
 }

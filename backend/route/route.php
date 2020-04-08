@@ -28,8 +28,18 @@ Route::get('/wx/oauth', 'web/Login/oauth');
 //微信js-sdk
 Route::get('/wx/sdkconf', 'index/Weixin/sdkConf');
 /* 微信端 接口路由*/
+
+//用户信息
 Route::get('/web/user/info', 'web/User/info');
+// 提交反馈
 Route::post('/collect/feedback', 'web/FeedBack/create');
+// 地址相关
+Route::get('/collect/address', 'web/Address/get');
+Route::get('/collect/addresses', 'web/Address/getList');
+Route::post('/collect/address/set', 'web/Address/set');
+Route::post('/collect/address/default', 'web/Address/setDefault');
+// 订单相关
+Route::get('/collect/orderInfo', 'web/Order/orderInfo');
 Route::post('/collect/order', 'web/Order/create');
 Route::get('/collect/orders', 'web/Order/getList');
 

@@ -13,6 +13,10 @@ use \app\common\model\Feedback as FeedbackModel;
 
 class Feedback extends Controller
 {
+    /**
+     * 新增反馈
+     * @throws ApiException
+     */
     public function create()
     {
         $post = $this->request->post();

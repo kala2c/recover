@@ -157,7 +157,27 @@ create_time: 创建时间
  
 update_time: 修改时间
 
-##### 用户
+##### 用户地址表
+
+id
+
+user_id
+
+name: 联系人名字
+
+phone： 联系人手机号
+
+area： 地址区域 省-市-区-街道
+
+detail： 地址详细信息 街道 路 门牌等
+
+status： 地址状态 默认地址、禁用等
+
+create_time: 地址创建时间
+
+update_time: 地址修改时间
+
+
 
 ##### config：系统配置
 

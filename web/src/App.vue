@@ -1,8 +1,18 @@
 <template>
   <div id="app">
+    <loading />
     <router-view/>
   </div>
 </template>
+
+<script>
+import Loading from '@/components/Loading'
+export default {
+  components: {
+    Loading
+  }
+}
+</script>
 
 <style lang="scss">
 * {

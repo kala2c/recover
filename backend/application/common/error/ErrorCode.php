@@ -31,6 +31,11 @@ class ErrorCode
     /*************Feedback 错误代码**********/
     const INSERT_FEEDBACK_FAILED = 40001;
 
+    /*************Address 错误代码**********/
+    const INSERT_ADDRESS_FAILED = 50001;
+    const UPDATE_ADDRESS_FAILED = 50002;
+    const SER_ADDRESS_DEFAULT_FAILED = 50003;
+
 
     // -----------------------error_message分割线-----------------------------------
 
@@ -52,6 +57,10 @@ class ErrorCode
         self::WX_OAUTH_FAILED => '微信授权失败',
         self::WX_GET_INFO_FAILED => '获取微信信息失败',
 
-        self::INSERT_FEEDBACK_FAILED => '保存反馈信息失败'
+        self::INSERT_FEEDBACK_FAILED => '保存反馈信息失败',
+
+        self::INSERT_ADDRESS_FAILED => '新增地址信息失败',
+        self::UPDATE_ADDRESS_FAILED => '更新地址信息失败',
+        self::SER_ADDRESS_DEFAULT_FAILED => '设置默认地址失败',
     ];
 }
