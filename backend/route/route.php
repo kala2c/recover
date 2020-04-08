@@ -24,7 +24,9 @@ Route::get('/admin/weixin/check', '/index/weixin/check');
 
 
 //微信登录
-Route::get('/wx/oauth', 'index/weixin/oauth');
+Route::get('/wx/oauth', 'web/Login/oauth');
+//微信js-sdk
+Route::get('/wx/sdkconf', 'index/Weixin/sdkConf');
 /* 微信端 接口路由*/
 Route::get('/web/user/info', 'web/User/info');
 Route::post('/collect/feedback', 'web/FeedBack/create');

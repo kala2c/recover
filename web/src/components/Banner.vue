@@ -115,6 +115,9 @@ export default {
     .swiper-item {
       flex: 1;
       height: 100%;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
       transition: all .6s ease;
     }
   }

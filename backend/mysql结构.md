@@ -132,6 +132,8 @@ discounts_money：优惠价格
 
 deal_money:最终成交价格
 
+note: 订单备注
+
 status: 状态 待处理、服务中、已完成、已取消等
 
 create_time：订单创建时间
@@ -155,6 +157,7 @@ create_time: 创建时间
  
 update_time: 修改时间
 
+##### 用户
 
 ##### config：系统配置
 

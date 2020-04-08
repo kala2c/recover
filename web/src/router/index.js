@@ -17,7 +17,7 @@ const BaseRoutes = [
 const routes = BaseRoutes.concat(collect, pick)
 
 const router = new VueRouter({
-  mode: 'history',
+  // mode: 'history',
   base: process.env.BASE_URL,
   routes
 })

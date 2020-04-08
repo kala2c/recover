@@ -11,7 +11,7 @@ class OrderMaster extends Base
     const STATUS_GOING = 1;
     const STATUS_SUCCESS = 2;
 
-    const STATUS_MSG = [
+    static public $STATUS_MSG = [
         self::STATUS_CANCEL => '已取消',
         self::STATUS_WAIT => '待处理',
         self::STATUS_GOING => '服务中',

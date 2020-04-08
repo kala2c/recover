@@ -1,5 +1,15 @@
 <template>
   <div class="address">
+    <van-nav-bar
+      title="编辑地址"
+      left-text="返回"
+      left-arrow
+      fixed
+      placeholder
+      border
+      @click-left="$router.go(-1)"
+    />
+      <!-- @click-left="$router.push({ path: '/collect/user' })" -->
     <van-address-list
       v-model="chosenAddressId"
       :list="list"
@@ -13,9 +23,10 @@
 </template>
 
 <script>
-import { AddressList, Toast } from 'vant'
+import { NavBar, AddressList, Toast } from 'vant'
 export default {
   components: {
+    VanNavBar: NavBar,
     VanAddressList: AddressList
   },
   data() {

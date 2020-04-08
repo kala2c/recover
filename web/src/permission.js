@@ -17,7 +17,8 @@ function createOauthUrl(state) {
 }
 
 // 当前host
-const host = 'http://' + window.location.host
+// const host = 'http://' + window.location.host
+const host = window.location.origin
 
 const href = window.location.href
 // let userinfo = null
@@ -39,7 +40,12 @@ router.beforeEach(async(to, from, next) => {
   // document.title = getPageTitle(to.meta.title)
 
   const hasToken = getToken()
-
+  let oauthUrl = ''
+  if (router.options.mode && router.options.mode === 'history') {
+    oauthUrl = createOauthUrl(host + to.path)
+  } else {
+    oauthUrl = createOauthUrl(host + '/#' + to.path)
+  }
   if (hasToken) {
     if (!store.getters.username) {
       try {
@@ -47,13 +53,14 @@ router.beforeEach(async(to, from, next) => {
         next()
       } catch (error) {
         // 重定向到微信授权页
-        // alert(error)
-        window.open(createOauthUrl(host + to.path), '_self')
+        setTimeout(function() {
+          window.open(oauthUrl, '_self')
+        }, 100000)
       }
     }
     next()
   } else {
     // 重定向到微信授权页
-    window.open(createOauthUrl(host + to.path), '_self')
+    window.open(oauthUrl, '_self')
   }
 })

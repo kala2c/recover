@@ -79,17 +79,22 @@ export default {
       bannerList: [
         {
           id: 1,
-          url: 'http://127.0.0.1:7000/images/banner1.jpeg'
+          url: 'http://static.c2wei.cn/banner/banner1.jpeg'
         },
         {
           id: 2,
-          url: 'http://127.0.0.1:7000/images/banner2.jpeg'
+          url: 'http://static.c2wei.cn/banner/banner.jpeg'
         },
         {
           id: 3,
-          url: 'http://127.0.0.1:7000/images/banner1.jpeg'
+          url: 'http://static.c2wei.cn/banner/banner1.jpeg'
         }
       ]
+    }
+  },
+  methods: {
+    getLocation() {
+      // this.$wx.config()
     }
   },
   async created() {

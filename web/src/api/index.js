@@ -8,11 +8,11 @@ const testApi = (params, data) => request({
   data
 })
 
-const getUserInfo = () => request({
-  url: '/web/user/info'
+const getWxsdkConf = () => request({
+  url: '/wx/sdkconf'
 })
 
 export default {
   testApi,
-  getUserInfo
+  getWxsdkConf
 }

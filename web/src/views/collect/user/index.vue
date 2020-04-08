@@ -55,7 +55,7 @@ export default {
         id: 5,
         icon: '',
         path: '/collect/user/address',
-        name: '收获地址'
+        name: '收货地址'
       }, {
         id: 6,
         icon: '',

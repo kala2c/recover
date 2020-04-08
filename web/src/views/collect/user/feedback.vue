@@ -1,5 +1,14 @@
 <template>
   <div class="feedback">
+    <van-nav-bar
+      title="意见反馈"
+      left-text="返回"
+      left-arrow
+      fixed
+      placeholder
+      border
+      @click-left="$router.go(-1)"
+    />
     <van-form class="form" @submit="onSubmit">
       <van-field
         v-model="phone"
@@ -26,10 +35,11 @@
 </template>
 
 <script>
-import { Form, Field, Button, Toast } from 'vant'
+import { NavBar, Form, Field, Button, Toast } from 'vant'
 import collectApi from '@/api/collect'
 export default {
   components: {
+    VanNavBar: NavBar,
     VanForm: Form,
     VanField: Field,
     VanButton: Button
