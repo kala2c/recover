@@ -67,7 +67,7 @@
 <script>
 import Banner from '@/components/Banner'
 import FootBar from '@/views/collect/components/FootBar'
-import api from '@/api/collect'
+// import api from '@/api/collect'
 
 export default {
   components: {
@@ -98,12 +98,6 @@ export default {
     }
   },
   async created() {
-    const data = await api.submitOrder({ a: 1 }, { b: 2 })
-    console.log(data)
-
-    api.submitOrder().then(res => {
-      console.log(res)
-    })
   }
 }
 </script>

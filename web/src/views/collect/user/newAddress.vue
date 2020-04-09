@@ -1,13 +1,13 @@
 <template>
   <div class="address">
     <van-nav-bar
-      title="新增地址"
+      title="填写地址"
       left-text="返回"
       left-arrow
       fixed
       placeholder
       border
-      @click-left="$router.go(-1)"
+      @click-left="goBack"
     />
     <div class="address-form">
       <van-field
@@ -30,6 +30,10 @@
         v-model="formData.detail"
         placeholder="填写街道-小区-门牌号"
       />
+      <div class="default-switch form-ctrl">
+        <div class="label">设为默认</div>
+        <van-switch v-model="switchChecked" :disabled="switchDisabled" />
+      </div>
       <div class="submit-wrap">
         <van-button class="submit-btn" round block type="info" :disabled="submitDisabled" @click="onSubmit">
           提交
@@ -50,7 +54,7 @@
 <script>
 import store from '@/store'
 import api from '@/api/collect'
-import { NavBar, Toast, Field, Cell, Button } from 'vant'
+import { NavBar, Toast, Field, Cell, Button, Switch } from 'vant'
 import Picker from '@/views/collect/components/Picker'
 export default {
   components: {
@@ -58,6 +62,7 @@ export default {
     VanField: Field,
     VanCell: Cell,
     VanButton: Button,
+    VanSwitch: Switch,
     Picker: Picker
   },
   data() {
@@ -65,7 +70,10 @@ export default {
       pickerTitle: '选择地区',
       pickerShow: false,
       pickerType: 'area',
+      switchChecked: true,
+      switchDisabled: true,
       submitDisabled: false,
+      cbPath: '',
       formData: {
         id: null,
         phone: '',
@@ -75,7 +83,26 @@ export default {
       }
     }
   },
+  watch: {
+    switchChecked(val) {
+      if (val) {
+        store.dispatch('loading/open')
+        this.switchDisabled = true
+        api.setDefaultAddress({ id: this.formData.id }).then(response => {
+          this.switchChecked = true
+          Toast(response.data.message || '设置成功')
+          store.dispatch('loading/close')
+        }).catch(() => {
+          this.switchDisabled = false
+          store.dispatch('loading/close')
+        })
+      }
+    }
+  },
   methods: {
+    goBack() {
+      this.$router.replace({ path: this.cbPath || '/collect/user/address' })
+    },
     openAreaPicker() {
       this.pickerTitle = '选择地区'
       this.pickerType = 'area'
@@ -118,7 +145,7 @@ export default {
         Toast(response.message)
         setTimeout(() => {
           this.submitDisabled = false
-          this.$router.go(-1)
+          this.goBack()
         }, 1300)
       }).catch(() => {
         this.submitDisabled = false
@@ -128,6 +155,8 @@ export default {
   },
   created() {
     const id = this.$route.query.id
+    const cbPath = this.$route.query && this.$route.query.cbPath
+    this.cbPath = cbPath
     if (id) {
       store.dispatch('loading/open')
       api.getAddressById(id).then(response => {
@@ -137,6 +166,10 @@ export default {
         this.formData.phone = data.phone
         this.formData.area = data.area
         this.formData.detail = data.detail
+        if (data.status !== 1) {
+          this.switchChecked = false
+          this.switchDisabled = false
+        }
         store.dispatch('loading/close')
       })
     }
@@ -159,6 +192,18 @@ div.van-cell__title {
 <style lang="scss" scoped>
 .address-form {
   padding: 20px 0;
+}
+.form-ctrl {
+  display: flex;
+  padding: 10px 16px;
+  color: #323233;
+  font-size: 14px;
+  line-height: 24px;
+  background-color: #fff;
+  border-bottom: 1px solid #efffff;
+  .label {
+    width: 90px;
+  }
 }
 .submit-wrap {
   padding: 5px 16px;

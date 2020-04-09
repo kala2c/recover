@@ -8,18 +8,19 @@
       fixed
       placeholder
       border
-      @click-left="$router.go(-1)"
+      @click-left="goBack()"
       @click-right="onAdd"
     />
     <van-address-list
-      v-model="chosenAddressIndex"
-      :list="addressList"
+      v-model="addressId"
+      :list="addressShowList"
       default-tag-text="默认"
       :add-button-text="addButtonText"
       :switchable="isChosen"
       @add="onConfirm"
       @edit="onEdit"
       @select="onSelect"
+      @check-item="onCheck"
     />
     <!-- :disabled-list="disabledList"
     disabled-text="以下地址超出配送范围" -->
@@ -39,9 +40,15 @@ export default {
     return {
       title: '管理地址',
       isChosen: false,
+      cbPath: '',
       addButtonText: '新增地址',
-      chosenAddressIndex: '0',
-      addressList: [
+      addressId: '0',
+      chosenAddressIndex: 0,
+      chosenAddressItem: null,
+      // 地址原信息
+      addressInfoList: [],
+      // 用于展示的列表信息
+      addressShowList: [
         // {
         //   id: '1',
         //   name: '陈禄伟',
@@ -55,26 +62,50 @@ export default {
   methods: {
     onConfirm() {
       if (this.isChosen) {
-        console.log('确定')
+        const address = this.addressInfoList[this.chosenAddressIndex]
+        store.dispatch('orderForm/setAddress', address)
+        this.goBack()
       } else {
         this.onAdd()
       }
     },
+    goBack() {
+      if (this.isChosen) {
+        this.$router.replace({ path: this.cbPath })
+      } else {
+        this.$router.go(-1)
+      }
+    },
+    toEditPage(id) {
+      const query = {
+        cbPath: this.$route.fullPath
+      }
+      if (id) {
+        query.id = id
+      }
+      this.$router.replace({ path: '/collect/user/new/address', query })
+    },
     onAdd() {
-      this.$router.push({ path: '/collect/user/new/address' })
+      this.toEditPage()
     },
     onEdit(item, index) {
-      this.$router.push({ path: '/collect/user/new/address?id=' + item.id })
+      this.toEditPage(item.id)
+      // this.$router.replace({ path: '/collect/user/new/address?id=' + item.id })
+    },
+    onCheck(item, index) {
+      console.log(item)
     },
     onSelect(item, index) {
-      console.log(item, index)
+      this.chosenAddressIndex = index
+      this.chosenAddressItem = item
     }
   },
   created() {
-    console.log(this.$route)
     const isChosen = this.$route.query && this.$route.query.chosen
+    const cbPath = this.$route.query && this.$route.query.cbPath
     if (isChosen && parseInt(isChosen) === 1) {
       this.isChosen = true
+      this.cbPath = cbPath
       this.title = '选择地址'
       this.addButtonText = '确定'
     }
@@ -82,8 +113,9 @@ export default {
     api.getAddressList().then(response => {
       store.dispatch('loading/close')
       const data = response.data
+      this.addressInfoList = data
       data.forEach((item, index) => {
-        this.addressList.push({
+        this.addressShowList.push({
           id: item.id,
           name: item.name,
           tel: item.phone,
