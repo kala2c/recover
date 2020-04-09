@@ -1,29 +1,17 @@
 import request from '@/utils/request'
 
-function login(data) {
-  return request({
-    url: '/admin/user/login',
-    method: 'post',
-    data
-  })
-}
-
-function getInfo() {
-  return request({
-    url: '/admin/user/info',
-    method: 'get'
-  })
-}
-
-function logout() {
-  return request({
-    url: '/admin/user/logout',
-    method: 'post'
-  })
-}
+const getUserList = (params) => request({
+  url: '/admin/user/UserList',
+  method: 'get',
+  params
+})
+const getUserInfo = (params) => request({
+  url: '/admin/user/UserInfo',
+  method: 'get',
+  params
+})
 
 export default {
-  login,
-  getInfo,
-  logout
+  getUserList,
+  getUserInfo
 }
