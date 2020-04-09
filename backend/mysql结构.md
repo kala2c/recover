@@ -124,6 +124,14 @@ pick_time: 取货时间
 
 pick_fast: 尽快上门 此时不需要取货时间
 
+username: 联系人姓名
+
+phone: 联系方式
+
+area: 区域
+
+address_detail: 地址详细信息
+
 waste_number：废品的数量（）
 
 waste_price：废品的单价

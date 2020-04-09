@@ -27,14 +27,20 @@ class Order extends Base
         $validate = Validate::make([
             'waste_id' => 'require',
             'waste_number' => 'require',
-            'address' => 'require',
+            'username' => 'require',
+            'phone' => 'require',
+            'area' => 'require',
+            'address_detail' => 'require',
 //            'pick_fast' => 'number', 1-尽快上门 2-预约时间
 //            'pick_time' => '',
 //            'note' => ''
         ], [
             'waste_id' => '请选择物品类型',
             'waste_number.require' => '请填写预估数量',
-            'address.require' => '请填写取货地址'
+            'address_detail.require' => '请填写取货地址',
+            'area.require' => '请填写取货地址',
+            'username.require' => '请填写联系人姓名',
+            'phone.require' => '请填写联系人手机号'
         ]);
 
         if (!$validate->check($data)) {

@@ -29,7 +29,7 @@ const saveAddress = (data) => request({
 })
 
 const setDefaultAddress = (data) => request({
-  url: '/collect/address/setdefault',
+  url: '/collect/address/default',
   method: 'post',
   data
 })

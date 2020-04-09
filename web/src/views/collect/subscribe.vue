@@ -73,13 +73,20 @@
           </template>
         </van-cell>
       </div>
-      <van-cell title="选择地址" @click="onChooseAddress" is-link>
+      <van-cell title="选择联系方式及地址" @click="onChooseAddress" is-link>
         <template #default>
-          <p class="cell-text">{{orderForm.address || '未选择'}}</p>
+          <p class="cell-text">{{orderForm.username || '未选择'}} {{orderForm.phone}}</p>
+          <p class="cell-text">{{orderForm.area}}{{orderForm.address_detail}}</p>
         </template>
       </van-cell>
       <van-field label="预估数量" v-model="formWatcher.waste_number" placeholder="瓶子等填写个数 其它填写重量"></van-field>
-      <van-field label="备注" v-model="formWatcher.note" placeholder="填写备注信息"></van-field>
+      <van-field
+        label="备注"
+        type="textarea"
+        autosize
+        v-model="formWatcher.note"
+        placeholder="填写备注信息"
+      />
       <div class="submit-wrap">
         <van-button class="submit-btn" round block type="info" :disabled="submitDisabled" @click="onSubmit">
           一键预约
@@ -202,6 +209,7 @@ export default {
         Toast(response.data.message || '下单成功')
         store.dispatch('loading/close')
         setTimeout(() => {
+          store.dispatch('orderForm/clear')
           this.$router.push({ path: '/collect/order' })
         }, 1000)
       }).catch(() => {
@@ -220,21 +228,16 @@ export default {
         this.wasteColumns.push(item.name)
       })
       if (!this.orderForm.waste_id && this.wasteList.length > 0) {
-        store.dispatch('orderForm/setData', { waste_id: this.wasteList[0].id })
+        this.formWatcher.waste_id = this.wasteList[0].id
+        store.dispatch('orderForm/setWasteIndex', 0)
       }
-      if (!this.orderForm.address && data.default_address) {
-        const address = data.default_address.area.split('-').join('') + data.default_address.detail
-        store.dispatch('orderForm/setData', { address: address })
+      if (!this.orderForm.username && data.default_address) {
+        store.dispatch('orderForm/setAddress', data.default_address)
       }
       store.dispatch('loading/close')
     }).catch(() => {
       store.dispatch('loading/close')
     })
-  },
-  mounted() {
-    setInterval(() => {
-      // console.log(this.formData)
-    }, 1000)
   }
 }
 </script>
@@ -255,6 +258,9 @@ div.van-cell__title {
 </style>
 
 <style lang="scss" scoped>
+.subscribe {
+  padding-bottom: 65px;
+}
 .type {
   margin-top: 15px;
 }
@@ -317,6 +323,7 @@ div.van-cell__title {
   width: 100%;
   padding: 10px 0;
   margin-top: 16px;
+  background-color: #fff;
   .submit-btn {
     width: 95%;
     margin: 0 auto;
