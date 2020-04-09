@@ -16,6 +16,11 @@ use think\facade\Validate;
 
 class Login extends Controller
 {
+    /**
+     * 微信授权登录 demo 待重写
+     * @return string
+     * @throws ApiException
+     */
     public function oauth()
     {
         //        获取参数并验证

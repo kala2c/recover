@@ -7,7 +7,7 @@
       fixed
       placeholder
       border
-      @click-left="$router.go(-1)"
+      @click-left="goBack"
     />
     <div class="address-form">
       <van-field
@@ -76,6 +76,9 @@ export default {
     }
   },
   methods: {
+    goBack() {
+      this.$router.replace({ path: '/collect/user/address' })
+    },
     openAreaPicker() {
       this.pickerTitle = '选择地区'
       this.pickerType = 'area'
@@ -118,7 +121,7 @@ export default {
         Toast(response.message)
         setTimeout(() => {
           this.submitDisabled = false
-          this.$router.go(-1)
+          this.goBack()
         }, 1300)
       }).catch(() => {
         this.submitDisabled = false

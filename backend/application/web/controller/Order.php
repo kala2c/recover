@@ -4,10 +4,11 @@
 namespace app\web\controller;
 
 
+use app\common\error\ErrorCode;
 use app\common\exception\ApiException;
+use app\common\exception\DataException;
 use app\common\model\Waste as WasteModel;
 use app\common\model\Address as AddressModel;
-use mysql_xdevapi\TableInsert;
 use think\Exception\DbException;
 use think\exception\ValidateException;
 use think\facade\Validate;
@@ -17,31 +18,41 @@ class Order extends Base
     /**
      * 创建订单
      * @return mixed
+     * @throws ApiException
+     * @throws DataException
      */
-    public function create()
+    public function set()
     {
-        $post = $this->request->post();
+        $data = $this->request->post();
         $validate = Validate::make([
-            'weight' => 'require',
-//            'pick_fast' => 'number',
-//            'pick_time' => 'require',
-            'address' => 'require'
+            'waste_id' => 'require',
+            'waste_number' => 'require',
+            'address' => 'require',
+//            'pick_fast' => 'number', 1-尽快上门 2-预约时间
+//            'pick_time' => '',
+//            'note' => ''
         ], [
-            'weight.require' => '请选择预估重量',
-//            'sub_time.require' => '请填写预约时间',
+            'waste_id' => '请选择物品类型',
+            'waste_number.require' => '请填写预估数量',
             'address.require' => '请填写取货地址'
         ]);
 
-        if (!$validate->check($post)) {
+        if (!$validate->check($data)) {
             throw new ValidateException($validate->getError());
         }
+        if ($data['pick_fast'] != 1 && !$data['pick_time']) {
+            throw new ValidateException('尽快上门和预约时间至少选择一个');
+        }
 
-//        OrderMasterModel::create($post)
-        return successWithMsg('操作成功');
+        $rlt = OrderMasterModel::set($data, $this->user_info['uid']);
+        if (!$rlt) {
+            throw new ApiException(ErrorCode::INSERT_ORDER_FAILED);
+        }
+        return successWithMsg('成功');
     }
 
     /**
-     * 获取下单的一些信息
+     * 获取下单前的一些信息
      * @throws DbException
      */
     public function orderInfo()
@@ -51,6 +62,7 @@ class Order extends Base
         $default_address = AddressModel::getDefaultAddress($user_id);
 
         return success([
+            'pick_msg' => OrderMasterModel::$PICK_MSG,
             'waste_list' => $waste_list,
             'default_address' => $default_address
         ]);
@@ -58,16 +70,17 @@ class Order extends Base
 
     /**
      * 获取订单列表
+     * @throws DbException
      * @return mixed
      */
     public function getList()
     {
         $param = $this->request->get();
         $validate = Validate::make([
-            'type' => 'require',
+            'status' => 'require',
             'page' => 'integer|egt:1',
         ], [
-            'type.require' => '请选择订单类型',
+            'status.require' => '请选择订单状态',
             'page.integer' => '页码格式不正确',
             'page.egt' => '页码不能为负数'
         ]);
@@ -75,8 +88,9 @@ class Order extends Base
         if (!$validate->check($param)) {
             throw new ValidateException($validate->getError());
         }
-        $map = ['type' => $param['type']];
-//        $orderList = OrderMasterModel::pageUtil()->select();
-        return success();
+        $page = $param['page'] ?? 1;
+        $map = ['status' => $param['status'], 'user_id' => $this->user_info['uid']];
+        $orderList = OrderMasterModel::pageUtil($page, $map)->select();
+        return success($orderList);
     }
 }

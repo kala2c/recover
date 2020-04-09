@@ -8,7 +8,7 @@
       fixed
       placeholder
       border
-      @click-left="$router.go(-1)"
+      @click-left="goBack()"
       @click-right="onAdd"
     />
     <van-address-list
@@ -39,8 +39,10 @@ export default {
     return {
       title: '管理地址',
       isChosen: false,
+      cbPath: '',
       addButtonText: '新增地址',
       chosenAddressIndex: '0',
+      chosenAddressItem: null,
       addressList: [
         // {
         //   id: '1',
@@ -55,26 +57,39 @@ export default {
   methods: {
     onConfirm() {
       if (this.isChosen) {
-        console.log('确定')
+        // const address = this.addressList[this.chosenAddressIndex].address
+        const address = this.chosenAddressItem.address
+        store.dispatch('orderForm/setData', { address })
+        this.$router.replace({ path: this.cbPath })
       } else {
         this.onAdd()
       }
     },
+    goBack() {
+      if (this.isChosen) {
+        this.$router.replace({ path: this.cbPath })
+      } else {
+        this.$router.go(-1)
+      }
+    },
     onAdd() {
-      this.$router.push({ path: '/collect/user/new/address' })
+      this.$router.replace({ path: '/collect/user/new/address' })
     },
     onEdit(item, index) {
-      this.$router.push({ path: '/collect/user/new/address?id=' + item.id })
+      this.$router.replace({ path: '/collect/user/new/address?id=' + item.id })
     },
     onSelect(item, index) {
       console.log(item, index)
+      this.chosenAddressItem = item
     }
   },
   created() {
     console.log(this.$route)
     const isChosen = this.$route.query && this.$route.query.chosen
+    const cbPath = this.$route.query && this.$route.query.cbPath
     if (isChosen && parseInt(isChosen) === 1) {
       this.isChosen = true
+      this.cbPath = cbPath
       this.title = '选择地址'
       this.addButtonText = '确定'
     }

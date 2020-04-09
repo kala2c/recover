@@ -36,6 +36,21 @@ class ErrorCode
     const UPDATE_ADDRESS_FAILED = 50002;
     const SER_ADDRESS_DEFAULT_FAILED = 50003;
 
+    /*************Order 订单代码**********/
+    const INSERT_ORDER_FAILED = 60001;
+    const UPDATE_ORDER_FAILED = 60002;
+    const GET_ORDER_DETAIL_FAILED = 60003;
+    const GET_ORDER_LIST_FAILED = 60004;
+
+    /*************Waste 废品代码**********/
+    const INSERT_WASTE_FAILED = 70001;
+    const UPDATE_WASTE_FAILED = 70002;
+    const GET_WASTE_DETAIL_FAILED = 70003;
+    const GET_WASTE_LIST_FAILED = 70004;
+    const WASTE_NOT_EXISTS = 70005;
+
+
+
 
     // -----------------------error_message分割线-----------------------------------
 
@@ -62,5 +77,12 @@ class ErrorCode
         self::INSERT_ADDRESS_FAILED => '新增地址信息失败',
         self::UPDATE_ADDRESS_FAILED => '更新地址信息失败',
         self::SER_ADDRESS_DEFAULT_FAILED => '设置默认地址失败',
+
+        self::INSERT_ORDER_FAILED => '创建订单失败',
+        self::UPDATE_ORDER_FAILED => '更新订单失败',
+        self::GET_ORDER_DETAIL_FAILED => '获取订单详情失败',
+        self::GET_ORDER_LIST_FAILED => '获取订单列表失败',
+
+        self::WASTE_NOT_EXISTS => '物品类型不存在',
     ];
 }

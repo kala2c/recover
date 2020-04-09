@@ -3,8 +3,6 @@ namespace app\web\controller;
 
 use app\common\error\ErrorCode;
 use app\common\exception\ApiException;
-use think\db\exception\DataNotFoundException;
-use think\db\exception\ModelNotFoundException;
 use think\Exception\DbException;
 use think\exception\ValidateException;
 use think\facade\Validate;

@@ -1,13 +1,6 @@
 // import store from '../store'
 import request from '@/utils/request'
 
-const submitOrder = (params, data) => request({
-  url: '/index/test/test',
-  method: 'post',
-  params,
-  data
-})
-
 const submitFeedback = (data) => request({
   url: '/collect/feedback',
   method: 'post',
@@ -45,13 +38,31 @@ const getOrderInfo = () => request({
   url: '/collect/orderinfo'
 })
 
+const submitOrder = (data) => request({
+  url: '/collect/order',
+  method: 'post',
+  data
+})
+
+const getOrderDetail = (params) => request({
+  url: '/collect/order',
+  method: 'get',
+  params
+})
+
+const getOrderList = (params) => request({
+  url: '/collect/orders'
+})
+
 export default {
-  submitOrder,
   submitFeedback,
   getUserInfo,
   getAddressById,
   getAddressList,
   saveAddress,
   setDefaultAddress,
-  getOrderInfo
+  getOrderInfo,
+  submitOrder,
+  getOrderDetail,
+  getOrderList
 }

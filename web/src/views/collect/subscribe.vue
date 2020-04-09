@@ -10,21 +10,29 @@
       @click-left="$router.go(-1)"
     />
     <div class="type">
-      <van-cell title="选择回收类型"></van-cell>
-      <van-grid square>
+      <van-cell title="选择物品类型" is-link @click="wastePickerShow = true">
+        <template #default>
+          <p class="cell-text right">{{wasteName}}</p>
+        </template>
+      </van-cell>
+      <van-grid v-if="false" square>
         <van-grid-item
-          v-for="value in 6"
-          :key="value"
+          v-for="(waste, index) in wasteList"
+          :key="waste.id"
           icon="photo-o"
-          text="文字"
+          :text="waste.name"
           class="type-grid-item"
-          :class="{ 'type-active': value === formData.type }"
-          @click="formData.type = value"
+          :class="{ 'type-active': waste.id === orderForm.waste_id }"
+          @click="onChangeWaste(waste, index)"
         />
       </van-grid>
     </div>
     <div class="price">
-      <p>今日指导价：{{lowPrice}}-{{highPrice}}元/公斤<router-link class="link" to="/collect/query/price">详细</router-link></p>
+      <p>
+        <!-- 今日指导价：{{lowPrice}}-{{highPrice}}元/ -->
+        今日指导价：{{price}}/{{unit}}
+        <router-link class="link" to="/collect/query/price">详细</router-link>
+      </p>
     </div>
     <!-- <div class="weight">
       <div class="info-box">
@@ -50,48 +58,59 @@
       <div class="time">
         <div class="time-radio form-ctrl">
           <div class="label">取货时间</div>
-          <van-radio-group v-model="formData.pickFast" direction="horizontal">
+          <van-radio-group v-model="formWatcher.pick_fast" direction="horizontal">
             <van-radio name="1" checked-color="#07c160">尽快上门</van-radio>
             <van-radio name="2" checked-color="#07c160">预约时间</van-radio>
           </van-radio-group>
         </div>
         <van-cell
-          v-if="formData.pickFast === '2'" title="选择时间"
+          v-if="orderForm.pick_fast === '2'" title="选择时间"
           @click="openTimePicker"
           is-link
         >
           <template #default>
-            <p class="cell-text">{{formData.pickTime}}</p>
+            <p class="cell-text">{{orderForm.pick_time || '未选择'}}</p>
           </template>
         </van-cell>
       </div>
-      <van-cell title="选择地址" is-link>
+      <van-cell title="选择地址" @click="onChooseAddress" is-link>
         <template #default>
-          <p class="cell-text">{{formData.address}}</p>
+          <p class="cell-text">{{orderForm.address || '未选择'}}</p>
         </template>
       </van-cell>
-      <van-field label="预估重量"></van-field>
-      <van-field label="备注"></van-field>
+      <van-field label="预估数量" v-model="formWatcher.waste_number" placeholder="瓶子等填写个数 其它填写重量"></van-field>
+      <van-field label="备注" v-model="formWatcher.note" placeholder="填写备注信息"></van-field>
       <div class="submit-wrap">
-        <van-button class="submit-btn" round block type="info" native-type="submit">
+        <van-button class="submit-btn" round block type="info" :disabled="submitDisabled" @click="onSubmit">
           一键预约
         </van-button>
       </div>
     </div>
+    <van-popup v-model="wastePickerShow" position="bottom">
+      <van-picker
+        show-toolbar
+        :columns="wasteColumns"
+        @cancel="wastePickerShow = false"
+        @confirm="onWastePickerConfirm"
+      />
+    </van-popup>
     <picker
       ref="picker"
-      :title="pickerTitle"
-      :type="pickerType"
-      :open="pickerShow"
-      @confirm="onConfirm"
-      @cancel="pickerShow = !pickerShow"
+      :title="timePickerTitle"
+      :type="timePickerType"
+      :toggle="timePickerShow"
+      @confirm="onTimePickerConfirm"
+      @cancel="timePickerShow = !timePickerShow"
     />
   </div>
 </template>
 
 <script>
-import { NavBar, Button, Field, Cell, RadioGroup, Radio, Grid, GridItem } from 'vant'
-import Picker from './components/Picker'
+import store from '@/store'
+import { mapGetters } from 'vuex'
+import api from '@/api/collect'
+import { NavBar, Button, Field, Cell, RadioGroup, Radio, Grid, GridItem, Popup, Picker, Toast } from 'vant'
+import CPicker from './components/Picker'
 export default {
   components: {
     VanNavBar: NavBar,
@@ -102,34 +121,115 @@ export default {
     VanRadio: Radio,
     VanGrid: Grid,
     VanGridItem: GridItem,
-    Picker
+    VanPopup: Popup,
+    VanPicker: Picker,
+    Picker: CPicker
   },
   data() {
     return {
       lowPrice: 1.00,
       highPrice: 2.00,
-      pickerTitle: '',
-      pickerType: '',
-      pickerShow: false,
-      formData: {
-        pickFast: '1',
-        pickTime: '',
-        type: 1
+      timePickerTitle: '',
+      timePickerType: '',
+      timePickerShow: false,
+      wastePickerShow: false,
+      wasteColumns: [],
+      wasteList: [],
+      submitDisabled: false,
+      formWatcher: {
+        waste_id: '',
+        pick_time: '',
+        pick_fast: '',
+        address: '',
+        waste_number: '',
+        note: ''
       }
+    }
+  },
+  watch: {
+    formWatcher: {
+      handler(val) {
+        // for (const item in newVal) {
+        //   if (newVal[item] !== oldVal[item]) {
+        //     store.dispatch('orderForm/setData', newVal)
+        //   }
+        // }
+        store.dispatch('orderForm/setData', val)
+      },
+      deep: true
+    }
+  },
+  computed: {
+    ...mapGetters(['wasteIndex', 'orderForm']),
+    wasteChosen() {
+      return this.wasteList[this.wasteIndex]
+    },
+    wasteName() {
+      return this.wasteChosen && this.wasteChosen.name
+    },
+    price() {
+      return this.wasteChosen && this.wasteChosen.price
+    },
+    unit() {
+      return this.wasteChosen && this.wasteChosen.unit
     }
   },
   methods: {
     openTimePicker() {
-      this.pickerTitle = '选择时间'
-      this.pickerType = 'time'
-      this.pickerShow = !this.pickerShow
+      this.timePickerTitle = '选择时间'
+      this.timePickerType = 'time'
+      this.timePickerShow = !this.timePickerShow
     },
-    onConfirm(value) {
-      this.pickerShow = !this.pickerShow
-      this.formData.pickTime = value.join('-')
+    onTimePickerConfirm(value) {
+      this.timePickerShow = !this.timePickerShow
+      this.formWatcher.pick_time = value.join('-')
+    },
+    onWastePickerConfirm(value, index) {
+      this.onChangeWaste(this.wasteList[index], index)
+      this.wastePickerShow = false
+    },
+    onChangeWaste(waste, index) {
+      this.formWatcher.waste_id = waste.id
+      store.dispatch('orderForm/setWasteIndex', index)
+    },
+    onChooseAddress() {
+      this.$router.replace({ path: '/collect/user/address?chosen=1&cbPath=' + this.$route.path })
+    },
+    onSubmit() {
+      store.dispatch('loading/open')
+      this.submitDisabled = true
+      api.submitOrder(this.orderForm).then(response => {
+        Toast(response.data.message || '下单成功')
+        store.dispatch('loading/close')
+        setTimeout(() => {
+          this.$router.push({ path: '/collect/order' })
+        }, 1000)
+      }).catch(() => {
+        this.submitDisabled = false
+        store.dispatch('loading/close')
+      })
     }
   },
   created() {
+    this.formWatcher = this.orderForm
+    store.dispatch('loading/open')
+    api.getOrderInfo().then(response => {
+      const data = response.data
+      this.wasteList = data.waste_list
+      this.wasteList.forEach(item => {
+        this.wasteColumns.push(item.name)
+      })
+      if (!this.orderForm.waste_id && this.wasteList.length > 0) {
+        store.dispatch('orderForm/setData', { waste_id: this.wasteList[0].id })
+      }
+      if (!this.orderForm.address && data.default_address) {
+        const address = data.default_address.area.split('-').join('') + data.default_address.detail
+        store.dispatch('orderForm/setData', { address: address })
+      }
+      store.dispatch('loading/close')
+    }).catch(() => {
+      store.dispatch('loading/close')
+    })
   },
   mounted() {
     setInterval(() => {
@@ -149,6 +249,9 @@ div.van-cell__title {
   text-align: left;
   color: #323233;
 }
+.cell-text.right {
+  text-align: right;
+}
 </style>
 
 <style lang="scss" scoped>
@@ -164,7 +267,6 @@ div.van-cell__title {
   border: 1px solid #07c160;
 }
 .price {
-  width: 100%;
   padding: 10px 16px;
   margin-top: 15px;
   // box-shadow: 0 2px 2px 0 #eee;

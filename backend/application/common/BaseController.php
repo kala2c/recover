@@ -14,6 +14,10 @@ class BaseController extends Controller
 {
     protected $user_info;
 
+    /**
+     * 鉴权-用户认证
+     * @throws ApiException
+     */
     public function initialize()
     {
         $token = $this->request->header('authorization') ?? null;

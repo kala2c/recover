@@ -39,7 +39,6 @@ const actions = {
         if (!data) {
           reject(new Error('验证失败 重新登录'))
         }
-        console.log(data)
 
         const { name, avatar } = data
 
