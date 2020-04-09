@@ -13,12 +13,17 @@
 Route::post('/admin/user/login', 'admin/Login/login');
 Route::post('/admin/user/logout', 'admin/Login/logout');
 Route::get('/admin/user/info', 'admin/User/info');
+//管理员端 用户账号相关
+Route::post('/admin/user/UserList', 'admin/user/UserList');
+Route::post('/admin/user/UserInfo', 'admin/user/UserInfo');
 //管理员端 废品相关
 Route::get('/admin/waste/WasteList', 'admin/waste/WasteList');
 Route::get('/admin/waste/WasteInfo', 'admin/waste/WasteInfo');
 Route::get('/admin/waste/setWasteInfo', 'admin/waste/setWasteInfo');
+//管理员端 订单相关
+Route::get('/admin/order/OrderList','admin/order/OrderList');
 //工具相关
-Route::post('/admin/dashboard', 'admin/Base/dashboard');
+Route::get('/admin/dashboard', 'admin/Base/dashboard');
 //微信接入相关
 Route::get('/admin/weixin/check', '/index/weixin/check');
 

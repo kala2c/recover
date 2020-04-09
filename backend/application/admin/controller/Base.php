@@ -9,7 +9,7 @@ use app\common\model\Waste as WasteModel;
 use app\common\model\User as UserModel;
 
 class Base extends BaseController
-{ 
+{
     //后台首页数据聚合
     public function dashboard()
     {
@@ -26,8 +26,10 @@ class Base extends BaseController
 
         //今日成交额
         $result_map = [
-            'wastecount' => $wastecount,
-            'allusercount' => $allusercount
+            'dashboarddata' => [
+                'wastecount' => $wastecount,
+                'allusercount' => $allusercount
+            ]
         ];
         return success($result_map);
     }

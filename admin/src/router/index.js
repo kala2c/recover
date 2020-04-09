@@ -82,21 +82,21 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
+        name: 'User',
+        component: () => import('@/views/user/index'),
         meta: { title: '用户管理', icon: 'peoples' }
       }
     ]
   },
 
   {
-    path: '/form',
+    path: '/order',
     component: Layout,
     children: [
       {
         path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
+        name: 'Order',
+        component: () => import('@/views/order/index'),
         meta: { title: '订单管理', icon: 'form' }
       }
     ]
@@ -113,15 +113,15 @@ export const constantRoutes = [
     },
     children: [
       {
-        path: '取货员信息',
+        path: '/1',
         component: () => import('@/views/nested/menu2/index'),
-        meta: { title: 'menu2' }
+        meta: { title: '取货员信息' }
       },
       {
-        path: '取货员申请',
+        path: '/2',
         component: () => import('@/views/nested/menu2/index'),
-        meta: { title: 'menu2' }
-      },
+        meta: { title: '取货员申请' }
+      }
     ]
   },
 
@@ -131,7 +131,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'https://www.baidu.com',
-        meta: { title: '外部链接', icon: 'link' }
+        meta: { title: '使用说明', icon: 'link' }
       }
     ]
   },

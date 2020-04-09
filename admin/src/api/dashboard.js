@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 const dashboard = (params) => request({
-  url: '/vue-admin-template/table/list',
+  url: '/admin/dashboard',
   method: 'get',
   params
 })

@@ -7,9 +7,9 @@ use think\facade\Request;
 use app\common\exception\ApiException;
 use app\common\error\ErrorCode;
 use app\common\model\Waste as WasteModel;
+use app\common\BaseController;
 
-
-class Waste extends Controller
+class Waste extends BaseController
 {
 
 
