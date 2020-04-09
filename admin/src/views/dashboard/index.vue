@@ -10,7 +10,7 @@
             <div class="card-panel-text">
               用户总数
             </div>
-            <count-to :start-val="0" :end-val=this.dashboarddata.allusercount :duration="2600" class="card-panel-num" />
+            <count-to :start-val="0" :end-val=dashboarddata.allusercount :duration="2600" class="card-panel-num" />
           </div>
         </div>
       </el-col>
@@ -64,7 +64,7 @@
             <div class="card-panel-text">
               废品种类
             </div>
-            <count-to :start-val="0" :end-val=this.dashboarddata.wastecount :duration="2600" class="card-panel-num" />
+            <count-to :start-val="0" :end-val=dashboarddata.wastecount :duration="2600" class="card-panel-num" />
           </div>
         </div>
       </el-col>
