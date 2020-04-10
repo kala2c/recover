@@ -30,6 +30,22 @@ class OrderMaster extends Base
     ];
 
     /**
+     * 定义字段获取器 将status => 文本
+     * 在toArray()或toJson()时自动触发 非显式方法
+     * @param $value
+     * @param $data
+     * @return mixed
+     */
+    public function getStatusAttr($value, $data)
+    {
+        return self::$STATUS_MSG[$data['status']];
+    }
+//    public function getStatusMsgAttr($value, $data)
+//    {
+//        return self::$STATUS_MSG[$data['status']];
+//    }
+
+    /**
      * 新增订单
      * @param $data
      * @param $user_id

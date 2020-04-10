@@ -11,7 +11,7 @@
             :key="item.id"
             :title="item.waste.name+' | '+item.waste_number+item.waste.unit"
             :value="item.status"
-            :label="item.pickman && item.pickman.name || '回收员未接单'"
+            :label="item.note || '未填写备注'"
           >
           </van-cell>
           <div class="load-btn-wrap">

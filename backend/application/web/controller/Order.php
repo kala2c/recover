@@ -96,7 +96,10 @@ class Order extends Base
         }
         $page = $param['page'] ?? 1;
         $map = ['status' => $param['status'], 'user_id' => $this->user_info['uid']];
-        $orderList = OrderMasterModel::pageUtil($page, $map)->with(['waste'])->select();
+        $orderList = OrderMasterModel::pageUtil($page, $map)
+            ->with(['waste'])
+            ->select()
+            ->toArray(); //触发获取器
         $pageInfo = OrderMasterModel::pageInfo();
         return success([
             'orderList' => $orderList,
