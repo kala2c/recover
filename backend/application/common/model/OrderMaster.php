@@ -32,6 +32,7 @@ class OrderMaster extends Base
     /**
      * 新增订单
      * @param $data
+     * @param $user_id
      * @return mixed
      * @throws DataException
      */
@@ -46,9 +47,19 @@ class OrderMaster extends Base
             $data['pick_time'] = date("Y-m-d H:i:s", $data['pick_time']);
         }
         $data['waste_price'] = $waste->price;
+        $data['order_no'] = self::createOrderNo();
         $data['status'] = self::STATUS_WAIT;
         $data = self::addTimeField($data);
         return self::create($data);
+    }
+
+    /**
+     * 生成十八位订单编号
+     * @return string
+     */
+    static private function createOrderNo()
+    {
+        return date('YmdHis').rand(1000, 9999);
     }
 
     /*

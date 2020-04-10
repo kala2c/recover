@@ -19,7 +19,8 @@ const getAddressById = (id) => request({
 })
 
 const getAddressList = () => request({
-  url: '/collect/addresses'
+  url: '/collect/addresses',
+  method: 'get'
 })
 
 const saveAddress = (data) => request({
@@ -51,7 +52,8 @@ const getOrderDetail = (params) => request({
 })
 
 const getOrderList = (params) => request({
-  url: '/collect/orders'
+  url: '/collect/orders',
+  params
 })
 
 export default {

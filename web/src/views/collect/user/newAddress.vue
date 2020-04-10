@@ -30,7 +30,7 @@
         v-model="formData.detail"
         placeholder="填写街道-小区-门牌号"
       />
-      <div class="default-switch form-ctrl">
+      <div class="default-switch form-ctrl" v-if="isEdit">
         <div class="label">设为默认</div>
         <van-switch v-model="switchChecked" :disabled="switchDisabled" />
       </div>
@@ -73,6 +73,7 @@ export default {
       switchChecked: true,
       switchDisabled: true,
       submitDisabled: false,
+      isEdit: false,
       cbPath: '',
       formData: {
         id: null,
@@ -166,6 +167,7 @@ export default {
         this.formData.phone = data.phone
         this.formData.area = data.area
         this.formData.detail = data.detail
+        this.isEdit = true
         if (data.status !== 1) {
           this.switchChecked = false
           this.switchDisabled = false
