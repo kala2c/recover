@@ -38,6 +38,7 @@ Route::get('/wx/sdkconf', 'index/Wx/sdkConf');
 
 //用户信息
 Route::get('/web/user/info', 'web/User/info');
+Route::get('/web/user/location', 'web/User/getLocation');
 // 提交反馈
 Route::post('/collect/feedback', 'web/FeedBack/create');
 // 地址相关

@@ -1,6 +1,8 @@
 <?php
 namespace app\index\controller;
 
+use app\common\model\User;
+use think\facade\Cache;
 use think\Controller;
 use think\facade\Request;
 
@@ -8,7 +10,23 @@ class Index extends Controller
 {
     public function index()
     {
-        return $this->fetch();
+        $xml = file_get_contents('php://input');
+        $p = xml_parser_create();
+        xml_parse_into_struct($p, $xml, $val, $index);
+        xml_parser_free($p);
+        if (!empty($val) && !empty($index)) {
+            $open_id = $val[$index["FROMUSERNAME"][0]]["value"];
+            $latitude = $val[$index["LATITUDE"][0]]["value"] ?? null;
+            $longitude = $val[$index["LONGITUDE"][0]]["value"] ?? null;
+            if ($latitude != null && $longitude != null) {
+                Cache::set("$open_id.location","$latitude,$longitude");
+            }
+//            $user = User::get(['openid' => $open_id]);
+//            if ($user) {
+//                $user->location = "$latitude,$longitude";
+//                $user->save();
+//            }
+        }
     }
 
     public function wxCheck()

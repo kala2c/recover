@@ -1,6 +1,9 @@
 <template>
   <div class="home">
-    <div class="location">定位</div>
+    <div class="location">
+      <van-icon name="location-o" />
+      {{location}}
+    </div>
     <banner :bannerList="bannerList"></banner>
     <div class="grid">
       <div v-for="item in pageList" :key="item.id" class="grid-item">
@@ -42,6 +45,7 @@
     <div class="one-key-btn" @click="$router.push('/collect/subscribe')">
       一键下单
     </div>
+    <div id="map"></div>
     <foot-bar></foot-bar>
   </div>
 </template>
@@ -50,14 +54,16 @@
 import Banner from '@/components/Banner'
 import FootBar from '@/views/collect/components/FootBar'
 import api from '@/api/collect'
-
+import { Icon } from 'vant'
 export default {
   components: {
+    VanIcon: Icon,
     Banner,
     FootBar
   },
   data() {
     return {
+      location: '正在获取位置信息...',
       bannerList: [
         {
           id: 1,
@@ -102,30 +108,31 @@ export default {
   },
   methods: {
     async getLocation() {
-      // const url = encodeURIComponent(location.href.split('#')[0])
-      const url = window.location.origin
-      const response = await api.getSdkConf(url)
-      const data = response.data
-      this.$wx.config({
-        debug: true,
-        appId: data.appId,
-        timestamp: data.timestamp,
-        nonceStr: data.nonceStr,
-        signature: data.signature,
-        jsApiList: ['getLocation']
-      })
-      this.$wx.ready(() => {
-        this.$wx.getLocation({
-          type: 'gcj102',
-          success: function (res) {
-            console.log(res, 'location')
-            // const latitude = res.latitude
-            // const longitude = res.longitude
-            // const speed = res.speed
-            // const accuracy = res.accuracy
-          }
-        })
-      })
+      // const wx = window.wx
+      // // const url = encodeURIComponent(location.href.split('#')[0])
+      // const url = window.location.origin
+      // const response = await api.getSdkConf(url)
+      // const data = response.data
+      // wx.config({
+      //   debug: true,
+      //   appId: data.appId,
+      //   timestamp: data.timestamp,
+      //   nonceStr: data.nonceStr,
+      //   signature: data.signature,
+      //   jsApiList: ['getLocation']
+      // })
+      // wx.ready(() => {
+      //   wx.getLocation({
+      //     type: 'gcj102',
+      //     success: function (res) {
+      //       console.log(res, 'location')
+      //       // const latitude = res.latitude
+      //       // const longitude = res.longitude
+      //       // const speed = res.speed
+      //       // const accuracy = res.accuracy
+      //     }
+      //   })
+      // })
     },
     toPage(item) {
       console.log(item)
@@ -133,6 +140,11 @@ export default {
   },
   async created() {
     this.getLocation()
+  },
+  async mounted() {
+    const res = await api.getLocation()
+    const data = res.data
+    this.location = data.address || data.errMsg || '无法获取位置信息'
   }
 }
 </script>
@@ -141,8 +153,11 @@ export default {
 .home {
   padding-bottom: 130px;
   .location {
+    display: flex;
+    align-items: center;
     height: 30px;
     line-height: 30px;
+    font-size: 15px;
     background-color: #fff;
   }
   .grid {

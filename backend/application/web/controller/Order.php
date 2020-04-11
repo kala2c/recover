@@ -113,6 +113,7 @@ class Order extends Base
 
     /**
      * 通知回收员新订单
+     * @param $order
      */
     private function notifyPickman($order) {
         // 根据区域信息获取分配到的回收员openid

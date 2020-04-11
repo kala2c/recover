@@ -8,6 +8,10 @@ const getSdkConf = (url) => request({
   }
 })
 
+const getLocation = () => request({
+  url: 'web/user/location'
+})
+
 const submitFeedback = (data) => request({
   url: '/collect/feedback',
   method: 'post',
@@ -65,6 +69,7 @@ const getOrderList = (params) => request({
 
 export default {
   getSdkConf,
+  getLocation,
   submitFeedback,
   getUserInfo,
   getAddressById,

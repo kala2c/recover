@@ -41,7 +41,7 @@ class Login extends Controller
         $appSecret = config('secret.wx.appSecret');
         $code = $param['code'];
         $response1 = Requests::get('https://api.weixin.qq.com/sns/oauth2/access_token?appid='.$appId.'&secret='.$appSecret.'&code='.$code.'&grant_type=authorization_code');
-        $response1 = (array)json_decode($response1->body);
+        $response1 = json_decode($response1->body, true);
         if (array_key_exists('errcode', $response1)) {
             throw new ApiException(ErrorCode::WX_OAUTH_FAILED);
         }
@@ -51,7 +51,7 @@ class Login extends Controller
 //        Cache::set('wx_refresh_token.', time());
 //        拉取用户信息
         $response2 = Requests::get('https://api.weixin.qq.com/sns/userinfo?access_token='.$access_token.'&openid='.$openid.'&lang=zh_CN');
-        $user_info = (array)json_decode($response2->body);
+        $user_info = json_decode($response2->body, true);
         if (array_key_exists('errcode', $user_info)) {
             throw new ApiException(ErrorCode::WX_GET_INFO_FAILED);
         }

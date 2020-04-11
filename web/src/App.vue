@@ -5,6 +5,7 @@
   </div>
 </template>
 
+<script src="https://map.qq.com/api/js?v=2.exp&key=NGLBZ-PFLAJ-N2AFY-FYYM3-IKZS7-MABJT"></script>
 <script>
 import Loading from '@/components/Loading'
 export default {
