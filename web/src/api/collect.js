@@ -1,6 +1,13 @@
 // import store from '../store'
 import request from '@/utils/request'
 
+const getSdkConf = (url) => request({
+  url: 'wx/sdkconf',
+  params: {
+    url: url
+  }
+})
+
 const submitFeedback = (data) => request({
   url: '/collect/feedback',
   method: 'post',
@@ -57,6 +64,7 @@ const getOrderList = (params) => request({
 })
 
 export default {
+  getSdkConf,
   submitFeedback,
   getUserInfo,
   getAddressById,

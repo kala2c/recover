@@ -5,7 +5,11 @@
 // +----------------------------------------------------------------------
 return [
     'wx' => [
-        'appID' => 'wxb06bf22b4b5e6a5d',
-        'appsecret' => '5199d77fa9ea333cfc2692553b733c12'
+        'appId' => 'wxb06bf22b4b5e6a5d',
+        'appSecret' => '5199d77fa9ea333cfc2692553b733c12',
+        'templateId' => [
+            'newOrderNotify' => 'F9KCWuOVVU_Elb-7cJ3KAHs8jAmchEBZVC2VQvE00OY'
+//            'newOrderNotify' => 'SxOvQtdNKt4msFkKPs0jeSvcv9rKatbM8ODvlJfUO20'
+        ]
     ]
 ];

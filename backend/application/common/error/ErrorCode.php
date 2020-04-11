@@ -14,6 +14,7 @@ class ErrorCode
     const UNAUTHORIZED = 10006;
     const TIME_OUT = 10007;
 //    const = 1008; 单点登录
+    const WX_AUTH_ERROR = 10008;
 
     /*************DB 操作错误代码**************/
     const LOST_CONNECT = 20000;

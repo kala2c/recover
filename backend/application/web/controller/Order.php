@@ -9,10 +9,12 @@ use app\common\exception\ApiException;
 use app\common\exception\DataException;
 use app\common\model\Waste as WasteModel;
 use app\common\model\Address as AddressModel;
+use app\index\controller\Wx;
 use think\Exception\DbException;
 use think\exception\ValidateException;
 use think\facade\Validate;
 use app\common\model\OrderMaster as OrderMasterModel;
+
 class Order extends Base
 {
     /**
@@ -51,6 +53,8 @@ class Order extends Base
         }
 
         $rlt = OrderMasterModel::set($data, $this->user_info['uid']);
+        // 通知回收员
+        $this->notifyPickman($rlt);
         if (!$rlt) {
             throw new ApiException(ErrorCode::INSERT_ORDER_FAILED);
         }
@@ -105,5 +109,38 @@ class Order extends Base
             'orderList' => $orderList,
             'pageMax' => $pageInfo['pageMax']
         ]);
+    }
+
+    /**
+     * 通知回收员新订单
+     */
+    private function notifyPickman($order) {
+        // 根据区域信息获取分配到的回收员openid
+        // $openid = "";
+        // 临时先用一个openid测试推送
+        $open_id = "orPPws8Mr4LO42SEJA4WMZ5tsrPo";
+        $template_id = config('secret.wx.templateId.newOrderNotify');
+        $data = [
+            "address" => [
+                "value" => $order->address_detail,
+                "color" => "#173177"
+            ],
+            "wasteName" => [
+                "value" => $order->waste->name,
+                "color" => "#173177"
+            ],
+            "number" => [
+                "value" => $order->waste_number,
+                "color" => "#173177"
+            ],
+            "unit" => [
+                "value" => $order->waste->unit,
+                "color" => "#173177"
+            ],
+        ];
+        // 接单页面
+        $url = "http://testwx2.c2wei.cn/#/pick/order";
+        $wx = new Wx();
+        $wx->sendMessage($open_id, $template_id, $url, $data);
     }
 }

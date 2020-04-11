@@ -8,10 +8,10 @@ class Wx
 
     static public function test()
     {
-        $appID = config('secret.wx.appID');
-        $appsecret = config('secret.wx.appsecret');
+        $appId = config('secret.wx.appId');
+        $appSecret = config('secret.wx.appSecret');
 
-        dump($appID);
-        dump($appsecret);
+        dump($appId);
+        dump($appSecret);
     }
 }

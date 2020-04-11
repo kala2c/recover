@@ -37,10 +37,10 @@ class Login extends Controller
             throw new ValidateException($validate->getError());
         }
 //        通过code换取access_token
-        $appid = config('secret.wx.appID');
-        $appsecret = config('secret.wx.appsecret');
+        $appId = config('secret.wx.appId');
+        $appSecret = config('secret.wx.appSecret');
         $code = $param['code'];
-        $response1 = Requests::get('https://api.weixin.qq.com/sns/oauth2/access_token?appid='.$appid.'&secret='.$appsecret.'&code='.$code.'&grant_type=authorization_code');
+        $response1 = Requests::get('https://api.weixin.qq.com/sns/oauth2/access_token?appid='.$appId.'&secret='.$appSecret.'&code='.$code.'&grant_type=authorization_code');
         $response1 = (array)json_decode($response1->body);
         if (array_key_exists('errcode', $response1)) {
             throw new ApiException(ErrorCode::WX_OAUTH_FAILED);

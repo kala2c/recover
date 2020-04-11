@@ -58,7 +58,8 @@ export default {
   height: 50px;
   // padding: 0 20px;
   // border-radius: 20px;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: #fff;
+  // background-color: rgba(255, 255, 255, 0.8);
   .foot-bar-item {
     width: 25%;
     height: 100%;

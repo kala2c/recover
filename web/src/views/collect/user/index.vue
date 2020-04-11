@@ -13,7 +13,9 @@
         class="grid-item"
         @click="toPath(item.path)"
         >
-        <div class="grid-item-pic"></div>
+        <div class="grid-item-pic">
+          <img class="icon" :src="item.icon" alt="">
+        </div>
         <p class="grid-item-text">{{item.name}}</p>
       </div>
     </div>
@@ -33,32 +35,33 @@ export default {
     return {
       gridList: [{
         id: 1,
-        icon: '',
+        icon: 'http://static.c2wei.cn/collect-icon/order.png',
         path: '/collect/order',
         name: '我的订单'
       }, {
         id: 2,
-        icon: '',
-        path: '/collect/shop',
+        icon: 'http://static.c2wei.cn/collect-icon/shop.png',
+        // path: '/collect/shop',
+        path: false,
         name: '积分商城'
       }, {
         id: 3,
-        icon: '',
+        icon: 'http://static.c2wei.cn/collect-icon/bill.png',
         path: false,
         name: '积分账单'
       }, {
         id: 4,
-        icon: '',
+        icon: 'http://static.c2wei.cn/collect-icon/score.png',
         path: false,
         name: '我的积分'
       }, {
         id: 5,
-        icon: '',
+        icon: 'http://static.c2wei.cn/collect-icon/place.png',
         path: '/collect/user/address',
         name: '收货地址'
       }, {
         id: 6,
-        icon: '',
+        icon: 'http://static.c2wei.cn/collect-icon/feedback.png',
         path: '/collect/user/feedback',
         name: '意见反馈'
       }]
@@ -129,6 +132,13 @@ export default {
       .grid-item-pic {
         width: 80px;
         height: 80px;
+        margin: 0 auto;
+        text-align: center;
+        .icon {
+          margin-top: 17px;
+          width: 46px;
+          height: 46px;
+        }
       }
       .grid-item-text {
         height: 20px;

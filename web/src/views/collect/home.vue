@@ -3,55 +3,37 @@
     <div class="location">定位</div>
     <banner :bannerList="bannerList"></banner>
     <div class="grid">
-      <div class="grid-item">
-        <div class="grid-item-content">
+      <div v-for="item in pageList" :key="item.id" class="grid-item">
+        <div class="grid-item-content" @click="toPage(item)">
           <div class="grid-item-pic">
-            <div class="img"></div>
+            <img :src="item.icon" alt="" class="icon">
           </div>
-          <p class="grid-item-text">价格查询</p>
-        </div>
-      </div>
-      <div class="grid-item">
-        <div class="grid-item-content">
-          <div class="grid-item-pic">
-            <div class="img"></div>
-          </div>
-          <p class="grid-item-text">客服电话</p>
-        </div>
-      </div>
-      <div class="grid-item">
-        <div class="grid-item-content">
-          <div class="grid-item-pic">
-            <div class="img"></div>
-          </div>
-          <p class="grid-item-text">附近回收员</p>
-        </div>
-      </div>
-      <div class="grid-item">
-        <div class="grid-item-content">
-          <div class="grid-item-pic">
-            <div class="img"></div>
-          </div>
-          <p class="grid-item-text">服务城市</p>
+          <p class="grid-item-text">{{item.name}}</p>
         </div>
       </div>
       <!-- <div class="grid-item"></div> -->
     </div>
     <div class="rule">
       <div class="rule-item">
-        <div class="rule-item-pic"></div>
+        <div class="rule-item-pic">
+          <img src="http://static.c2wei.cn/collect-icon/0.png" alt="">
+        </div>
         <div class="rule-item-text">
           <span class="strong">拒绝</span>掺水
         </div>
       </div>
       <div class="rule-item">
-        <div class="rule-item-pic"></div>
+        <div class="rule-item-pic">
+          <img src="http://static.c2wei.cn/collect-icon/1.png" alt="">
+        </div>
         <div class="rule-item-text">
           <span class="strong">拒绝</span>掺杂
         </div>
       </div>
       <div class="rule-item">
-        <div class="rule-item-pic"></div>
+        <div class="rule-item-pic">
+          <img src="http://static.c2wei.cn/collect-icon/2.png" alt="">
+        </div>
         <div class="rule-item-text">
           单次<span class="strong">10KG</span>以上
         </div>
@@ -67,7 +49,7 @@
 <script>
 import Banner from '@/components/Banner'
 import FootBar from '@/views/collect/components/FootBar'
-// import api from '@/api/collect'
+import api from '@/api/collect'
 
 export default {
   components: {
@@ -89,15 +71,68 @@ export default {
           id: 3,
           url: 'http://static.c2wei.cn/banner/banner1.jpeg'
         }
+      ],
+      pageList: [
+        {
+          id: 1,
+          path: '',
+          icon: 'http://static.c2wei.cn/collect-icon/price.png',
+          name: '价格查询'
+        },
+        {
+          id: 2,
+          path: '',
+          icon: 'http://static.c2wei.cn/collect-icon/city.png',
+          name: '服务城市'
+        },
+        {
+          id: 3,
+          path: '',
+          icon: 'http://static.c2wei.cn/collect-icon/pickman.png',
+          name: '附近回收员'
+        },
+        {
+          id: 4,
+          path: '',
+          icon: 'http://static.c2wei.cn/collect-icon/custom.png',
+          name: '联系客服'
+        }
       ]
     }
   },
   methods: {
-    getLocation() {
-      // this.$wx.config()
+    async getLocation() {
+      // const url = encodeURIComponent(location.href.split('#')[0])
+      const url = window.location.origin
+      const response = await api.getSdkConf(url)
+      const data = response.data
+      this.$wx.config({
+        debug: true,
+        appId: data.appId,
+        timestamp: data.timestamp,
+        nonceStr: data.nonceStr,
+        signature: data.signature,
+        jsApiList: ['getLocation']
+      })
+      this.$wx.ready(() => {
+        this.$wx.getLocation({
+          type: 'gcj102',
+          success: function (res) {
+            console.log(res, 'location')
+            // const latitude = res.latitude
+            // const longitude = res.longitude
+            // const speed = res.speed
+            // const accuracy = res.accuracy
+          }
+        })
+      })
+    },
+    toPage(item) {
+      console.log(item)
     }
   },
   async created() {
+    this.getLocation()
   }
 }
 </script>
@@ -131,12 +166,12 @@ export default {
           width: 40%;
           height: 40px;
           text-align: center;
-          .img {
+          .icon {
             display: inline-block;
             box-sizing: border-box;
             width: 40px;
             height: 40px;
-            border: 2px solid #ccc;
+            border: 2px solid #eee;
             border-radius: 50%;
           }
         }
@@ -165,6 +200,11 @@ export default {
         display: inline-block;
         width: 80px;
         height: 80px;
+        img {
+          margin: 10px auto;
+          width: 60px;
+          height: 60px;
+        }
       }
       .rule-item-text {
         height: 20px;

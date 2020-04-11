@@ -25,13 +25,13 @@ Route::get('/admin/order/OrderList','admin/order/OrderList');
 //工具相关
 Route::get('/admin/dashboard', 'admin/Base/dashboard');
 //微信接入相关
-Route::get('/admin/weixin/check', '/index/weixin/check');
+Route::get('/admin/weixin/check', '/index/Index/wxCheck');
 
 
-//微信登录
+//微信网页授权登录
 Route::get('/wx/oauth', 'web/Login/oauth');
 //微信js-sdk
-Route::get('/wx/sdkconf', 'index/Weixin/sdkConf');
+Route::get('/wx/sdkconf', 'index/Wx/sdkConf');
 /* 微信端 接口路由*/
 
 //用户信息
