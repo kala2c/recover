@@ -17,7 +17,7 @@
         <el-table-column label="微信昵称" prop="username"></el-table-column>
         <el-table-column label="openid" prop="openid" width="300px"></el-table-column>
         <el-table-column label="积分" prop="score"></el-table-column>
-        <el-table-column label="等级" prop="status"></el-table-column>
+        <el-table-column label="状态" prop="status"></el-table-column>
         <el-table-column label="注册时间" prop="create_time">
 <!--          <template slot-scope="scope">-->
 <!--            <el-switch v-model="scope.row.mg_state" @change="userStateChanged(scope.row)">-->
