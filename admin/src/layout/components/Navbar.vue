@@ -16,9 +16,9 @@
               主页
             </el-dropdown-item>
           </router-link>
-          <a href="">
+          <router-link to="/account/index">
             <el-dropdown-item>账号管理</el-dropdown-item>
-          </a>
+          </router-link>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">退出登录</span>
           </el-dropdown-item>
