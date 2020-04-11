@@ -5,7 +5,7 @@
       <!-- 搜索与添加区域 -->
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="getWasteList">
+          <el-input placeholder="搜索废品名称" v-model="queryInfo.query" clearable @clear="getWasteList">
             <el-button slot="append" icon="el-icon-search" @click="getWasteList"></el-button>
           </el-input>
         </el-col>

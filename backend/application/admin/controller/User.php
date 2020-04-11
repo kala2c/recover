@@ -10,17 +10,21 @@ use think\facade\Request;
 
 class User extends Base
 {
-    public function info() {
+    public function info(Request $request)
+    {
         return success([
             'roles' => ['admin'],
             'introduction' => '我是超级管理',
             'avatar' => 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
             'name' => '超级管理员',
         ]);
+
     }
-    public function UserList(){
+
+    public function UserList()
+    {
         // 用于微信名称的模糊查询
-        $username = Request::param('username').'%';
+        $username = Request::param('username') . '%';
         //分页的大小
         $pagesize = Request::param('pagesize', '10');
         //当前在第几页

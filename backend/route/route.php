@@ -13,6 +13,7 @@
 Route::post('/admin/user/login', 'admin/Login/login');
 Route::post('/admin/user/logout', 'admin/Login/logout');
 Route::get('/admin/user/info', 'admin/User/info');
+Route::post('/admin/user/changepassword', 'admin/Administrator/changepassword');
 //管理员端 用户账号相关
 Route::post('/admin/user/UserList', 'admin/user/UserList');
 Route::post('/admin/user/UserInfo', 'admin/user/UserInfo');
@@ -22,6 +23,7 @@ Route::get('/admin/waste/WasteInfo', 'admin/waste/WasteInfo');
 Route::get('/admin/waste/setWasteInfo', 'admin/waste/setWasteInfo');
 //管理员端 订单相关
 Route::get('/admin/order/OrderList','admin/order/OrderList');
+Route::post('/admin/order/DeleteOrder','admin/order/DeleteOrder');
 //工具相关
 Route::get('/admin/dashboard', 'admin/Base/dashboard');
 //微信接入相关
