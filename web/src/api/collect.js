@@ -46,6 +46,10 @@ const setDefaultAddress = (data) => request({
   data
 })
 
+const getAreaTable = () => request({
+  url: '/collect/area'
+})
+
 const getOrderInfo = () => request({
   url: '/collect/orderinfo'
 })
@@ -76,6 +80,7 @@ export default {
   getAddressList,
   saveAddress,
   setDefaultAddress,
+  getAreaTable,
   getOrderInfo,
   submitOrder,
   getOrderDetail,

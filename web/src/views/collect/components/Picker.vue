@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import api from '@/api/collect'
 import { Picker, Popup } from 'vant'
 export default {
   components: {
@@ -58,24 +59,51 @@ export default {
   methods: {
     onConfirm(value) {
       this.$emit('confirm', value)
+    },
+    init() {
+      if (this.type === 'time') {
+        // 渲染时间菜单
+        const dayTime = []
+        for (let i = 8; i <= 17; i++) {
+          dayTime.push(i + ':00')
+        }
+        const timeTable = [
+          {
+            values: ['明天', '后天'],
+            defaultIndex: 0
+          },
+          {
+            values: dayTime,
+            defaultIndex: 0
+          }
+        ]
+        this.timeTable = timeTable
+      } else if (this.type === 'area') {
+        // 渲染地区菜单
+        let areaTable = []
+        api.getAreaTable().then(res => {
+          const data = res.data
+          areaTable = this.findChild(data)
+          this.areaTable = areaTable
+        })
+      }
+    },
+    findChild(data) {
+      if (data instanceof Array) {
+        const rlt = data.map(item => {
+          const obj = {}
+          obj.text = item.name
+          if (item.child) {
+            obj.children = this.findChild(item.child)
+          }
+          return obj
+        })
+        return rlt
+      }
     }
   },
   created() {
-    const dayTime = []
-    for (let i = 8; i <= 17; i++) {
-      dayTime.push(i + ':00')
-    }
-    const timeTable = [
-      {
-        values: ['明天', '后天'],
-        defaultIndex: 0
-      },
-      {
-        values: dayTime,
-        defaultIndex: 0
-      }
-    ]
-    this.timeTable = timeTable
+    this.init()
   }
 }
 </script>

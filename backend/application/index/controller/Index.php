@@ -15,13 +15,13 @@ class Index extends Controller
         xml_parse_into_struct($p, $xml, $val, $index);
         xml_parser_free($p);
         if (!empty($val) && !empty($index)) {
-            $open_id = $val[$index["FROMUSERNAME"][0]]["value"];
+            $openid = $val[$index["FROMUSERNAME"][0]]["value"];
             $latitude = $val[$index["LATITUDE"][0]]["value"] ?? null;
             $longitude = $val[$index["LONGITUDE"][0]]["value"] ?? null;
             if ($latitude != null && $longitude != null) {
-                Cache::set("$open_id.location","$latitude,$longitude");
+                Cache::set("$openid.location","$latitude,$longitude");
             }
-//            $user = User::get(['openid' => $open_id]);
+//            $user = User::get(['openid' => $openid]);
 //            if ($user) {
 //                $user->location = "$latitude,$longitude";
 //                $user->save();

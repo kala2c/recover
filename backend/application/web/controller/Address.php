@@ -3,6 +3,7 @@ namespace app\web\controller;
 
 use app\common\error\ErrorCode;
 use app\common\exception\ApiException;
+use app\common\model\Area as AreaModel;
 use think\Exception\DbException;
 use think\exception\ValidateException;
 use think\facade\Validate;
@@ -102,5 +103,15 @@ class Address extends Base
             throw new ApiException(ErrorCode::SER_ADDRESS_DEFAULT_FAILED);
         }
         return successWithMsg('设置成功');
+    }
+
+    /**
+     * 获取区域信息
+     * @throws DbException
+     */
+    public function getArea()
+    {
+        $data = AreaModel::getList();
+        return success($data);
     }
 }

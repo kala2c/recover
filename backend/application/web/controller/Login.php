@@ -47,8 +47,8 @@ class Login extends Controller
         }
         $access_token = $response1['access_token'];
         $openid = $response1['openid'];
-//        Cache::set('wx_access_token.', time());
-//        Cache::set('wx_refresh_token.', time());
+//        Cache::set("wx_access_token.$openid", time());
+//        Cache::set("wx_refresh_token.', time());
 //        拉取用户信息
         $response2 = Requests::get('https://api.weixin.qq.com/sns/userinfo?access_token='.$access_token.'&openid='.$openid.'&lang=zh_CN');
         $user_info = json_decode($response2->body, true);
@@ -65,10 +65,22 @@ class Login extends Controller
                 'status' => User::STATUS_NORMAL
             ]);
         }
+        $uid = $user->id;
+        $nickname = $user_info['nickname'];
+        $avatar = $user_info['headimgurl'];
+        $old_nickname = Cache::get("name.$uid");
+        $old_avatar = Cache::get("avatar.$uid");
+        if (
+            (!$old_avatar || !$old_nickname) || // 没有缓存头像和昵称
+            ($old_nickname != $nickname || $old_avatar != $avatar) // 缓存了 但是信息已更新
+        ) {
+            // 缓存头像和昵称
+            Cache::set("name.$uid", $nickname);
+            Cache::set("avatar.$uid", $avatar);
+        }
         $payload = [
             'uid' => $user->id,
-            'name' => $user_info['nickname'],
-            'avatar' => $user_info['headimgurl'],
+            'openid' => $openid
         ];
         $token = JWT::encode($payload, 'recover');
         Cache::set($token, time());

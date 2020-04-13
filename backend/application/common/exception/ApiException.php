@@ -16,7 +16,7 @@ class ApiException extends Exception
     {
 //        parent::__construct($message, $code);
         $this->status = $status;
-        $this->message = $this->getMessageByCode($code) ?? $message;
+        $this->message = !$message ? $this->getMessageByCode($code) : $message;
         $this->code = $code;
     }
 

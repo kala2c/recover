@@ -19,7 +19,13 @@ class User extends Base
      */
     public function info()
     {
-        return success($this->user_info);
+        $uid = $this->user_info['uid'];
+        $name = Cache::get("name.$uid");
+        $avatar = Cache::get("avatar.$uid");
+        return success([
+            'name' => $name,
+            'avatar' => $avatar
+        ]);
     }
 
     /**
@@ -37,16 +43,16 @@ class User extends Base
 //        }
 //        $location = $param['location']; //39.984154,116.307490
         $user = UserModel::get($this->user_info['uid']);
-        $open_id = $user->openid;
-        $location = Cache::get("$open_id.location");
+        $openid = $user->openid;
+        $location = Cache::get("$openid.location");
         if (!$location) {
             return success([
                 'errMsg' => '获取位置信息失败'
             ]);
         }
-        $address = Cache::get("$open_id.address");
+        $address = Cache::get("$openid.address");
         if (!$address) {
-            $data = $this->pos2address($location, $open_id);
+            $data = $this->pos2address($location, $openid);
             return success($data);
         } else {
             $address = json_decode($address, true);
@@ -55,7 +61,7 @@ class User extends Base
             $old_lng = $address['location']['lng'];
 //            地址变化时才会重新获取
             if (abs($new_lat-$old_lat) > 0.01 || abs($new_lng-$old_lng) > 0.01) {
-                $data = $this->pos2address($location, $open_id);
+                $data = $this->pos2address($location, $openid);
                 $address = $data;
             }
             return success($address);
@@ -66,10 +72,10 @@ class User extends Base
     /**
      * 将缓存的经纬度转换为文字坐标
      * @param $location
-     * @param $open_id
+     * @param $openid
      * @return mixed
      */
-    private function pos2address($location, $open_id)
+    private function pos2address($location, $openid)
     {
         $key = 'NGLBZ-PFLAJ-N2AFY-FYYM3-IKZS7-MABJT';
 //        $secret = 'd1BPD2s8xaKvn6Xi6alsE7cQS7opU0R';
@@ -82,7 +88,7 @@ class User extends Base
         $data = json_decode($response->body, true);
         $address = $data['result'];
         if ($address) {
-            Cache::set("$open_id.address", json_encode($address));
+            Cache::set("$openid.address", json_encode($address));
         }
         return $address;
     }

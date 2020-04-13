@@ -57,6 +57,8 @@ note：（varchar）备注
 
 id :（int）主键，自增
 
+openid: 取货员openid
+
 username ：（varchar）取货员账号
 
 realname：（varchar）取货员真实姓名
@@ -185,7 +187,22 @@ create_time: 地址创建时间
 
 update_time: 地址修改时间
 
+#### area 区域表 
+id
 
+name
+
+level 区域级别 1为最小 
+
+top_id 上级区域 如世回尧街道->芝罘区
+
+admin_id 辖区代理 
+
+pickman_id 辖区回收员
+
+create_time
+
+update_time
 
 ##### config：系统配置
 

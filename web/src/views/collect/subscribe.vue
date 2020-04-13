@@ -205,7 +205,11 @@ export default {
     onSubmit() {
       store.dispatch('loading/open')
       this.submitDisabled = true
-      api.submitOrder(this.orderForm).then(response => {
+      const formData = {}
+      Object.assign(formData, this.orderForm)
+      formData.pick_time = this.encodeTime(formData.pick_time)
+      console.log(formData)
+      api.submitOrder(formData).then(response => {
         Toast(response.data.message || '下单成功')
         store.dispatch('loading/close')
         setTimeout(() => {
@@ -216,6 +220,20 @@ export default {
         this.submitDisabled = false
         store.dispatch('loading/close')
       })
+    },
+    encodeTime(time) {
+      const now = new Date()
+      let timestamp = now.getTime()
+      const timeInfo = time.split('-')
+      if (timeInfo[0] === '明天') {
+        timestamp += 86400000
+      } else if (timeInfo[0] === '后天') {
+        timestamp += 86400000 * 2
+      }
+      const temp = new Date(timestamp)
+      const pickDate = temp.getFullYear() + '-' + (temp.getMonth() + 1) + '-' + temp.getDate() + ' ' + timeInfo[1]
+      const pickTime = (new Date(pickDate)).getTime() + ''
+      return pickTime.substr(0, 10)
     }
   },
   created() {

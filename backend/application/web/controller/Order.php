@@ -102,6 +102,7 @@ class Order extends Base
         $map = ['status' => $param['status'], 'user_id' => $this->user_info['uid']];
         $orderList = OrderMasterModel::pageUtil($page, $map)
             ->with(['waste'])
+            ->order('create_time', 'desc')
             ->select()
             ->toArray(); //触发获取器
         $pageInfo = OrderMasterModel::pageInfo();
@@ -119,7 +120,7 @@ class Order extends Base
         // 根据区域信息获取分配到的回收员openid
         // $openid = "";
         // 临时先用一个openid测试推送
-        $open_id = "orPPws8Mr4LO42SEJA4WMZ5tsrPo";
+        $openid = "orPPws8Mr4LO42SEJA4WMZ5tsrPo";
         $template_id = config('secret.wx.templateId.newOrderNotify');
         $data = [
             "address" => [
@@ -142,6 +143,6 @@ class Order extends Base
         // 接单页面
         $url = "http://testwx2.c2wei.cn/#/pick/order";
         $wx = new Wx();
-        $wx->sendMessage($open_id, $template_id, $url, $data);
+        $wx->sendMessage($openid, $template_id, $url, $data);
     }
 }

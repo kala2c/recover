@@ -56,7 +56,7 @@ class Wx extends Controller
         $response = Requests::get($api);
         $data = json_decode($response->body, true);
         if (array_key_exists('errcode', $data)) {
-            throw new ApiException(ErrorCode::WX_AUTH_ERROR, 500, $data['errmsg']);
+            throw new ApiException(ErrorCode::WX_AUTH_ERROR, 500, '获取access_token失败:'.$data['errmsg']);
         }
         Cache::set('wx_access_token', $data['access_token']);
         Cache::set('wx_access_token_expire_time', time()+$data['expires_in']);

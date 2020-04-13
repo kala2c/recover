@@ -44,6 +44,7 @@ Route::post('/collect/feedback', 'web/FeedBack/create');
 // 地址相关
 Route::get('/collect/address', 'web/Address/get');
 Route::get('/collect/addresses', 'web/Address/getList');
+Route::get('/collect/area', 'web/Address/getArea');
 Route::post('/collect/address/set', 'web/Address/set');
 Route::post('/collect/address/default', 'web/Address/setDefault');
 // 订单相关

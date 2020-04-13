@@ -32,10 +32,6 @@ const routes = [
         component: () => import('@/views/collect/user/about')
       },
       {
-        path: 'concat',
-        component: () => import('@/views/collect/user/concat')
-      },
-      {
         path: 'user/feedback',
         component: () => import('@/views/collect/user/feedback')
       },
@@ -46,6 +42,22 @@ const routes = [
       {
         path: 'user/new/address',
         component: () => import('@/views/collect/user/newAddress')
+      },
+      {
+        path: 'query/price',
+        component: () => import('@/views/collect/query/price')
+      },
+      {
+        path: 'query/custom',
+        component: () => import('@/views/collect/query/custom')
+      },
+      {
+        path: 'query/pickman',
+        component: () => import('@/views/collect/query/pickman')
+      },
+      {
+        path: 'query/city',
+        component: () => import('@/views/collect/query/city')
       }
     ]
   }

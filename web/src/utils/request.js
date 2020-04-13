@@ -4,13 +4,13 @@ import store from '@/store'
 import { getToken } from '@/utils/auth'
 import Qs from 'querystring'
 
-const baseURL = 'http://testwx.c2wei.cn/'
-// const baseURL = 'http://localhost:7000'
+// const baseURL = 'http://testwx.c2wei.cn/'
+const baseURL = 'http://localhost:7000'
 // 创建一个axios实例
 const service = axios.create({
   baseURL, // url = baseURL + request url
   // withCredentials: true, // 在跨域请求发送cookies
-  timeout: 5000 // 请求超时
+  timeout: 30000 // 请求超时
 })
 
 // request interceptor

@@ -54,7 +54,7 @@
 import Banner from '@/components/Banner'
 import FootBar from '@/views/collect/components/FootBar'
 import api from '@/api/collect'
-import { Icon } from 'vant'
+import { Icon, Toast } from 'vant'
 export default {
   components: {
     VanIcon: Icon,
@@ -81,25 +81,25 @@ export default {
       pageList: [
         {
           id: 1,
-          path: '',
+          path: '/collect/query/price',
           icon: 'http://static.c2wei.cn/collect-icon/price.png',
           name: '价格查询'
         },
         {
           id: 2,
-          path: '',
+          path: '/collect/query/city',
           icon: 'http://static.c2wei.cn/collect-icon/city.png',
           name: '服务城市'
         },
         {
           id: 3,
-          path: '',
+          path: '/collect/query/pickman',
           icon: 'http://static.c2wei.cn/collect-icon/pickman.png',
           name: '附近回收员'
         },
         {
           id: 4,
-          path: '',
+          path: '/collect/query/custom',
           icon: 'http://static.c2wei.cn/collect-icon/custom.png',
           name: '联系客服'
         }
@@ -135,7 +135,12 @@ export default {
       // })
     },
     toPage(item) {
-      console.log(item)
+      const path = item.path
+      if (path) {
+        this.$router.push(path)
+      } else {
+        Toast('该功能暂未上线，敬请期待')
+      }
     }
   },
   async created() {

@@ -1,0 +1,22 @@
+<template>
+  <div class="pickman">
+    <van-nav-bar
+      title="价格细目"
+      left-text="返回"
+      left-arrow
+      fixed
+      placeholder
+      border
+      @click-left="$router.go(-1)"
+    />
+  </div>
+</template>
+
+<script>
+import { NavBar } from 'vant'
+export default {
+  components: {
+    VanNavBar: NavBar
+  }
+}
+</script>
