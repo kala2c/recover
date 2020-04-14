@@ -80,6 +80,7 @@ export default {
         phone: '',
         name: '',
         area: '未选择',
+        area_id: '',
         detail: ''
       }
     }
@@ -109,9 +110,10 @@ export default {
       this.pickerType = 'area'
       this.pickerShow = !this.pickerShow
     },
-    onConfirm(value) {
+    onConfirm(value, areaId) {
       this.pickerShow = !this.pickerShow
       this.formData.area = value && value.join('-')
+      this.formData.area_id = areaId || 0
     },
     onSubmit() {
       if (!this.formData.name) {
@@ -134,6 +136,7 @@ export default {
         name: this.formData.name,
         phone: this.formData.phone,
         area: this.formData.area,
+        area_id: this.formData.area_id,
         detail: this.formData.detail
       }
       if (this.formData.id) {
@@ -166,6 +169,7 @@ export default {
         this.formData.name = data.name
         this.formData.phone = data.phone
         this.formData.area = data.area
+        this.formData.area_id = data.area_id
         this.formData.detail = data.detail
         this.isEdit = true
         if (data.status !== 1) {

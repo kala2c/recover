@@ -1,14 +1,15 @@
 <template>
   <div class="home">
-    <map3d class="map"></map3d>
+    <h1>接单</h1>
+    <foot-bar></foot-bar>
   </div>
 </template>
 
 <script>
-import Map3d from '@/components/Map3d'
+import FootBar from './components/FootBar'
 export default {
   components: {
-    Map3d
+    FootBar
   },
   methods: {
   },

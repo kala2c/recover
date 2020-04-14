@@ -53,6 +53,11 @@ Route::post('/collect/order', 'web/Order/set');
 Route::get('/collect/order', 'web/Order/get');
 Route::get('/collect/orders', 'web/Order/getList');
 
+// 取货员订单相关
+Route::get('/pick/takeorders', 'web/TakeOrder/getTakeOrders');
+Route::get('/pick/orders', 'web/TakeOrder/getList');
+Route::post('/pick/order/take', 'web/TakeOrder/takeOrder');
+
 return [
 
 ];

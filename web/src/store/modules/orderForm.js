@@ -5,7 +5,7 @@ const state = {
     waste_id: '',
     pick_time: '',
     pick_fast: '',
-    address: '',
+    area_id: '',
     username: '',
     phone: '',
     area: '',
@@ -28,8 +28,8 @@ const mutations = {
   SET_PICK_FAST (state, pickFast) {
     state.formData.pick_fast = pickFast
   },
-  SET_ADDRESS (state, address) {
-    state.formData.address = address
+  SET_AREA_ID (state, areaId) {
+    state.formData.area_id = areaId
   },
   SET_USERNAME (state, username) {
     state.formData.username = username
@@ -68,6 +68,7 @@ const actions = {
       username: address.name,
       phone: address.phone,
       area: address.area,
+      area_id: address.area_id,
       address_detail: address.detail
     })
   },

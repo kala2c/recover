@@ -43,6 +43,9 @@ class ErrorCode
     const UPDATE_ORDER_FAILED = 60002;
     const GET_ORDER_DETAIL_FAILED = 60003;
     const GET_ORDER_LIST_FAILED = 60004;
+    const TAKE_ORDER_FAILED = 60005;
+    const ORDER_NOT_WAIT = 60006;
+
 
     /*************Waste 废品代码**********/
     const INSERT_WASTE_FAILED = 70001;
@@ -50,6 +53,15 @@ class ErrorCode
     const GET_WASTE_DETAIL_FAILED = 70003;
     const GET_WASTE_LIST_FAILED = 70004;
     const WASTE_NOT_EXISTS = 70005;
+
+    /*************Pickman 回收员代码**********/
+    const INSERT_PICKMAN_FAILED = 80001;
+    const UPDATE_PICKMAN_FAILED = 80002;
+    const GET_PICKMAN_FAILED = 80003;
+    const GET_PICKMAN_LIST_FAILED = 80004;
+    const PICKMAN_NOT_EXISTS = 80005;
+    const PICKMAN_FORBIDDEN = 80006;
+    const PICKMAN_WAIT_AUDIT = 80007;
 
 
 
@@ -85,7 +97,14 @@ class ErrorCode
         self::UPDATE_ORDER_FAILED => '更新订单失败',
         self::GET_ORDER_DETAIL_FAILED => '获取订单详情失败',
         self::GET_ORDER_LIST_FAILED => '获取订单列表失败',
+        self::TAKE_ORDER_FAILED => '接单失败',
+        self::ORDER_NOT_WAIT => '订单非待服务状态',
 
         self::WASTE_NOT_EXISTS => '物品类型不存在',
+
+        self::INSERT_PICKMAN_FAILED => '新建取货员失败',
+        self::PICKMAN_NOT_EXISTS => '取货员不存在',
+        self::PICKMAN_FORBIDDEN => '账号已封禁',
+        self::PICKMAN_WAIT_AUDIT => '账号审核未通过',
     ];
 }
