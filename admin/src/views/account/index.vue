@@ -5,6 +5,9 @@
     </div>
     <div>
       <el-form ref="ruleForm" :model="ruleForm" status-icon :rules="rules" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="账号">
+          <el-input value="admin" type="text" autocomplete="off" disabled />
+        </el-form-item>
         <el-form-item label="原密码" prop="pass">
           <el-input v-model="ruleForm.pass" type="password" autocomplete="off" />
         </el-form-item>
@@ -28,7 +31,7 @@ export default {
   data() {
     var validatePass = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入密码'))
+        callback(new Error('请输入原密码'))
       } else {
         if (this.ruleForm.checkPass !== '') {
           this.$refs.ruleForm.validateField('checkPass')
@@ -38,7 +41,7 @@ export default {
     }
     var validatenewPass = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入密码'))
+        callback(new Error('请输入新密码'))
       } else if (value === this.ruleForm.pass) {
         callback(new Error('新密码和旧密码相同！'))
       } else {
@@ -50,7 +53,7 @@ export default {
     }
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请再次输入密码'))
+        callback(new Error('请再次输入新密码'))
       } else if (value !== this.ruleForm.newpass) {
         callback(new Error('两次输入密码不一致!'))
       } else {
@@ -97,7 +100,7 @@ export default {
     async changepassword() {
       const data = await administratorApi.changepassword(this.ruleForm)
       if (data.code !== 10000) {
-        return this.$message.error('获取用户列表失败！')
+        return this.$message.error('原密码错误！')
       }
       this.$message({
         type: 'success',

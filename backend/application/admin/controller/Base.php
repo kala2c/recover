@@ -5,6 +5,7 @@ namespace app\admin\controller;
 
 
 use app\common\BaseController;
+use app\common\model\OrderMaster as OrderModel;
 use app\common\model\Waste as WasteModel;
 use app\common\model\User as UserModel;
 
@@ -22,8 +23,12 @@ class Base extends BaseController
 
         //配送员总数
 
+        //总成交订单数
+//        $allordercount = OrderModel::where('status','=',OrderModel::STATUS_SUCCESS)->count();
         //今日成交订单数
-
+//        $todayordercount = OrderModel::where('status','=',OrderModel::STATUS_SUCCESS)->count();
+        //今日下单数
+//        $todayordercount = OrderModel::where('','=',OrderModel::STATUS_SUCCESS)->count();
         //今日成交额
         $result_map = [
             'dashboarddata' => [

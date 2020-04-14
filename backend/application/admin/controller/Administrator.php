@@ -9,6 +9,7 @@ use think\facade\Request;
 use app\admin\model\Administrator as AdminModel;
 
 class Administrator extends Base{
+    //根据账号密码修改管理员密码
     public function changepassword(){
         $password = Request::param('pass');
         $newpassword = Request::param('newpass');
