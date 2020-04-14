@@ -7,6 +7,7 @@ namespace app\web\controller;
 use app\common\error\ErrorCode;
 use app\common\exception\ApiException;
 use app\common\exception\DataException;
+use app\common\model\Area as AreaModel;
 use app\common\model\Waste as WasteModel;
 use app\common\model\Address as AddressModel;
 use app\index\controller\Wx;
@@ -15,6 +16,12 @@ use think\exception\ValidateException;
 use think\facade\Validate;
 use app\common\model\OrderMaster as OrderMasterModel;
 
+
+/**
+ * 用户下单 订单进度等
+ * Class Order
+ * @package app\web\controller
+ */
 class Order extends Base
 {
     /**
@@ -52,12 +59,12 @@ class Order extends Base
             throw new ValidateException('尽快上门和预约时间至少选择一个');
         }
 
-        $rlt = OrderMasterModel::set($data, $this->user_info['uid']);
-        // 通知回收员
-        $this->notifyPickman($rlt);
+        $rlt = OrderMasterModel::add($data, $this->user_info['uid']);
         if (!$rlt) {
             throw new ApiException(ErrorCode::INSERT_ORDER_FAILED);
         }
+        // 通知回收员
+        $this->notifyPickman($rlt);
         return successWithMsg('成功');
     }
 
@@ -117,10 +124,11 @@ class Order extends Base
      * @param $order
      */
     private function notifyPickman($order) {
-        // 根据区域信息获取分配到的回收员openid
-        // $openid = "";
-        // 临时先用一个openid测试推送
-        $openid = "orPPws8Mr4LO42SEJA4WMZ5tsrPo";
+        // 根据区域信息获取到回收员信息
+        $area = AreaModel::get($order->area_id);
+        if (!$area) return;
+        $pickmen = $area->pickman;
+        // 组装模板信息
         $template_id = config('secret.wx.templateId.newOrderNotify');
         $data = [
             "address" => [
@@ -141,8 +149,12 @@ class Order extends Base
             ],
         ];
         // 接单页面
-        $url = "http://testwx2.c2wei.cn/#/pick/order";
+        $url = "http://testwx2.c2wei.cn/#/pick/take";
+        // 根据回收员openid发送通知
         $wx = new Wx();
-        $wx->sendMessage($openid, $template_id, $url, $data);
+        foreach ($pickmen as $pickman) {
+            $openid = $pickman->openid;
+            $wx->sendMessage($openid, $template_id, $url, $data);
+        }
     }
 }

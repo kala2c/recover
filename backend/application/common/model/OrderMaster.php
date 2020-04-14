@@ -52,7 +52,7 @@ class OrderMaster extends Base
      * @return mixed
      * @throws DataException
      */
-    static public function set($data, $user_id)
+    static public function add($data, $user_id)
     {
         $data['user_id'] = $user_id;
         $waste = Waste::get($data['waste_id']);
@@ -76,6 +76,24 @@ class OrderMaster extends Base
     static private function createOrderNo()
     {
         return date('YmdHis').rand(1000, 9999);
+    }
+
+    /**
+     * 为订单设置取货员
+     * @param $order_id
+     * @param $pickman_id
+     * @throws DataException
+     * @return OrderMaster
+     */
+    static public function setPickman($order_id, $pickman)
+    {
+        $order = OrderMaster::get($order_id);
+        if ($order->status != self::STATUS_WAIT) {
+            throw new DataException(ErrorCode::ORDER_NOT_WAIT);
+        }
+        $data = ['pickman_id' => $pickman->id, 'status' => self::STATUS_GOING];
+        $data = self::addTimeField($data, false);
+        return self::update($data, ['id' => $order_id]);
     }
 
     /*

@@ -4,6 +4,8 @@
 namespace app\common\model;
 
 
+use think\db\exception\DataNotFoundException;
+use think\db\exception\ModelNotFoundException;
 use think\exception\DbException;
 
 class Area extends Base
@@ -26,7 +28,39 @@ class Area extends Base
      */
     static public function getList()
     {
-        $list = self::order('level')->select()->toArray();
+        $list = self::with('pickman')->order('level', 'desc')->order('top_id')->select()->toArray();
+        $qu = [];
+        $jd = [];
+        $rlt = [];
+        foreach ($list as $area) {
+            if ($area['level'] == self::LEVEL_QU) {
+                $qu[$area['id']] = $area;
+            } elseif ($area['level'] == self::LEVEL_JD) {
+                if (array_key_exists($area['top_id'], $qu)) {
+                    $area['top'] = $qu[$area['top_id']];
+                }
+                $jd[$area['id']] = $area;
+            } elseif ($area['level'] == self::LEVEL_JWH) {
+                if (array_key_exists($area['top_id'], $jd)) {
+                    $area['top'] = $jd[$area['top_id']];
+                }
+                $rlt[] = $area;
+            }
+        }
+        return $rlt;
+    }
+
+    /**
+     * 获取树形区域列表 上级.child = 下级
+     * @param string $field
+     * @return array
+     * @throws DbException
+     * @return mixed
+     */
+    const FRONTEND_INFO = 'id,level,top_id,name';
+    static public function getTree($field = '*')
+    {
+        $list = self::field($field)->order('level')->select()->toArray();
         $qu = [];
         $jd = [];
         $rlt = [];
@@ -46,5 +80,25 @@ class Area extends Base
             }
         }
         return $rlt;
+    }
+
+//    /**
+//     * 通过区域名字找到对应取货员
+//     * @param string $area 例：芝罘区-世回尧街道-上尧
+//     * @throws DbException
+//     */
+//    static public function getPickManByAreaName($area = '')
+//    {
+//        $area_info = explode('-', $area);
+//        $map = [];
+//        $area_data = self::where($map)->select();
+//    }
+
+    /**
+     * 关联到取货员
+     */
+    public function Pickman()
+    {
+        return $this->belongsToMany('Pickman', 'pickman_area');
     }
 }

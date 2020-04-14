@@ -19,4 +19,9 @@ class User extends Base
         $data = self::addTimeField($data);
         return self::create($data);
     }
+
+    public function OrderMaster()
+    {
+        return $this->hasOne('OrderMaster');
+    }
 }

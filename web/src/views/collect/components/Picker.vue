@@ -57,8 +57,13 @@ export default {
     }
   },
   methods: {
-    onConfirm(value) {
-      this.$emit('confirm', value)
+    onConfirm(value, index) {
+      if (this.type === 'area') {
+        const area = this.areaTable[index[0]].children[index[1]].children[index[2]]
+        this.$emit('confirm', value, area.id)
+      } else if (this.type === 'time') {
+        this.$emit('confirm', value)
+      }
     },
     init() {
       if (this.type === 'time') {
@@ -92,6 +97,7 @@ export default {
       if (data instanceof Array) {
         const rlt = data.map(item => {
           const obj = {}
+          obj.id = item.id
           obj.text = item.name
           if (item.child) {
             obj.children = this.findChild(item.child)

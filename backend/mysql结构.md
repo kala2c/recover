@@ -65,7 +65,7 @@ realname：（varchar）取货员真实姓名
 
 password：（varchar）取货员密码
 
-moible:（varchar）取货员手机号
+phone:（varchar）取货员手机号
 
 sex：（varchar）取货员性别
 
@@ -73,11 +73,21 @@ age：（int）取货员年龄
 
 idnumber：（varchar）取货员身份证号
 
-area：（varchar）取货员工作区域
-
 note：（varchar）备注
 
+status: 状态 待审核已通过等
 
+create_time: 
+
+update_time
+
+##### pickman_area 多对多中间表
+
+id
+
+pickman_id
+
+area_id
 
 ##### user：用户信息表
 
@@ -132,6 +142,8 @@ phone: 联系方式
 
 area: 区域
 
+area_id: 区域id
+
 address_detail: 地址详细信息
 
 waste_number：废品的数量（）
@@ -179,6 +191,8 @@ phone： 联系人手机号
 
 area： 地址区域 省-市-区-街道
 
+area_id: 区域id
+
 detail： 地址详细信息 街道 路 门牌等
 
 status： 地址状态 默认地址、禁用等
@@ -197,8 +211,6 @@ level 区域级别 1为最小
 top_id 上级区域 如世回尧街道->芝罘区
 
 admin_id 辖区代理 
-
-pickman_id 辖区回收员
 
 create_time
 

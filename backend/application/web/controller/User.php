@@ -71,8 +71,8 @@ class User extends Base
 
     /**
      * 将缓存的经纬度转换为文字坐标
-     * @param $location
-     * @param $openid
+     * @param $location string 经纬坐标 36.108678,149.585123
+     * @param $openid string openid
      * @return mixed
      */
     private function pos2address($location, $openid)

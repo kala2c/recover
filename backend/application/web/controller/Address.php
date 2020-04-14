@@ -50,12 +50,14 @@ class Address extends Base
             'name' => 'require',
             'phone' => 'require',
             'area' => 'require',
+            'area_id' => 'require',
             'detail' => 'require'
         ], [
             'id.number' => 'id格式不正确',
             'name.require' => '名字不可缺少',
             'phone.require' => '联系方式不可缺少',
             'area.require' => '地区不可缺少',
+            'area_id.require' => '地区不可缺少',
             'detail.require' => '地址详细信息不可缺少',
         ]);
         if (!$validate->check($data)) {
@@ -107,11 +109,10 @@ class Address extends Base
 
     /**
      * 获取区域信息
-     * @throws DbException
      */
     public function getArea()
     {
-        $data = AreaModel::getList();
+        $data = AreaModel::getTree(AreaModel::FRONTEND_INFO);
         return success($data);
     }
 }
