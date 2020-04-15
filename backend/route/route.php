@@ -24,6 +24,9 @@ Route::get('/admin/waste/setWasteInfo', 'admin/waste/setWasteInfo');
 //管理员端 订单相关
 Route::get('/admin/order/OrderList','admin/order/OrderList');
 Route::post('/admin/order/DeleteOrder','admin/order/DeleteOrder');
+//管理员端 取货员相关
+Route::get('/admin/pickman/PickmanList','admin/pickman/PickmanList');
+Route::post('/admin/pickman/PickmanStatus','admin/pickman/PickmanStatus');
 //工具相关
 Route::get('/admin/dashboard', 'admin/Base/dashboard');
 //微信接入相关

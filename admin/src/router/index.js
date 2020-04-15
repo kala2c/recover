@@ -113,9 +113,9 @@ export const constantRoutes = [
   },
 
   {
-    path: '/nested',
+    path: '/pickman',
     component: Layout,
-    redirect: '/nested/menu1',
+    redirect: '/pickman/index',
     name: 'Nested',
     meta: {
       title: '取货员管理',
@@ -123,13 +123,13 @@ export const constantRoutes = [
     },
     children: [
       {
-        path: '/1',
-        component: () => import('@/views/nested/menu2/index'),
+        path: '/index',
+        component: () => import('@/views/pickman/index'),
         meta: { title: '取货员信息' }
       },
       {
-        path: '/2',
-        component: () => import('@/views/nested/menu2/index'),
+        path: '/apply',
+        component: () => import('@/views/pickman/apply'),
         meta: { title: '取货员申请' }
       }
     ]
