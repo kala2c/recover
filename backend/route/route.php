@@ -28,7 +28,7 @@ Route::post('/admin/order/DeleteOrder','admin/order/DeleteOrder');
 Route::get('/admin/pickman/PickmanList','admin/pickman/PickmanList');
 Route::post('/admin/pickman/PickmanStatus','admin/pickman/PickmanStatus');
 //工具相关
-Route::get('/admin/dashboard', 'admin/Base/dashboard');
+Route::get('/admin/dashboard', 'admin/Administrator/dashboard');
 //微信接入相关
 Route::get('/admin/weixin/check', '/index/Index/wxCheck');
 
