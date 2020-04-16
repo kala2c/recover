@@ -86,6 +86,31 @@ class Order extends Base
     }
 
     /**
+     * 取消订单
+     * @throws ApiException
+     * @return mixed
+     */
+    public function cancel()
+    {
+        $data = $this->request->post();
+        $validate = Validate::make([
+            'order_id' => 'require|number'
+        ], [
+            'order_id.require' => '请选择订单',
+            'order_id.number' => '订单id格式不正确'
+        ]);
+        if (!$validate->check($data)) {
+            throw new ValidateException($validate->getError());
+        }
+        $user_id = $this->user_info['uid'];
+        $rlt = OrderMasterModel::cancel($data['order_id'], $user_id);
+        if (!$rlt) {
+            throw new ApiException(ErrorCode::CANCEL_ORDER_FAILED);
+        }
+        return successWithMsg('取消成功');
+    }
+
+    /**
      * 获取订单列表
      * @throws DbException
      * @return mixed
@@ -115,6 +140,7 @@ class Order extends Base
         $pageInfo = OrderMasterModel::pageInfo();
         return success([
             'orderList' => $orderList,
+            'status' => OrderMasterModel::$STATUS_MSG,
             'pageMax' => $pageInfo['pageMax']
         ]);
     }

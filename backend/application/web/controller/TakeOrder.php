@@ -74,10 +74,11 @@ class TakeOrder extends Base
             ['status', 'eq', OrderMasterModel::STATUS_WAIT]
         ];
         // 查询列表
-        $list = OrderMasterModel::pageUtil($page, $map)->select();
+        $list = OrderMasterModel::pageUtil($page, $map)->with(['waste'])->select();
         $pageInfo = OrderMasterModel::pageInfo();
         return success([
             'list' => $list,
+            'status' => OrderMasterModel::$STATUS_MSG,
             'pageMax' => $pageInfo['pageMax']
         ]);
     }
@@ -104,10 +105,10 @@ class TakeOrder extends Base
         $page = $param['page'] ?? 1;
         $pickman_id = $this->pickman->id;
         $map = [
-            'picman_id' => $pickman_id,
+            'pickman_id' => $pickman_id,
             'status' => $page['status']
         ];
-        $list = OrderMasterModel::pageUtil($page, $map)->select();
+        $list = OrderMasterModel::pageUtil($page, $map)->with(['waste'])->select();
         $pageInfo = OrderMasterModel::pageInfo();
         return success([
             'list' => $list,

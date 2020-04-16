@@ -50,6 +50,7 @@ Route::post('/collect/address/default', 'web/Address/setDefault');
 // 订单相关
 Route::get('/collect/orderInfo', 'web/Order/orderInfo');
 Route::post('/collect/order', 'web/Order/set');
+Route::post('/collect/cancelorder', 'web/Order/cancel');
 Route::get('/collect/order', 'web/Order/get');
 Route::get('/collect/orders', 'web/Order/getList');
 

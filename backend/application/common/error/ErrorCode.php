@@ -45,6 +45,8 @@ class ErrorCode
     const GET_ORDER_LIST_FAILED = 60004;
     const TAKE_ORDER_FAILED = 60005;
     const ORDER_NOT_WAIT = 60006;
+    const ORDER_CANT_REPEAT_TAKE = 60007;
+    const CANCEL_ORDER_FAILED = 60008;
 
 
     /*************Waste 废品代码**********/
@@ -99,6 +101,8 @@ class ErrorCode
         self::GET_ORDER_LIST_FAILED => '获取订单列表失败',
         self::TAKE_ORDER_FAILED => '接单失败',
         self::ORDER_NOT_WAIT => '订单非待服务状态',
+        self::ORDER_CANT_REPEAT_TAKE => '已经接过该订单',
+        self::CANCEL_ORDER_FAILED => '取消订单失败',
 
         self::WASTE_NOT_EXISTS => '物品类型不存在',
 

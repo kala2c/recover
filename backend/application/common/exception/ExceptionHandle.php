@@ -19,6 +19,8 @@ class ExceptionHandle extends Handle
             return result(ErrorCode::PARAM_ERROR, 400, $e->getError(), []);
         } elseif ($e instanceof ApiException) {
             return result($e->getCode(), $e->getStatus(), $e->getMessage(), []);
+        } elseif ($e instanceof DataException) {
+            return result($e->getCode(), $e->getStatus(), $e->getMessage(), []);
         }
         elseif ($e instanceof HttpException) {
             return result(ErrorCode::NET_ERROR, $e->getStatusCode(), $e->getMessage(), []);
