@@ -23,10 +23,38 @@
             <div class="card-panel-text">
               今日新增用户
             </div>
-            <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
+            <count-to :start-val="0" :end-val=dashboarddata.todayusercount :duration="3000" class="card-panel-num" />
           </div>
         </div>
       </el-col>
+      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+        <div class="card-panel" @click="handleSetLineChartData('messages')">
+          <div class="card-panel-icon-wrapper icon-message">
+            <svg-icon icon-class="list" class-name="card-panel-icon" />
+          </div>
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              取货员
+            </div>
+            <count-to :start-val="0" :end-val=dashboarddata.pickmancount :duration="3000" class="card-panel-num" />
+          </div>
+        </div>
+      </el-col>
+      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+        <div class="card-panel" @click="redirectto('/waste/index')">
+          <div class="card-panel-icon-wrapper icon-people">
+            <svg-icon icon-class="component" class-name="card-panel-icon" />
+          </div>
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              废品种类
+            </div>
+            <count-to :start-val="0" :end-val=dashboarddata.wastecount :duration="2600" class="card-panel-num" />
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row :gutter="40" class="panel-group">
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel" @click="handleSetLineChartData('purchases')">
           <div class="card-panel-icon-wrapper icon-money">
@@ -36,7 +64,7 @@
             <div class="card-panel-text">
               今日成交量
             </div>
-            <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
+            <count-to :start-val="0" :end-val=dashboarddata.todayordercount :duration="3200" class="card-panel-num" />
           </div>
         </div>
       </el-col>
@@ -53,34 +81,6 @@
           </div>
         </div>
       </el-col>
-    </el-row>
-    <el-row :gutter="40" class="panel-group">
-      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div class="card-panel" @click="redirectto('/waste/index')">
-          <div class="card-panel-icon-wrapper icon-people">
-            <svg-icon icon-class="component" class-name="card-panel-icon" />
-          </div>
-          <div class="card-panel-description">
-            <div class="card-panel-text">
-              废品种类
-            </div>
-            <count-to :start-val="0" :end-val=dashboarddata.wastecount :duration="2600" class="card-panel-num" />
-          </div>
-        </div>
-      </el-col>
-      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div class="card-panel" @click="handleSetLineChartData('messages')">
-          <div class="card-panel-icon-wrapper icon-message">
-            <svg-icon icon-class="list" class-name="card-panel-icon" />
-          </div>
-          <div class="card-panel-description">
-            <div class="card-panel-text">
-              废品平均价格
-            </div>
-            <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
-          </div>
-        </div>
-      </el-col>
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel" @click="handleSetLineChartData('purchases')">
           <div class="card-panel-icon-wrapper icon-money">
@@ -90,7 +90,7 @@
             <div class="card-panel-text">
               累积成交量
             </div>
-            <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
+            <count-to :start-val="0" :end-val=dashboarddata.allordercount :duration="3200" class="card-panel-num" />
           </div>
         </div>
       </el-col>

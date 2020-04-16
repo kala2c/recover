@@ -7,6 +7,9 @@ return [
     'wx' => [
         'appId' => 'wxb06bf22b4b5e6a5d',
         'appSecret' => '5199d77fa9ea333cfc2692553b733c12',
+        //李烁的测试公众号
+//        'appId' => 'wx3df1334ac159289e',
+//        'appSecret' => 'edef45c25b7dfb55584fec8471c1c2a4',
 //        'appId' => 'wxb1a1311f3cab8ac4',
 //        'appSecret' => '9a6f610dbd3b4545eaba03d4f3ff7630',
         'templateId' => [

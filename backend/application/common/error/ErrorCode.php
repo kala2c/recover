@@ -13,6 +13,7 @@ class ErrorCode
     const LOGIN_EXPIRED = 10005;
     const UNAUTHORIZED = 10006;
     const TIME_OUT = 10007;
+    const ACCOUNT_PASSWORD_ERROR = 10009;
 //    const = 1008; 单点登录
     const WX_AUTH_ERROR = 10008;
 
@@ -76,6 +77,7 @@ class ErrorCode
         self::PARAM_ERROR => '参数错误',
         self::LOGIN_EXPIRED => '登录过期 请重新登录',
         self::UNAUTHORIZED => '未登录 请先登录',
+        self::ACCOUNT_PASSWORD_ERROR => '账号或密码错误',
 
         self::LOST_CONNECT => '失去DB连接',
         self::CONFIG_ERROR => 'DB配置错误',

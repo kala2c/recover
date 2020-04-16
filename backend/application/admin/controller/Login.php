@@ -35,7 +35,7 @@ class Login extends Controller
                 'token' => $token
             ]);
         } else {
-            throw new ApiException(ErrorCode::GET_USER_INFO_EMPTY);
+            throw new ApiException(ErrorCode::ACCOUNT_PASSWORD_ERROR);
         }
 
 
