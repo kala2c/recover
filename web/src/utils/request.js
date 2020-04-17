@@ -58,12 +58,14 @@ service.interceptors.response.use(
       if (res.code === 10006) {
         message = '未登录 将自动跳转登录'
       }
-      Dialog.alert({
-        title: '提示',
-        message
-      })
+      if (res.code !== 80005) {
+        Dialog.alert({
+          title: '提示',
+          message
+        })
+      }
 
-      return Promise.reject(new Error(res.message || 'Error'))
+      return Promise.reject(new Error(res.code || 'Error'))
     } else {
       return res
     }

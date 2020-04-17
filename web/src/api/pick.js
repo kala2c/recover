@@ -1,6 +1,16 @@
 // import store from '../store'
 import request from '@/utils/request'
 
+const getInfo = () => request({
+  url: '/pickman/info'
+})
+
+const signup = (params) => request({
+  url: '/pickman/signup',
+  method: 'post',
+  params: params
+})
+
 const getOrderList = (params) => request({
   url: '/pick/orders',
   params: params
@@ -18,6 +28,8 @@ const takeOrder = (data) => request({
 })
 
 export default {
+  getInfo,
+  signup,
   getOrderList,
   getTakeOrderList,
   takeOrder

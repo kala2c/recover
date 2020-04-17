@@ -12,6 +12,10 @@ const routes = [
         component: () => import('@/views/pick/take')
       },
       {
+        path: 'error',
+        component: () => import('@/views/pick/error')
+      },
+      {
         path: 'user',
         component: () => import('@/views/pick/user')
       },

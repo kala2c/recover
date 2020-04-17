@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import cart from './modules/cart'
+import pickman from './modules/pickman'
 import loading from './modules/loading'
 import user from './modules/user'
 import orderForm from './modules/orderForm'
@@ -12,14 +12,15 @@ const getters = {
   orderForm: state => state.orderForm.formData,
   username: state => state.user.name,
   avatar: state => state.user.avatar,
-  cartGoodsList: state => state.cart.goodsList,
+  pickman: state => state.pickman.info,
+  pickmanErr: state => state.pickman.errMsg,
   loading: state => state.loading.show
 }
 
 export default new Vuex.Store({
   getters,
   modules: {
-    cart,
+    pickman,
     loading,
     user,
     orderForm

@@ -56,7 +56,9 @@ Route::post('/collect/order', 'web/Order/set');
 Route::post('/collect/cancelorder', 'web/Order/cancel');
 Route::get('/collect/order', 'web/Order/get');
 Route::get('/collect/orders', 'web/Order/getList');
-
+// 取货员信息
+Route::get('/pickman/info', 'web/Pickman/info');
+Route::post('/pickman/signup', 'web/Login/addPickman');
 // 取货员订单相关
 Route::get('/pick/takeorders', 'web/TakeOrder/getTakeOrders');
 Route::get('/pick/orders', 'web/TakeOrder/getList');
