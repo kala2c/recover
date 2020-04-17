@@ -9,7 +9,7 @@
       border
       @click-left="$router.go(-1)"
     />
-    <p>可以放微信二维码 手机号等</p>
+    <p>附近回收员</p>
   </div>
 </template>
 

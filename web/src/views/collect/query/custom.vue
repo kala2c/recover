@@ -9,6 +9,7 @@
       border
       @click-left="$router.go(-1)"
     />
+    <div class="tex">可以放微信号手机号等</div>
   </div>
 </template>
 

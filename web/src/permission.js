@@ -38,7 +38,7 @@ if (parseUrl.length > 1) {
 router.beforeEach(async(to, from, next) => {
   // 设置页面标题
   // document.title = getPageTitle(to.meta.title)
-
+  const path = to.path.split('/')
   const hasToken = getToken()
   let oauthUrl = ''
   if (router.options.mode && router.options.mode === 'history') {
@@ -52,11 +52,16 @@ router.beforeEach(async(to, from, next) => {
         await store.dispatch('user/getInfo')
         next()
       } catch (error) {
+        console.log(error)
         // 重定向到微信授权页
-        setTimeout(function() {
-          window.open(oauthUrl, '_self')
-        }, 100000)
+        // setTimeout(function() {
+        window.open(oauthUrl, '_self')
+        // }, 100000)
       }
+    }
+    // 回收员页面需要进行回收员信息校验
+    if (path.length > 1 && path[1] === 'pick') {
+      console.log('pick')
     }
     next()
   } else {

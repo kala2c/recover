@@ -106,12 +106,15 @@ class TakeOrder extends Base
         $pickman_id = $this->pickman->id;
         $map = [
             'pickman_id' => $pickman_id,
-            'status' => $page['status']
+            'status' => $param['status']
         ];
-        $list = OrderMasterModel::pageUtil($page, $map)->with(['waste'])->select();
+        $list = OrderMasterModel::pageUtil($page, $map)
+                    ->order('update_time', 'desc')
+                    ->with(['waste'])->select();
         $pageInfo = OrderMasterModel::pageInfo();
         return success([
             'list' => $list,
+            'status' => OrderMasterModel::$STATUS_MSG,
             'pageMax' => $pageInfo['pageMax']
         ]);
     }

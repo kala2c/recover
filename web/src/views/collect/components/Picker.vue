@@ -66,24 +66,25 @@ export default {
       }
     },
     init() {
-      if (this.type === 'time') {
-        // 渲染时间菜单
-        const dayTime = []
-        for (let i = 8; i <= 17; i++) {
-          dayTime.push(i + ':00')
+      // if (this.type === 'time') {
+      // 渲染时间菜单
+      const dayTime = []
+      for (let i = 8; i <= 17; i++) {
+        dayTime.push(i + ':00')
+      }
+      const timeTable = [
+        {
+          values: ['明天', '后天'],
+          defaultIndex: 0
+        },
+        {
+          values: dayTime,
+          defaultIndex: 0
         }
-        const timeTable = [
-          {
-            values: ['明天', '后天'],
-            defaultIndex: 0
-          },
-          {
-            values: dayTime,
-            defaultIndex: 0
-          }
-        ]
-        this.timeTable = timeTable
-      } else if (this.type === 'area') {
+      ]
+      this.timeTable = timeTable
+      // } else
+      if (this.type === 'area') {
         // 渲染地区菜单
         let areaTable = []
         api.getAreaTable().then(res => {
@@ -110,6 +111,7 @@ export default {
   },
   created() {
     this.init()
+    console.log(this.timeTable)
   }
 }
 </script>

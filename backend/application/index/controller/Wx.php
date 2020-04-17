@@ -134,6 +134,41 @@ class Wx extends Controller
     }
 
     /**
+     * 自定义测试号菜单
+     * @return mixed
+     */
+    public function setMenu()
+    {
+        $key = $this->request->get('key');
+        if ($key != 'abc688') {
+            throw new ValidateException("没有执行权限");
+        }
+        $data = [
+            "button" => [
+                [
+                    "name" => "下单",
+                    "sub_button"=> [
+                        [
+                            "type" => "view",
+                            "name" => "下单",
+                            "url" => "http://testwx2.c2wei.cn/#/collect"
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $access_token = $this->access_token;
+        $api = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=$access_token";
+        $headers = ['Content-Type' => 'application/json'];
+        $json = json_encode($data, JSON_UNESCAPED_UNICODE);
+        var_dump($json);
+        $response = Requests::post($api, $headers, $json);
+        dump($response);
+        return '';
+//        return json_decode($response->body, true);
+    }
+
+    /**
      * 模板消息
      * @param $openid
      * @param $template_id

@@ -60,6 +60,12 @@ const submitOrder = (data) => request({
   data
 })
 
+const cancelOrder = (data) => request({
+  url: '/collect/cancelorder',
+  method: 'post',
+  data
+})
+
 const getOrderDetail = (params) => request({
   url: '/collect/order',
   method: 'get',
@@ -83,6 +89,7 @@ export default {
   getAreaTable,
   getOrderInfo,
   submitOrder,
+  cancelOrder,
   getOrderDetail,
   getOrderList
 }

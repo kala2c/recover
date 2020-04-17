@@ -183,10 +183,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 /* 覆盖vant的样式 */
-div.van-cell__title {
-  width: 90px!important;
+/deep/ div.van-cell__title {
+  width: 90px;
   flex: none;
 }
 .cell-text {

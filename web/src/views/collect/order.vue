@@ -6,14 +6,25 @@
         :key="tab.id"
         :title="tab.name">
         <van-pull-refresh v-show="!!orderList.length" v-model="refreshing" @refresh="onRefresh">
-          <van-cell
+          <van-panel
+            class="panel"
             v-for="item in orderList"
             :key="item.id"
             :title="item.waste.name+' | '+item.waste_number+item.waste.unit"
-            :value="item.status"
-            :label="item.note || '未填写备注'"
+            :desc="item.pick_fast === '1' ? '尽快上门' : '预约时间:' + item.pick_time"
+            :status="statusMsg(item.status)"
           >
-          </van-cell>
+            <div class="panel-content">
+              <p class="text address">{{item.username}} {{item.phone}}</p>
+              <p class="text address">{{item.address_detail}}</p>
+              <p class="text note">备注：{{item.note || '未填写备注'}}</p>
+            </div>
+            <template v-if="!activeStatus" #footer>
+              <div class="panel-btn-wrap">
+                <van-button @click="onCancel(item)" size="small" type="danger">取消</van-button>
+              </div>
+            </template>
+          </van-panel>
           <div class="load-btn-wrap">
             <van-button
               plain hairline type="primary"
@@ -28,7 +39,7 @@
             </van-button>
           </div>
         </van-pull-refresh>
-        <div v-show="!orderList.length" class="empty">
+        <div v-show="!orderList.length && !loading" class="empty">
           <p>您的{{tab.name}}订单为空</p>
           <p>
             <router-link class="link" to="/collect/subscribe">点我马上下单</router-link>
@@ -41,7 +52,7 @@
 </template>
 
 <script>
-import { Tabs, Tab, PullRefresh, Button, Cell } from 'vant'
+import { Tabs, Tab, PullRefresh, Button, Panel, Toast } from 'vant'
 import FootBar from '@/views/collect/components/FootBar'
 import api from '@/api/collect'
 import store from '@/store'
@@ -53,7 +64,8 @@ export default {
     VanPullRefresh: PullRefresh,
     // VanList: List,
     VanButton: Button,
-    VanCell: Cell,
+    // VanCell: Cell,
+    VanPanel: Panel,
     FootBar
   },
   data() {
@@ -66,20 +78,26 @@ export default {
       active: 0,
       tabList: [{
         id: 0,
-        name: '待服务'
+        name: '待取货'
       }, {
         id: 1,
-        name: '服务中'
+        name: '取货中'
       }, {
-        id: 2,
+        id: 3,
         name: '已完成'
-      }]
+      }],
+      statusTable: null
     }
   },
   computed: {
     activeStatus() {
       const activeTab = this.tabList[this.active]
       return activeTab && activeTab.id
+    },
+    statusMsg() {
+      return status => {
+        return this.statusTable[status]
+      }
     }
   },
   watch: {
@@ -107,6 +125,8 @@ export default {
         const data = response.data
         store.dispatch('loading/close')
         this.loading = false
+        this.refreshing = false
+        this.statusTable = data.status
         this.orderList = this.orderList.concat(data.orderList)
         if (this.page >= data.pageMax) {
           this.hasNext = false
@@ -115,8 +135,15 @@ export default {
         }
       })
     },
-    loadTabs() {
-
+    onCancel(order) {
+      api.cancelOrder({
+        order_id: order.id
+      }).then(response => {
+        Toast(response.data.message || '取消成功')
+        setTimeout(() => {
+          this.onRefresh()
+        }, 800)
+      })
     }
   },
   created() {
@@ -138,6 +165,24 @@ export default {
     .link {
       color: #1e9fff;
     }
+  }
+}
+.panel {
+  margin-top: 10px;
+  // border-bottom: 1px solid #eee;
+  .panel-content {
+    padding: 10px 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    .address {
+      font-size: 12px;
+    }
+    .note {
+      margin-top: 10px;
+    }
+  }
+  .panel-btn-wrap {
+    text-align: right;
   }
 }
 .load-btn-wrap {

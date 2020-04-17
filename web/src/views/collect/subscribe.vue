@@ -262,8 +262,8 @@ export default {
 
 <style scoped>
 /*覆盖vant样式*/
-div.van-cell__title {
-  width: 90px!important;
+/deep/ div.van-cell__title {
+  width: 90px;
   flex: none;
 }
 .cell-text {
@@ -336,8 +336,8 @@ div.van-cell__title {
   }
 }
 .submit-wrap {
-  position: absolute;
-  bottom: 0;
+  // position: absolute;
+  // bottom: 0;
   width: 100%;
   padding: 10px 0;
   margin-top: 16px;

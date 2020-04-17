@@ -9,7 +9,7 @@ const routes = [
     children: [
       {
         path: '/',
-        component: () => import('@/views/pick/home')
+        component: () => import('@/views/pick/take')
       },
       {
         path: 'user',
