@@ -104,13 +104,16 @@ class OrderMaster extends Base
     /**
      * 为订单设置取货员
      * @param $order_id
-     * @param $pickman_id
+     * @param $pickman
      * @throws DataException
      * @return OrderMaster
      */
     static public function setPickman($order_id, $pickman)
     {
         $order = OrderMaster::get($order_id);
+        if (!$order) {
+            throw new DataException(ErrorCode::ORDER_NOT_EXIST);
+        }
         if ($order->status != self::STATUS_WAIT) {
             if ($order->pickman_id == $pickman->id) {
                 throw new DataException(ErrorCode::ORDER_CANT_REPEAT_TAKE);
@@ -119,6 +122,30 @@ class OrderMaster extends Base
             }
         }
         $data = ['pickman_id' => $pickman->id, 'status' => self::STATUS_GOING];
+        $data = self::addTimeField($data, false);
+        return self::update($data, ['id' => $order_id]);
+    }
+
+    /**
+     * 标记订单已送到
+     * @param $order_id
+     * @param $pickman
+     * @return OrderMaster
+     * @throws DataException
+     */
+    public static function delivered($order_id, $pickman)
+    {
+        $order = OrderMaster::get($order_id);
+        if (!$order) {
+            throw new DataException(ErrorCode::ORDER_NOT_EXIST);
+        }
+        if ($order->pickman_id != $pickman->id) {
+            throw new DataException(ErrorCode::CANT_SET_ORDER);
+        }
+        if ($order->status != self::STATUS_GOING) {
+            throw new DataException(ErrorCode::ORDER_NOT_GOING);
+        }
+        $data = ['status' => self::STATUS_RECYCLING];
         $data = self::addTimeField($data, false);
         return self::update($data, ['id' => $order_id]);
     }

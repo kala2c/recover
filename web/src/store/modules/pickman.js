@@ -55,12 +55,19 @@ const actions = {
         if (!data) {
           reject(new Error('验证失败 将重新登录'))
         }
+        let status = ''
+        if (data.status === 0) {
+          status = '等待审核'
+        }
+        if (data.status === 1) {
+          status = '正式回收员'
+        }
         const info = {
           realname: data.realname,
           phone: data.phone,
           sex: data.sex,
           age: data.age,
-          status: '正式回收员'
+          status: status
         }
         dispatch('setData', info)
         resolve(data)

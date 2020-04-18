@@ -6,10 +6,13 @@ namespace app\web\controller;
 
 use app\common\error\ErrorCode;
 use app\common\exception\ApiException;
+use app\common\exception\DataException;
+use think\exception\DbException;
 use think\facade\Cache;
 use think\exception\ValidateException;
 use think\facade\Validate;
 use app\common\model\User as UserModel;
+use app\common\model\Pickman as PickmanModel;
 
 class User extends Base
 {
@@ -29,8 +32,40 @@ class User extends Base
     }
 
     /**
-     * 获取用户地址
+     * 回收员申请
      * @throws ApiException
+     * @throws DataException
+     */
+    public function addPickman()
+    {
+        $data = $this->request->post();
+        $validate = Validate::make([
+            'phone' => 'require',
+            'password' => 'require',
+            'sex' => 'require',
+            'realname' => 'require',
+            'age' => 'require|number',
+        ], [
+            'phone.require' => '手机号不可缺少',
+            'password.require' => '密码不可缺少',
+            'sex.require' => '性别不可缺少',
+            'realname.require' => '姓名不可缺少',
+            'age.require' => '年龄不可缺少'
+        ]);
+
+        if (!$validate->check($data)) {
+            throw new ValidateException($validate->getError());
+        }
+        $data['openid'] = $this->user_info['openid'];
+        $rlt = PickmanModel::add($data);
+        if (!$rlt) {
+            throw new ApiException(ErrorCode::INSERT_PICKMAN_FAILED);
+        }
+        return successWithMsg('申请成功');
+    }
+
+    /**
+     * 获取用户地址
      */
     public function getLocation()
     {
@@ -77,7 +112,7 @@ class User extends Base
      */
     private function pos2address($location, $openid)
     {
-        $key = 'NGLBZ-PFLAJ-N2AFY-FYYM3-IKZS7-MABJT';
+        $key = config('secret.qqMap.key');
 //        $secret = 'd1BPD2s8xaKvn6Xi6alsE7cQS7opU0R';
 //        $raw_string = "/ws/geocoder/v1?key=$key&location=$location".$secret;
 //        $sig = md5($raw_string);

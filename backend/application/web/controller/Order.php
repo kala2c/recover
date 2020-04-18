@@ -87,8 +87,9 @@ class Order extends Base
 
     /**
      * 取消订单
-     * @throws ApiException
      * @return mixed
+     * @throws DataException
+     * @throws ApiException
      */
     public function cancel()
     {

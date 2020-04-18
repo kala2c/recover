@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { Tabs, Tab, PullRefresh, Button, Panel, Toast } from 'vant'
+import { Tabs, Tab, PullRefresh, Button, Panel, Toast, Dialog } from 'vant'
 import FootBar from '@/views/collect/components/FootBar'
 import api from '@/api/collect'
 import store from '@/store'
@@ -102,13 +102,15 @@ export default {
   },
   watch: {
     active() {
+      this.orderList = []
       this.onRefresh()
     }
   },
   methods: {
     onRefresh() {
       this.page = 1
-      this.orderList = []
+      this.refreshing = true
+      // this.orderList = []
       this.loadOrderList()
     },
     loadMore() {
@@ -125,9 +127,10 @@ export default {
         const data = response.data
         store.dispatch('loading/close')
         this.loading = false
-        this.refreshing = false
         this.statusTable = data.status
-        this.orderList = this.orderList.concat(data.orderList)
+        // this.orderList = this.orderList.concat(data.orderList)
+        this.concatList(data.orderList)
+        this.refreshing = false
         if (this.page >= data.pageMax) {
           this.hasNext = false
         } else {
@@ -135,14 +138,24 @@ export default {
         }
       })
     },
+    concatList(list) {
+      if (list) {
+        if (this.refreshing) this.orderList = []
+        this.orderList = this.orderList.concat(list)
+      }
+    },
     onCancel(order) {
-      api.cancelOrder({
-        order_id: order.id
-      }).then(response => {
-        Toast(response.data.message || '取消成功')
-        setTimeout(() => {
+      Dialog.confirm({
+        title: '取消接单',
+        message: '真的要取消订单吗'
+      }).then(() => {
+        api.cancelOrder({
+          order_id: order.id
+        }).then(response => {
+          Toast(response.data.message || '取消成功')
           this.onRefresh()
-        }, 800)
+        })
+      }).catch(() => {
       })
     }
   },

@@ -88,15 +88,4 @@ class Login extends Controller
         $this->redirect($url);
         return '<script>window.open("'.$url.'", "_self")</script>';
     }
-
-    /**
-     * 回收员申请
-     */
-    public function addPickman()
-    {
-        $data = $this->request->post();
-        $validate = Validate::make([
-            ''
-        ]);
-    }
 }

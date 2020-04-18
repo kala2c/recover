@@ -7,6 +7,7 @@ namespace app\web\controller;
 use app\common\error\ErrorCode;
 use app\common\exception\ApiException;
 use app\common\model\Pickman as PickmanModel;
+use \Requests;
 
 class Pickman extends Base
 {
@@ -26,7 +27,8 @@ class Pickman extends Base
             throw new ApiException(ErrorCode::PICKMAN_NOT_EXISTS);
         }
         if ($this->pickman->status == PickmanModel::STATUS_WAIT) {
-            throw new ApiException(ErrorCode::PICKMAN_WAIT_AUDIT);
+            $this->pickman;
+//            throw new ApiException(ErrorCode::PICKMAN_WAIT_AUDIT);
         } elseif ($this->pickman->status == PickmanModel::STATUS_FORBIDDEN) {
             throw new ApiException(ErrorCode::PICKMAN_FORBIDDEN);
         }
@@ -44,5 +46,20 @@ class Pickman extends Base
         unset($pickman['password']);
 
         return success($pickman);
+    }
+
+    /**
+     * 导航到目的地
+     */
+    public function navigation()
+    {
+        $self_location = '37.520755,121.357534';
+        $key = config('secret.qqMap.key');
+        $target_location = '';
+        $way_list = ['driving', 'bicycling', 'transit', 'walking'];
+        $way = 'driving';
+        $api = "https://apis.map.qq.com/ws/direction/v1/$way/?from=$self_location&to=$target_location&key=$key";
+        $response = Requests::get($api);
+        dump($response->body);
     }
 }

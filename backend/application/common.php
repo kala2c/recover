@@ -45,3 +45,7 @@ function error($data = [])
 {
     return result(-1, "error", "服务出错了，稍后再试", $data);
 }
+
+function encrypt($str) {
+    return sha1(md5($str));
+}

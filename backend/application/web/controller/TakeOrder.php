@@ -46,7 +46,11 @@ class TakeOrder extends Pickman
         }
         // 区域为空 直接返回空
         if (empty($area_id_list)) {
-            return success([]);
+            return success([
+                'list' => [],
+                'status' => OrderMasterModel::$STATUS_MSG,
+                'pageMax' => 1
+            ]);
         }
         $map = [
             ['area_id', 'in', $area_id_list],
@@ -105,6 +109,10 @@ class TakeOrder extends Pickman
      */
     public function takeOrder()
     {
+        // 审查账号审核是否通过
+        if ($this->pickman->status != PickmanModel::STATUS_NORMAL) {
+            throw new ApiException(ErrorCode::PICKMAN_WAIT_AUDIT);
+        }
         $data = $this->request->post();
         $validate = Validate::make([
             'order_id' => 'require|number'
@@ -120,5 +128,34 @@ class TakeOrder extends Pickman
             throw new ApiException(ErrorCode::TAKE_ORDER_FAILED);
         }
         return successWithMsg('接单成功');
+    }
+
+    /**
+     * 标记订单已送达
+     * @return mixed
+     * @throws ApiException
+     * @throws DataException
+     */
+    public function delivered()
+    {
+        // 审查账号审核是否通过
+        if ($this->pickman->status != PickmanModel::STATUS_NORMAL) {
+            throw new ApiException(ErrorCode::PICKMAN_WAIT_AUDIT);
+        }
+        $data = $this->request->post();
+        $validate = Validate::make([
+            'order_id' => 'require|number'
+        ], [
+            'order_id.require' => '请选择订单',
+            'order_id.number' => '订单id格式不正确'
+        ]);
+        if (!$validate->check($data)) {
+            throw new ValidateException($validate->getError());
+        }
+        $rlt = OrderMasterModel::delivered($data['order_id'], $this->pickman);
+        if (!$rlt) {
+            throw new ApiException(ErrorCode::UPDATE_ORDER_FAILED);
+        }
+        return successWithMsg('操作成功');
     }
 }

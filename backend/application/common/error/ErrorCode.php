@@ -46,8 +46,12 @@ class ErrorCode
     const GET_ORDER_LIST_FAILED = 60004;
     const TAKE_ORDER_FAILED = 60005;
     const ORDER_NOT_WAIT = 60006;
-    const ORDER_CANT_REPEAT_TAKE = 60007;
+    const ORDER_NOT_GOING = 60007;
     const CANCEL_ORDER_FAILED = 60008;
+    const CANT_SET_ORDER = 60009;
+    const ORDER_NOT_EXIST = 60010;
+    const ORDER_CANT_REPEAT_TAKE = 600011;
+
 
 
     /*************Waste 废品代码**********/
@@ -65,6 +69,7 @@ class ErrorCode
     const PICKMAN_NOT_EXISTS = 80005;
     const PICKMAN_FORBIDDEN = 80006;
     const PICKMAN_WAIT_AUDIT = 80007;
+    const PICKMAN_EXISTS = 80008;
 
 
 
@@ -102,15 +107,19 @@ class ErrorCode
         self::GET_ORDER_DETAIL_FAILED => '获取订单详情失败',
         self::GET_ORDER_LIST_FAILED => '获取订单列表失败',
         self::TAKE_ORDER_FAILED => '接单失败',
-        self::ORDER_NOT_WAIT => '订单非待服务状态',
+        self::ORDER_NOT_WAIT => '订单非待取货状态',
+        self::ORDER_NOT_GOING => '订单非取货中状态',
         self::ORDER_CANT_REPEAT_TAKE => '已经接过该订单',
         self::CANCEL_ORDER_FAILED => '取消订单失败',
+        self::CANT_SET_ORDER => '您不能操作该订单',
+        self::ORDER_NOT_EXIST => '订单不存在',
 
         self::WASTE_NOT_EXISTS => '物品类型不存在',
 
         self::INSERT_PICKMAN_FAILED => '新建取货员失败',
         self::PICKMAN_NOT_EXISTS => '取货员不存在',
         self::PICKMAN_FORBIDDEN => '账号已封禁',
-        self::PICKMAN_WAIT_AUDIT => '账号审核未通过',
+        self::PICKMAN_WAIT_AUDIT => '信息正在审核中',
+        self::PICKMAN_EXISTS => '已经注册过回收员'
     ];
 }

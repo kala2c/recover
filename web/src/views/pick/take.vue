@@ -87,7 +87,7 @@ export default {
     onRefresh() {
       this.page = 1
       this.refreshing = true
-      this.orderList = []
+      // this.orderList = []
       this.loadOrderList()
     },
     loadMore() {
@@ -104,15 +104,22 @@ export default {
         const data = response.data
         store.dispatch('loading/close')
         this.loading = false
-        this.refreshing = false
         this.statusTable = data.status
-        this.orderList = this.orderList.concat(data.list)
+        this.concatList(data.list)
+        this.refreshing = false
+        console.log(this.orderList)
         if (this.page >= data.pageMax) {
           this.hasNext = false
         } else {
           this.hasNext = true
         }
       })
+    },
+    concatList(list) {
+      if (list) {
+        if (this.refreshing) this.orderList = []
+        this.orderList = this.orderList.concat(list)
+      }
     },
     onTake(order) {
       Dialog.confirm({

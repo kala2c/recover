@@ -2,13 +2,13 @@
   <div class="signup">
     <van-nav-bar
       title="注册回收员"
-      left-text="返回"
-      left-arrow
       fixed
       placeholder
       border
-      @click-left="$router.go(-1)"
     />
+    <!-- left-text="返回"
+    left-arrow
+    @click-left="$router.go(-1)" -->
     <van-form class="form-wrap" @submit="onSubmit">
       <van-field
         v-model="formData.phone"
@@ -78,7 +78,9 @@
 </template>
 
 <script>
-import { NavBar, Field, Form, Button, RadioGroup, Radio } from 'vant'
+import { mapGetters } from 'vuex'
+import { NavBar, Field, Form, Button, RadioGroup, Radio, Toast } from 'vant'
+import api from '@/api/pick'
 export default {
   components: {
     VanNavBar: NavBar,
@@ -97,13 +99,25 @@ export default {
         password2: '',
         age: '',
         realname: '',
+        username: '',
         idnumber: ''
       }
     }
   },
+  computed: {
+    ...mapGetters(['username'])
+  },
   methods: {
     onSubmit() {
-      console.log(this.formData)
+      this.formData.username = this.username
+      if (this.formData.password !== this.formData.password2) {
+        Toast('两次密码填写不一致')
+        return
+      }
+      api.signup(this.formData).then(response => {
+        Toast(response.data.message || '申请成功')
+        this.$router.replace({ path: '/pick/user' })
+      })
     }
   }
 }
@@ -126,8 +140,8 @@ export default {
   }
 }
 .submit-wrap {
-  position: absolute;
-  bottom: 0;
+  // position: absolute;
+  // bottom: 0;
   width: 100%;
   padding: 10px 0;
   margin-top: 16px;

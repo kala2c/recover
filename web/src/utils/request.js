@@ -64,7 +64,7 @@ service.interceptors.response.use(
           message
         })
       }
-
+      store.dispatch('loading/close')
       return Promise.reject(new Error(res.code || 'Error'))
     } else {
       return res

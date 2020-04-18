@@ -58,9 +58,10 @@ Route::get('/collect/order', 'web/Order/get');
 Route::get('/collect/orders', 'web/Order/getList');
 // 取货员信息
 Route::get('/pickman/info', 'web/Pickman/info');
-Route::post('/pickman/signup', 'web/Login/addPickman');
+Route::post('/pickman/signup', 'web/User/addPickman');
 // 取货员订单相关
 Route::get('/pick/takeorders', 'web/TakeOrder/getTakeOrders');
+Route::post('/pick/deliveredorder', 'web/TakeOrder/delivered');
 Route::get('/pick/orders', 'web/TakeOrder/getList');
 Route::post('/pick/order/take', 'web/TakeOrder/takeOrder');
 

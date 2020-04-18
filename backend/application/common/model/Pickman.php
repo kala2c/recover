@@ -4,6 +4,9 @@
 namespace app\common\model;
 
 
+use app\common\error\ErrorCode;
+use app\common\exception\DataException;
+
 class Pickman extends Base
 {
 
@@ -17,9 +20,22 @@ class Pickman extends Base
         self::STATUS_NORMAL => '正常',
     ];
 
-    public function set($data)
+    /**
+     * 增加回收员
+     * @param $data
+     * @throws DataException
+     * @return mixed
+     */
+    public static function add($data)
     {
-
+        $pickman = self::get(['openid' => $data['openid']]);
+        if ($pickman) {
+            throw new DataException(ErrorCode::PICKMAN_EXISTS);
+        }
+        $data['password'] = encrypt($data['password']);
+        $data['status'] = self::STATUS_WAIT;
+        $data = self::addTimeField($data);
+        return self::create($data);
     }
     /**
      * 关联到区域 多对多

@@ -16,5 +16,8 @@ return [
             'newOrderNotify' => 'F9KCWuOVVU_Elb-7cJ3KAHs8jAmchEBZVC2VQvE00OY'
 //            'newOrderNotify' => 'SxOvQtdNKt4msFkKPs0jeSvcv9rKatbM8ODvlJfUO20'
         ]
+    ],
+    'qqMap' => [
+        'key' => 'NGLBZ-PFLAJ-N2AFY-FYYM3-IKZS7-MABJT'
     ]
 ];

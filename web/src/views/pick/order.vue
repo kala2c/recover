@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { Tabs, Tab, PullRefresh, Button, Panel, NavBar } from 'vant'
+import { Tabs, Tab, PullRefresh, Button, Panel, NavBar, Toast, Dialog } from 'vant'
 import FootBar from '@/views/pick/components/FootBar'
 import api from '@/api/pick'
 import store from '@/store'
@@ -113,7 +113,8 @@ export default {
   methods: {
     onRefresh() {
       this.page = 1
-      this.orderList = []
+      this.refreshing = true
+      // this.orderList = []
       this.loadOrderList()
     },
     loadMore() {
@@ -130,9 +131,10 @@ export default {
         const data = response.data
         store.dispatch('loading/close')
         this.loading = false
-        this.refreshing = false
         this.statusTable = data.status
-        this.orderList = this.orderList.concat(data.list)
+        this.concatList(data.list)
+        // this.orderList = this.orderList.concat(data.list)
+        this.refreshing = false
         if (this.page >= data.pageMax) {
           this.hasNext = false
         } else {
@@ -140,8 +142,25 @@ export default {
         }
       })
     },
-    onDelivered(item) {
-      console.log(item)
+    concatList(list) {
+      if (list) {
+        if (this.refreshing) this.orderList = []
+        this.orderList = this.orderList.concat(list)
+      }
+    },
+    onDelivered(order) {
+      Dialog.confirm({
+        title: '确认送达',
+        message: '确定标记为送达吗'
+      }).then(() => {
+        api.deliveredOrder({
+          order_id: order.id
+        }).then(response => {
+          Toast(response.data.message || '标记成功')
+          this.onRefresh()
+        })
+      }).catch(() => {
+      })
     },
     toNav(item) {
       this.$router.push({ path: '/pick/navigation', query: { id: item.id } })

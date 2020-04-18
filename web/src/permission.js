@@ -35,7 +35,6 @@ if (parseUrl.length > 1) {
   }
 }
 
-// const whiteList = []
 router.beforeEach(async(to, from, next) => {
   // 设置页面标题
   // document.title = getPageTitle(to.meta.title)
@@ -62,29 +61,35 @@ router.beforeEach(async(to, from, next) => {
     }
     // 回收员页面需要进行回收员信息校验
     if (path.length > 1 && path[1] === 'pick') {
-      if (path[2] === 'signup' || path[2] === 'error') {
+      const whiteList = ['signup', 'error']
+      // 白名单页面直接通过 即申请、错误页面
+      if (whiteList.indexOf(path[2]) !== -1) {
         next()
       } else {
+        // 非白名单页面进行身份检查
         if (!store.getters.pickman.realname) {
           try {
             await store.dispatch('pickman/getInfo')
             next()
           } catch (error) {
             console.log(error)
+            // 没有注册
             if (error.message === '80005') {
               next('/pick/signup')
               return
             }
+            // 账号已封停
             if (error.message === '80006') {
               store.dispatch('pickman/setErr', '账号已封禁')
               next('/pick/error')
               return
             }
-            if (error.message === '80007') {
-              store.dispatch('pickman/setErr', '账号正在审核中')
-              next('/pick/error')
-              return
-            }
+            // 正在审核中
+            // if (error.message === '80007') {
+            //   store.dispatch('pickman/setErr', '账号正在审核中')
+            //   next('/pick/error')
+            //   return
+            // }
           }
         }
       }

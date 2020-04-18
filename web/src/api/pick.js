@@ -5,10 +5,10 @@ const getInfo = () => request({
   url: '/pickman/info'
 })
 
-const signup = (params) => request({
+const signup = (data) => request({
   url: '/pickman/signup',
   method: 'post',
-  params: params
+  data: data
 })
 
 const getOrderList = (params) => request({
@@ -27,10 +27,17 @@ const takeOrder = (data) => request({
   data: data
 })
 
+const deliveredOrder = (data) => request({
+  url: '/pick/deliveredorder',
+  method: 'post',
+  data
+})
+
 export default {
   getInfo,
   signup,
   getOrderList,
   getTakeOrderList,
-  takeOrder
+  takeOrder,
+  deliveredOrder
 }
