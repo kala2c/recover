@@ -6,6 +6,7 @@ namespace app\common\model;
 
 use app\common\error\ErrorCode;
 use app\common\exception\DataException;
+use think\model\relation\BelongsTo;
 
 class OrderMaster extends Base
 {
@@ -161,11 +162,17 @@ class OrderMaster extends Base
     /**
      * 关联到取货员
      */
-//    public function Pickman()
-//    {
-//        return $this->belongsTo('Pickman');
-//    }
-
+    public function Pickman()
+    {
+        return $this->belongsTo('Pickman');
+    }
+    /**
+     * 关联到区域
+     */
+    public function area()
+    {
+        return $this->belongsTo('Area');
+    }
     /**
      * 关联到waste
      */

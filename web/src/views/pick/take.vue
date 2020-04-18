@@ -107,7 +107,6 @@ export default {
         this.statusTable = data.status
         this.concatList(data.list)
         this.refreshing = false
-        console.log(this.orderList)
         if (this.page >= data.pageMax) {
           this.hasNext = false
         } else {

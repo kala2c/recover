@@ -6,8 +6,10 @@ namespace app\web\controller;
 
 use app\common\error\ErrorCode;
 use app\common\exception\ApiException;
+use app\common\model\OrderMaster as OrderMasterModel;
 use app\common\model\Pickman as PickmanModel;
 use \Requests;
+use think\Exception\DbException;
 
 class Pickman extends Base
 {
@@ -50,16 +52,33 @@ class Pickman extends Base
 
     /**
      * 导航到目的地
+     * @throws DbException
      */
-    public function navigation()
+    public function navigate()
     {
+        $param = $this->request->get();
+        // 取出订单信息
+        $order = OrderMasterModel::get($param['id']);
+        $detail = $order->area.$order->address_detail;
+        // 获得目的地坐标
+        $target_info = $this->address2location($detail);
+        $target_location = $target_info['location']['lat'].','.$target_info['location']['lng'];
         $self_location = '37.520755,121.357534';
         $key = config('secret.qqMap.key');
-        $target_location = '';
         $way_list = ['driving', 'bicycling', 'transit', 'walking'];
         $way = 'driving';
         $api = "https://apis.map.qq.com/ws/direction/v1/$way/?from=$self_location&to=$target_location&key=$key";
         $response = Requests::get($api);
-        dump($response->body);
+        $data = json_decode($response->body, true);
+        return success($data);
+    }
+
+    private function address2location($address)
+    {
+        $key = config('secret.qqMap.key');
+        $api = "https://apis.map.qq.com/ws/geocoder/v1/?address=$address&key=$key";
+        $response = Requests::get($api);
+        $data = json_decode($response->body, true);
+        return $data['result'];
     }
 }

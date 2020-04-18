@@ -64,6 +64,7 @@ Route::get('/pick/takeorders', 'web/TakeOrder/getTakeOrders');
 Route::post('/pick/deliveredorder', 'web/TakeOrder/delivered');
 Route::get('/pick/orders', 'web/TakeOrder/getList');
 Route::post('/pick/order/take', 'web/TakeOrder/takeOrder');
+Route::get('/pick/navigate', 'web/Pickman/navigate');
 
 return [
 

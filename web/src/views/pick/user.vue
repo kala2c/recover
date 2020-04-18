@@ -53,7 +53,7 @@ export default {
     ...mapGetters(['username', 'avatar', 'pickman'])
   },
   mounted() {
-    console.log(this.pickman)
+    // console.log(this.pickman)
   }
 }
 </script>

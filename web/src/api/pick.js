@@ -33,11 +33,17 @@ const deliveredOrder = (data) => request({
   data
 })
 
+const navigate = (params) => request({
+  url: '/pick/navigate',
+  params: params
+})
+
 export default {
   getInfo,
   signup,
   getOrderList,
   getTakeOrderList,
   takeOrder,
-  deliveredOrder
+  deliveredOrder,
+  navigate
 }
