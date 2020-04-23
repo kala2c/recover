@@ -12,7 +12,14 @@ const deleteOrder = (params) => request({
   params
 })
 
+const completeOrder = (params) => request({
+  url: '/admin/order/CompleteOrder',
+  method: 'post',
+  params
+})
+
 export default {
   getOrderList,
-  deleteOrder
+  deleteOrder,
+  completeOrder
 }

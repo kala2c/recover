@@ -28,14 +28,20 @@
         <el-table-column label="姓名" prop="username" />
         <el-table-column label="电话" prop="phone" />
         <el-table-column label="下单时间" prop="create_time" />
-        <el-table-column label="地址" prop="area" />
-        <el-table-column label="废品" prop="create_time" />
-        <el-table-column label="重量" prop="create_time" />
+        <el-table-column label="地区" prop="area" />
+        <el-table-column label="详细地址" prop="address_detail" />
+        <el-table-column label="废品" prop="waste.name" />
+        <el-table-column label="数量" prop="waste_number" />
+        <el-table-column label="单位" prop="waste.unit" />
+        <el-table-column label="状态" prop="status_text" />
         <el-table-column label="操作" width="80px">
           <template slot-scope="scope">
             <!-- 删除按钮 -->
             <el-tooltip effect="dark" content="取消订单" placement="top" :enterable="false">
               <el-button type="danger" icon="el-icon-delete" size="mini" @click="deletebox(scope.row.id)" />
+            </el-tooltip>
+            <el-tooltip effect="dark" content="标记完成" placement="top" :enterable="false">
+              <el-button type="primary" icon="el-icon-success" size="mini" @click="complete(scope.row.id)" />
             </el-tooltip>
           </template>
         </el-table-column>
@@ -64,7 +70,15 @@ export default {
         pagesize: 10
       },
       orderlist: [],
+      status: null,
       total: 0
+    }
+  },
+  computed: {
+    statusMsg(status) {
+      return (status) => {
+        this.status[status]
+      }
     }
   },
   created() {
@@ -78,6 +92,7 @@ export default {
         return this.$message.error('获取订单列表失败！')
       }
       this.orderlist = data.data.orderlist
+      this.status = data.data.status
       this.total = data.data.total
     },
     // 监听 pagesize 改变的事件
@@ -106,7 +121,7 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消取消订单'
+          message: '取消操作'
         })
       })
     },
@@ -120,6 +135,26 @@ export default {
         message: '订单取消成功!'
       })
       this.getOrderList()
+    },
+    complete(id) {
+      this.$confirm('是否确认订单完成?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        orderApi.completeOrder({ id: id }).then(response => {
+          this.$message({
+            type: 'success',
+            message: response.data.message || '取消成功'
+          })
+          this.getOrderList()
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消取消订单'
+        })
+      })
     }
   }
 }

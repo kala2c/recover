@@ -47,10 +47,11 @@ class ErrorCode
     const TAKE_ORDER_FAILED = 60005;
     const ORDER_NOT_WAIT = 60006;
     const ORDER_NOT_GOING = 60007;
-    const CANCEL_ORDER_FAILED = 60008;
+    const ORDER_NOT_RECYCLING = 60008;
     const CANT_SET_ORDER = 60009;
     const ORDER_NOT_EXIST = 60010;
     const ORDER_CANT_REPEAT_TAKE = 600011;
+    const CANCEL_ORDER_FAILED = 600012;
 
 
 
@@ -109,6 +110,7 @@ class ErrorCode
         self::TAKE_ORDER_FAILED => '接单失败',
         self::ORDER_NOT_WAIT => '订单非待取货状态',
         self::ORDER_NOT_GOING => '订单非取货中状态',
+        self::ORDER_NOT_RECYCLING => '订单非回收中状态',
         self::ORDER_CANT_REPEAT_TAKE => '已经接过该订单',
         self::CANCEL_ORDER_FAILED => '取消订单失败',
         self::CANT_SET_ORDER => '您不能操作该订单',

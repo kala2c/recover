@@ -151,9 +151,24 @@ class OrderMaster extends Base
         return self::update($data, ['id' => $order_id]);
     }
 
+    public static function complete($id)
+    {
+        $order = OrderMaster::get($id);
+        if (!$order) {
+            throw new DataException(ErrorCode::ORDER_NOT_EXIST);
+        }
+        if ($order->status != self::STATUS_RECYCLING) {
+            throw new DataException(ErrorCode::ORDER_NOT_RECYCLING);
+        }
+        $data = ['status' => self::STATUS_SUCCESS];
+        $data = self::addTimeField($data, false);
+        return self::update($data, ['id' => $id]);
+    }
+
     /*
     * 关联到user
     */
+
     public function User()
     {
         return $this->belongsTo('User');
