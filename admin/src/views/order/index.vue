@@ -62,8 +62,15 @@
             </el-tooltip>
           </template>
         </el-table-column>
-        <el-table-column label="地址" prop="area" />
-        <el-table-column label="废品" prop="create_time" />
+        <el-table-column label="地址">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" placement="top">
+              <div slot="content">{{ scope.row.area }}<br/>{{ scope.row.address_detail }}</div>
+              <span>{{ scope.row.area }}</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+        <el-table-column label="废品" prop="waste.name" />
         <el-table-column label="数量" prop="waste_number" />
         <el-table-column label="单价" prop="waste_price" />
         <el-table-column label="状态">
