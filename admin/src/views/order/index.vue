@@ -4,20 +4,41 @@
     <el-card>
       <!-- 搜索与添加区域 -->
       <el-row :gutter="20">
-        <el-col :span="5">
-          <el-input v-model="queryInfo.username" placeholder="搜索用户姓名" clearable @clear="getOrderList">
+        <el-col :span="3">
+          <el-input v-model="queryInfo.username" placeholder="姓名" clearable @clear="getOrderList">
             <el-button slot="append" icon="el-icon-search" @click="getOrderList" />
           </el-input>
         </el-col>
-        <el-col :span="5">
-          <el-input v-model="queryInfo.phone" placeholder="搜索手机号" clearable @clear="getOrderList">
+        <el-col :span="4">
+          <el-input v-model="queryInfo.phone" placeholder="手机号" clearable @clear="getOrderList">
             <el-button slot="append" icon="el-icon-search" @click="getOrderList" />
           </el-input>
         </el-col>
-        <el-col :span="5">
-          <el-input v-model="queryInfo.orderno" placeholder="搜索订单号" clearable @clear="getOrderList">
+        <el-col :span="4">
+          <el-input v-model="queryInfo.orderno" placeholder="订单号" clearable @clear="getOrderList">
             <el-button slot="append" icon="el-icon-search" @click="getOrderList" />
           </el-input>
+        </el-col>
+        <el-col :span="3">
+          <el-select v-model="queryInfo.status" placeholder="订单状态" clearable @change="getOrderList">
+            <el-option
+              v-for="item in orderstatus"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-col>
+        <el-col :span="5">
+          <div class="">
+            <el-date-picker
+              v-model="value1"
+              type="datetimerange"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              :default-time="['12:00:00']"
+            />
+          </div>
         </el-col>
       </el-row>
 
@@ -25,30 +46,72 @@
       <el-table :data="orderlist" border stripe>
         <el-table-column type="index" />
         <el-table-column label="订单编号" prop="order_no" />
-        <el-table-column label="姓名" prop="username" />
+        <el-table-column label="姓名">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" placement="top">
+              <div slot="content">用户ID : {{ scope.row.user_id }}</div>
+              <span>{{ scope.row.username }}</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
         <el-table-column label="电话" prop="phone" />
-        <el-table-column label="下单时间" prop="create_time" />
+        <el-table-column label="下单时间">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" :content="scope.row.create_time" placement="top">
+              <span>{{ scope.row.create_time.split(' ')[0] }}</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
         <el-table-column label="地址" prop="area" />
         <el-table-column label="废品" prop="create_time" />
-        <el-table-column label="重量" prop="create_time" />
+        <el-table-column label="数量" prop="waste_number" />
+        <el-table-column label="单价" prop="waste_price" />
+        <el-table-column label="状态">
+          <template slot-scope="scope">
+            <div v-if="scope.row.status == -1">
+              <el-button type="info">已取消</el-button>
+            </div>
+            <div v-if="scope.row.status == 0">
+              <el-button type="danger">待取货</el-button>
+            </div>
+            <div v-if="scope.row.status == 1">
+              <el-button type="warning">取货中</el-button>
+            </div>
+            <div v-if="scope.row.status == 2">
+              <el-button type="primary">回收中</el-button>
+            </div>
+            <div v-if="scope.row.status == 3">
+              <el-button type="success">已完成</el-button>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="80px">
           <template slot-scope="scope">
             <!-- 删除按钮 -->
             <el-tooltip effect="dark" content="取消订单" placement="top" :enterable="false">
-              <el-button type="danger" icon="el-icon-delete" size="mini" @click="deletebox(scope.row.id)" />
+              <el-button icon="el-icon-delete" size="mini" @click="deletebox(scope.row.id)" />
             </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
 
       <!-- 分页区域 -->
-      <el-pagination :current-page="queryInfo.pagenum" :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+      <el-pagination
+        :current-page="queryInfo.pagenum"
+        :page-sizes="[5, 10, 15, 20]"
+        :page-size="queryInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </el-card>
   </div>
 </template>
 
 <script>
 import orderApi from '@/api/order'
+
 export default {
   data() {
     return {
@@ -58,13 +121,32 @@ export default {
         username: '',
         orderno: '',
         phone: '',
+        status: '',
         // 当前的页数
         pagenum: 1,
         // 当前每页显示多少条数据
         pagesize: 10
       },
       orderlist: [],
-      total: 0
+      total: 0,
+      // 用于加载订单状态的取货框
+      orderstatus: [{
+        value: '-1',
+        label: '已取消'
+      }, {
+        value: '0',
+        label: '待取货'
+      }, {
+        value: '1',
+        label: '取货中'
+      }, {
+        value: '2',
+        label: '回收中'
+      }, {
+        value: '3',
+        label: '已完成'
+      }
+      ]
     }
   },
   created() {
@@ -104,10 +186,10 @@ export default {
       }).then(() => {
         this.deleteOrder(id)
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消取消订单'
-        })
+        // this.$message({
+        //   type: 'info',
+        //   message: '已取消取消订单'
+        // })
       })
     },
     async deleteOrder(id) {
@@ -126,7 +208,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .el-table{
+  .el-table {
     margin-top: 15px;
   }
 </style>

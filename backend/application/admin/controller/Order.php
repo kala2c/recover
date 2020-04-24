@@ -15,12 +15,14 @@ class Order extends Base
         $phone = '%' . Request::param('phone') . '%';
         //用于模糊查询订单编号
         $orderno = '%' . Request::param('orderno') . '%';
+        //用于查询订单状态
+        $status = Request::param('status') . '%';
         //分页的大小
         $pagesize = Request::param('pagesize', '10');
         //当前在第几页
         $pagenum = Request::param('pagenum', '1');
         //获取所有的订单信息
-        $query = OrderModel::pageUtil($pagenum, [['username', 'like', $username], ['phone', 'like', $phone], ['order_no', 'like', $orderno]], $pagesize)->select();
+        $query = OrderModel::pageUtil($pagenum, [['username', 'like', $username], ['phone', 'like', $phone], ['order_no', 'like', $orderno], ['status', 'like', $status]], $pagesize)->select();
         //获取订单总数的数量
         $count = OrderModel::pageInfo()['total'];
         return success([

@@ -68,21 +68,13 @@ export const constantRoutes = [
   {
     path: '/waste',
     component: Layout,
-    redirect: '/waste/index',
-    name: 'Waste',
     meta: { title: '废品管理', icon: 'example' },
     children: [
       {
         path: 'index',
-        name: 'index',
+        name: 'Waste',
         component: () => import('@/views/waste/index'),
-        meta: { title: '废品管理', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: '树形结构', icon: 'tree' }
+        meta: { title: '废品种类', icon: 'table' }
       }
     ]
   },
@@ -94,7 +86,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'User',
         component: () => import('@/views/user/index'),
-        meta: { title: '用户管理', icon: 'peoples' }
+        meta: { title: '用户信息', icon: 'peoples' }
       }
     ]
   },
@@ -107,7 +99,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Order',
         component: () => import('@/views/order/index'),
-        meta: { title: '订单管理', icon: 'form' }
+        meta: { title: '订单数据', icon: 'form' }
       }
     ]
   },
@@ -116,7 +108,7 @@ export const constantRoutes = [
     path: '/pickman',
     component: Layout,
     redirect: '/pickman/index',
-    name: 'Nested',
+    name: 'Pickman',
     meta: {
       title: '取货员管理',
       icon: 'nested'
@@ -131,17 +123,6 @@ export const constantRoutes = [
         path: '/apply',
         component: () => import('@/views/pickman/apply'),
         meta: { title: '取货员申请' }
-      }
-    ]
-  },
-
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://www.baidu.com',
-        meta: { title: '使用说明', icon: 'link' }
       }
     ]
   },

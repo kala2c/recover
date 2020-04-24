@@ -115,6 +115,7 @@ export default {
         // 当前每页显示多少条数据
         pagesize: 10
       },
+      // 用于加载取货员状态的查询框
       pickmanstatus: [{
         value: '-1',
         label: '不限'

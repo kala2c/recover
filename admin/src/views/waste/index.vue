@@ -18,12 +18,11 @@
       <el-table :data="wastelist" border stripe>
         <el-table-column type="index"></el-table-column>
         <el-table-column label="名称" prop="name"></el-table-column>
-        <el-table-column label="图片" prop="image"></el-table-column>
         <el-table-column label="单位" prop="unit"></el-table-column>
         <el-table-column label="价格(元)" prop="price"></el-table-column>
         <el-table-column label="是否开启回收">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.mg_state" @change="userStateChanged(scope.row)">
+            <el-switch v-model="scope.row.isrecover" @change="WasteIsRecoverChanged(scope.row.id)" active-value="1" inactive-value="0">
             </el-switch>
           </template>
         </el-table-column>
