@@ -91,6 +91,9 @@
             <el-tooltip effect="dark" content="取消订单" placement="top" :enterable="false">
               <el-button icon="el-icon-delete" size="mini" @click="deletebox(scope.row.id)" />
             </el-tooltip>
+            <el-tooltip effect="dark" content="标记完成" placement="top" :enterable="false">
+              <el-button type="primary" icon="el-icon-success" size="mini" @click="complete(scope.row.id)" />
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -149,6 +152,13 @@ export default {
       ]
     }
   },
+  computed: {
+    statusMsg(status) {
+      return (status) => {
+        this.status[status]
+      }
+    }
+  },
   created() {
     this.getOrderList()
   },
@@ -160,6 +170,7 @@ export default {
         return this.$message.error('获取订单列表失败！')
       }
       this.orderlist = data.data.orderlist
+      this.status = data.data.status
       this.total = data.data.total
     },
     // 监听 pagesize 改变的事件
@@ -186,10 +197,10 @@ export default {
       }).then(() => {
         this.deleteOrder(id)
       }).catch(() => {
-        // this.$message({
-        //   type: 'info',
-        //   message: '已取消取消订单'
-        // })
+        this.$message({
+          type: 'info',
+          message: '取消操作'
+        })
       })
     },
     async deleteOrder(id) {
@@ -202,6 +213,26 @@ export default {
         message: '订单取消成功!'
       })
       this.getOrderList()
+    },
+    complete(id) {
+      this.$confirm('是否确认订单完成?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        orderApi.completeOrder({ id: id }).then(response => {
+          this.$message({
+            type: 'success',
+            message: response.data.message || '取消成功'
+          })
+          this.getOrderList()
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消取消订单'
+        })
+      })
     }
   }
 }

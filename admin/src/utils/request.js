@@ -5,6 +5,7 @@ import { getToken } from '@/utils/auth'
 import Qs from 'querystring'
 
 const baseURL = 'http://127.0.0.9/'
+// const baseURL = 'http://127.0.0.1:7000/'
 // const baseURL = '/'
 // 创建一个axios实例
 const service = axios.create({
