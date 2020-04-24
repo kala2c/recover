@@ -85,14 +85,13 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="80px">
+        <el-table-column label="操作" width="140px">
           <template slot-scope="scope">
-            <!-- 删除按钮 -->
-            <el-tooltip effect="dark" content="取消订单" placement="top" :enterable="false">
-              <el-button icon="el-icon-delete" size="mini" @click="deletebox(scope.row.id)" />
-            </el-tooltip>
             <el-tooltip effect="dark" content="标记完成" placement="top" :enterable="false">
               <el-button type="primary" icon="el-icon-success" size="mini" @click="complete(scope.row.id)" />
+            </el-tooltip>
+            <el-tooltip effect="dark" content="取消订单" placement="top" :enterable="false">
+              <el-button icon="el-icon-delete" size="mini" @click="deletebox(scope.row.id)" />
             </el-tooltip>
           </template>
         </el-table-column>
