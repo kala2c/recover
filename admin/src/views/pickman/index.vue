@@ -20,7 +20,7 @@
             v-model="queryInfo.phone"
             placeholder="搜索手机号"
             clearable
-            @change="getPickmanList"w
+            @change="getPickmanList"
             @clear="getPickmanList"
           >
             <el-button slot="append" icon="el-icon-search" @click="getPickmanList" />
@@ -56,28 +56,35 @@
           <!--取货员账号的四种状态和对应的操作-->
           <template slot-scope="scope">
             <el-popover v-if="scope.row.status == 0">
+              <el-button type="success" @click="PickmanStatus(scope.row.id, 1)">通过审核</el-button>
               <div slot="reference" class="name-wrapper">
-                <el-tag size="info">未提交认证</el-tag>
+                <el-tag size="info">待审核</el-tag>
               </div>
             </el-popover>
             <el-popover v-else-if="scope.row.status == 1" trigger="hover" placement="left">
-              <el-button type="danger" @click="PickmanStatus(scope.row.id,3)">冻结账号</el-button>
+              <el-button type="danger" @click="PickmanStatus(scope.row.id, -1)">冻结账号</el-button>
               <div slot="reference" class="name-wrapper">
                 <el-tag size="medium">正常</el-tag>
               </div>
             </el-popover>
-            <el-popover v-else-if="scope.row.status == 2" trigger="hover" placement="left">
-              <el-button type="success" @click="PickmanStatus(scope.row.id,1)">通过认证</el-button>
+            <!-- <el-popover v-else-if="scope.row.status == 2" trigger="hover" placement="left">
+              <el-button type="success" @click="PickmanStatus(scope.row.id,1)">通过审核</el-button>
               <div slot="reference" class="name-wrapper">
-                <el-tag size="warning">已提交认证</el-tag>
+                <el-tag size="warning">已通过</el-tag>
               </div>
-            </el-popover>
-            <el-popover v-else-if="scope.row.status == 3" trigger="hover" placement="left">
+            </el-popover> -->
+            <el-popover v-else-if="scope.row.status == -1" trigger="hover" placement="left">
               <el-button type="success" @click="PickmanStatus(scope.row.id,1)">解冻账号</el-button>
               <div slot="reference" class="name-wrapper">
                 <el-tag size="danger">冻结</el-tag>
               </div>
             </el-popover>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="200px">
+          <template slot-scope="scope">
+            <!-- 分配区域 -->
+            <el-button type="primary" icon="el-icon-edit" size="mini" @click="showAreaDialog(scope.row)" />
           </template>
         </el-table-column>
       </el-table>
@@ -93,11 +100,29 @@
         @current-change="handleCurrentChange"
       />
     </el-card>
+
+    <!-- 分配区域的对话框 -->
+    <el-dialog title="分配区域" :visible.sync="areaDialogVisible" width="50%" @close="areaDialogClosed">
+      <!-- 内容主体区域 -->
+      <el-tree
+        ref="areaTree"
+        :data="areaTable"
+        show-checkbox
+        node-key="id"
+        :props="areaProps"
+      />
+      <!-- 底部区域 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="areaDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveArea">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import pickmanApi from '@/api/pickman'
+import areaApi from '@/api/area'
 
 export default {
   data() {
@@ -118,32 +143,43 @@ export default {
       // 用于加载取货员状态的查询框
       pickmanstatus: [{
         value: '-1',
-        label: '不限'
+        label: '冻结'
       }, {
         value: '1',
         label: '正常'
       }, {
-        value: '3',
-        label: '冻结'
-      }, {
         value: '0',
-        label: '未提交认证'
-      }, {
-        value: '2',
-        label: '已提交认证'
+        label: '待审核'
       }
       ],
       userlist: [],
-      total: 0
+      total: 0,
+      selectedPickmanId: null,
+      areaTable: [],
+      areaProps: {
+        children: 'child',
+        label: 'name'
+      },
+      areaDialogVisible: false
     }
   },
   created() {
     this.getPickmanList()
+    areaApi.getAreaTable().then(response => {
+      this.areaTable = response.data
+    })
   },
   methods: {
     // 获取用户列表
     async getPickmanList() {
+      const loading = this.$loading({
+        lock: true,
+        text: '列表加载中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       const data = await pickmanApi.getPickmanList(this.queryInfo)
+      loading.close()
       if (data.code !== 10000) {
         return this.$message.error('获取用户列表失败！')
       }
@@ -174,6 +210,37 @@ export default {
       }
       this.$message.success('修改取货员状态成功！')
       this.getPickmanList()
+    },
+    areaDialogClosed() {
+      this.areaDialogVisible = false
+    },
+    showAreaDialog(pickman) {
+      this.areaDialogVisible = true
+      const areaIdList = []
+      pickman.area.forEach(item => {
+        areaIdList.push(item.id)
+      })
+      this.selectedPickmanId = pickman.id
+      setTimeout(() => {
+        this.$refs.areaTree.setCheckedKeys(areaIdList)
+      }, 100)
+    },
+    saveArea() {
+      const loading = this.$loading({
+        lock: true
+      })
+      const areaIdList = this.$refs.areaTree.getCheckedKeys()
+      pickmanApi.setArea({
+        area_id: areaIdList.join(','),
+        pickman_id: this.selectedPickmanId
+      }).then(response => {
+        this.$message.success(response.data.message || '修改成功')
+        this.areaDialogVisible = false
+        this.getPickmanList()
+        loading.close()
+      }).catch(() => {
+        loading.close()
+      })
     }
   }
 }

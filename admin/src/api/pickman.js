@@ -10,7 +10,13 @@ const setPickmanStatus = (params) => request({
   method: 'post',
   params
 })
+const setArea = (data) => request({
+  url: '/admin/pickman/setArea',
+  method: 'post',
+  data
+})
 export default {
   getPickmanList,
-  setPickmanStatus
+  setPickmanStatus,
+  setArea
 }

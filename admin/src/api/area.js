@@ -14,6 +14,11 @@ const getList = (params) => request({
   params
 })
 
+const getAreaTable = () => request({
+  url: '/collect/area'
+})
+
 export default {
-  getList
+  getList,
+  getAreaTable
 }

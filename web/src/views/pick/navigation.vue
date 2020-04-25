@@ -78,7 +78,7 @@ export default {
         })
         wx.ready(() => {
           wx.getLocation({
-            type: 'gcj102',
+            type: 'gcj02',
             success: function (res) {
               console.log(res, 'location')
               // const latitude = res.latitude

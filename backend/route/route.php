@@ -28,6 +28,7 @@ Route::post('/admin/order/CompleteOrder','admin/order/CompleteOrder');
 //管理员端 取货员相关
 Route::get('/admin/pickman/PickmanList','admin/pickman/PickmanList');
 Route::post('/admin/pickman/PickmanStatus','admin/pickman/PickmanStatus');
+Route::post('/admin/pickman/setArea','admin/pickman/setArea');
 //工具相关
 Route::get('/admin/dashboard', 'admin/Administrator/dashboard');
 //微信接入相关

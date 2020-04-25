@@ -14,7 +14,7 @@
         </el-col>
       </el-row>
 
-      <!-- 用户列表区域 -->
+      <!-- 列表区域 -->
       <el-table :data="wastelist" border stripe>
         <el-table-column type="index" />
         <el-table-column label="名称" prop="name" />

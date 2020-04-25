@@ -12,7 +12,7 @@ const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   baseURL, // url = base url + request url
   // withCredentials: true, // 在跨域请求发送cookies
-  timeout: 5000 // 请求超时
+  timeout: 30000 // 请求超时
 })
 
 // request interceptor

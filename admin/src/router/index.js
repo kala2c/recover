@@ -127,6 +127,24 @@ export const constantRoutes = [
     ]
   },
 
+  {
+    path: '/area',
+    component: Layout,
+    redirect: '/area/index',
+    name: 'Area',
+    meta: {
+      title: '区域管理',
+      icon: 'nested'
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/area/index'),
+        meta: { title: '区域列表' }
+      }
+    ]
+  },
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
