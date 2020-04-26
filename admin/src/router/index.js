@@ -134,13 +134,13 @@ export const constantRoutes = [
     name: 'Area',
     meta: {
       title: '区域管理',
-      icon: 'nested'
+      icon: 'tree'
     },
     children: [
       {
         path: 'index',
         component: () => import('@/views/area/index'),
-        meta: { title: '区域列表' }
+        meta: { title: '区域管理' }
       }
     ]
   },

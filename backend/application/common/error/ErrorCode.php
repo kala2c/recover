@@ -72,6 +72,13 @@ class ErrorCode
     const PICKMAN_WAIT_AUDIT = 80007;
     const PICKMAN_EXISTS = 80008;
 
+    /*************Area 地区代码**********/
+    const INSERT_AREA_FAILED = 90001;
+    const DELETE_AREA_FAILED = 90002;
+    const SET_AREA_ADMIN_FAILED = 90003;
+    const AREA_NOT_EXISTS = 90004;
+    const AREA_LEVEL_LOW = 90005;
+
 
 
 
@@ -122,6 +129,12 @@ class ErrorCode
         self::PICKMAN_NOT_EXISTS => '取货员不存在',
         self::PICKMAN_FORBIDDEN => '账号已封禁',
         self::PICKMAN_WAIT_AUDIT => '信息正在审核中',
-        self::PICKMAN_EXISTS => '已经注册过回收员'
+        self::PICKMAN_EXISTS => '已经注册过回收员',
+
+        self::INSERT_AREA_FAILED => '新增地区失败',
+        self::DELETE_AREA_FAILED => '删除地区失败',
+        self::SET_AREA_ADMIN_FAILED => '变更地区管理员失败',
+        self::AREA_NOT_EXISTS => '地区不存在',
+        self::AREA_LEVEL_LOW => '该地区级别低 无法添加下级'
     ];
 }

@@ -22,6 +22,6 @@ class User extends Base
 
     public function OrderMaster()
     {
-        return $this->hasOne('OrderMaster');
+        return $this->hasMany('OrderMaster');
     }
 }

@@ -1,24 +1,35 @@
 import request from '@/utils/request'
 
-// function getList(params) {
-//   return request({
-//     url: '/vue-admin-template/table/list',
-//     method: 'get',
-//     params
-//   })
-// }
-
-const getList = (params) => request({
-  url: '/vue-admin-template/table/list',
-  method: 'get',
-  params
+const getAreaTable = () => request({
+  url: '/admin/area/list'
 })
 
-const getAreaTable = () => request({
-  url: '/collect/area'
+const appendArea = (data) => request({
+  url: 'admin/area/append',
+  method: 'post',
+  data
+})
+
+const removeArea = (data) => request({
+  url: 'admin/area/remove',
+  method: 'post',
+  data
+})
+
+const setAreaAdmin = (data) => request({
+  url: 'admin/area/setAdmin',
+  method: 'post',
+  data
+})
+
+const getAdminList = () => request({
+  url: '/admin/area/adminlist'
 })
 
 export default {
-  getList,
-  getAreaTable
+  getAreaTable,
+  appendArea,
+  removeArea,
+  setAreaAdmin,
+  getAdminList
 }

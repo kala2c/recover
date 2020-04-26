@@ -29,6 +29,12 @@ Route::post('/admin/order/CompleteOrder','admin/order/CompleteOrder');
 Route::get('/admin/pickman/PickmanList','admin/pickman/PickmanList');
 Route::post('/admin/pickman/PickmanStatus','admin/pickman/PickmanStatus');
 Route::post('/admin/pickman/setArea','admin/pickman/setArea');
+// 管理员端 地区相关
+Route::get('/admin/area/list','admin/area/getList');
+Route::get('/admin/area/adminlist','admin/area/getAdminList');
+Route::post('/admin/area/append','admin/area/append');
+Route::post('/admin/area/remove','admin/area/remove');
+Route::post('/admin/area/setAdmin','admin/area/setAdmin');
 //工具相关
 Route::get('/admin/dashboard', 'admin/Administrator/dashboard');
 //微信接入相关

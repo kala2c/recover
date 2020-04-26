@@ -210,7 +210,7 @@ level 区域级别 1为最小
 
 top_id 上级区域 如世回尧街道->芝罘区
 
-admin_id 辖区代理 
+administrator_id 辖区代理 
 
 create_time
 
