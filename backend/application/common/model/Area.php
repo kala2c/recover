@@ -129,19 +129,48 @@ class Area extends Base
      * @param $area_id
      * @param $admin_id
      * @return Area
+     * @throws DbException
      */
+    static private $area_id_list = [];
     public static function setAdmin($area_id, $admin_id)
     {
-        $data = ['admin_id' => $admin_id];
-        $data = self::addTimeField($data, false);
-        return self::update($data, ['id' => $area_id]);
+        array_push(self::$area_id_list, $area_id);
+//        self::$area_id_list[] = $top_id;
+        self::findChild([$area_id]);
+
+//        $data = [];
+//        foreach (self::$area_id_list as $id) {
+//            array_push($data, self::addTimeField([
+//                'admin_id' => $admin_id,
+//                'id' => $id
+//            ], false));
+//        }
+        $data = self::addTimeField([
+            'administrator_id' => $admin_id
+        ], true);
+        return self::where('id', 'in', self::$area_id_list)->update($data);
     }
 
-//    public static function findChild($id_list = [])
-//    {
-//        $area = [];
-//
-//    }
+    /**
+     * 递归查找所有子地区
+     * @param array $top_id
+     * @return bool
+     * @throws DbException
+     */
+    public static function findChild($top_id = [])
+    {
+
+        if (empty($top_id)) {
+            return false;
+        } else {
+            $data = self::where('top_id', 'in', $top_id)->select()->toArray();
+            $top_id = array_column($data, 'id');
+//            self::$area_id_list[] = $top_id;
+            self::$area_id_list = array_merge(self::$area_id_list, $top_id);
+            self::findChild($top_id);
+        }
+        return true;
+    }
 
 //    /**
 //     * 通过区域名字找到对应取货员
