@@ -28,7 +28,7 @@ class Login extends Controller
             $token = JWT::encode($payload, 'recover');
             Cache::set($token, time());
             return success([
-                'roles' => ['admin'],
+                'roles' => explode(',', $query['permission']),
                 'introduction' => $query['username'],
                 'avatar' => 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
                 'name' => $query['note'],

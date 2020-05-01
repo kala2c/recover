@@ -1,4 +1,4 @@
-import router from './router'
+import router, { constantRoutes } from './router'
 import store from './store'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress' // 进度条
@@ -8,7 +8,35 @@ import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({ showSpinner: false }) // NProgress 配置
 
-const whiteList = ['/login'] // 不需要登录页面的白名单
+let added = false
+function addRoutes(accessRoutes) {
+  if (!added) {
+    router.options.routes = constantRoutes.concat(accessRoutes)
+    router.addRoutes(accessRoutes)
+    added = true
+  }
+}
+
+async function initRoutes() {
+  if (getToken()) {
+    try {
+      //   // 获取用户信息 -- 验证token有效性
+      await store.dispatch('user/getInfo')
+      const { roles } = await store.dispatch('user/getInfo')
+      // // generate accessible routes map based on roles
+      const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
+      // // dynamically add accessible routes
+      addRoutes(accessRoutes)
+    } catch (error) {
+      // token无效 -- 清除token并重定向到登录页
+      await store.dispatch('user/resetToken')
+      Message.error(error || '需要重新登录')
+    }
+  }
+}
+initRoutes()
+
+const whiteList = ['/login'] // 不需要登录权限的页面白名单
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar
@@ -33,8 +61,13 @@ router.beforeEach(async(to, from, next) => {
         try {
           // 获取用户信息 -- 验证token有效性
           await store.dispatch('user/getInfo')
+          const { roles } = await store.dispatch('user/getInfo')
 
-          next()
+          // generate accessible routes map based on roles
+          const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
+          // dynamically add accessible routes
+          addRoutes(accessRoutes)
+          next({ ...to, replace: true })
         } catch (error) {
           // token无效 -- 清除token并重定向到登录页
           await store.dispatch('user/resetToken')

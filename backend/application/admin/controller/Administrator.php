@@ -10,13 +10,20 @@ use app\common\model\OrderMaster as OrderModel;
 use app\common\model\Pickman as PickmanModel;
 use app\common\model\User as UserModel;
 use app\common\model\Waste as WasteModel;
+use think\exception\DbException;
+use think\exception\ValidateException;
 use think\facade\Request;
 use app\admin\model\Administrator as AdminModel;
+use think\facade\Validate;
 
 class Administrator extends Base
 {
-    //根据账号密码修改管理员密码
-    public function changepassword()
+    /**
+     * 根据账号密码修改管理员密码
+     * @throws ApiException
+     * @throws DbException
+     */
+    public function changePassword()
     {
         $password = Request::param('pass');
         $newpassword = Request::param('newpass');
@@ -27,6 +34,67 @@ class Administrator extends Base
             return success();
         }
         throw new ApiException(ErrorCode::UPDATE_USER_RECORD_FAILED);
+    }
+
+    /**
+     * 获取负责人列表
+     * @throws DbException
+     */
+    public function getList()
+    {
+        $page = $this->request->get('page') ?? 1;
+        $admin_list = AdminModel::pageUtil($page)->hidden(['password'])->select();
+        return success([
+            'list' => $admin_list,
+            'meta' => AdminModel::pageInfo()
+        ]);
+    }
+
+    /**
+     * 添加负责人
+     * @throws ApiException
+     */
+    public function append()
+    {
+        $data = $this->request->post();
+        $validate = Validate::make([
+            'username' => 'require',
+            'password' => 'require',
+            'mobile' => 'require',
+            'note' => 'require'
+        ]);
+        if (!$validate->check($data)) {
+            throw new ValidateException($validate->getError());
+        }
+        $rlt = AdminModel::add($data);
+        if (!$rlt) {
+            throw new ApiException(ErrorCode::INSERT_USER_RECORD_FAILED);
+        }
+        return successWithMsg('添加成功');
+    }
+
+    /**
+     * 添加负责人
+     * @throws ApiException
+     */
+    public function set()
+    {
+        $data = $this->request->post();
+        $validate = Validate::make([
+            'id' => 'number',
+//            'username' => 'require',
+//            'password' => 'require',
+//            'mobile' => 'require',
+//            'note' => 'require'
+        ]);
+        if (!$validate->check($data)) {
+            throw new ValidateException($validate->getError());
+        }
+        $rlt = AdminModel::set($data);
+        if (!$rlt) {
+            throw new ApiException(ErrorCode::INSERT_USER_RECORD_FAILED);
+        }
+        return successWithMsg('添加成功');
     }
 
     //后台首页数据聚合

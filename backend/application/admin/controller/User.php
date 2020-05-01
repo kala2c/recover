@@ -12,11 +12,12 @@ class User extends Base
 {
     public function info(Request $request)
     {
+        $admin = $this->self;
         return success([
-            'roles' => ['admin'],
-            'introduction' => '我是超级管理',
+            'roles' => explode(',', $admin['permission']),
+            'introduction' => $admin['note'],
             'avatar' => 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-            'name' => '超级管理员',
+            'name' => $admin['username'],
         ]);
 
     }

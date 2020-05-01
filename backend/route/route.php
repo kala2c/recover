@@ -13,7 +13,12 @@
 Route::post('/admin/user/login', 'admin/Login/login');
 Route::post('/admin/user/logout', 'admin/Login/logout');
 Route::get('/admin/user/info', 'admin/User/info');
-Route::post('/admin/user/changepassword', 'admin/Administrator/changepassword');
+Route::post('/admin/user/changepassword', 'admin/Administrator/changePassword');
+//管理员端 管理员相关
+Route::get('/admin/admin/list', 'admin/Administrator/getList');
+Route::post('/admin/admin/append', 'admin/Administrator/append');
+Route::post('/admin/admin/setInfo', 'admin/Administrator/set');
+
 //管理员端 用户账号相关
 Route::post('/admin/user/UserList', 'admin/user/UserList');
 Route::post('/admin/user/UserInfo', 'admin/user/UserInfo');

@@ -51,6 +51,11 @@ export default {
     isCollapse() {
       return !this.sidebar.opened
     }
+  },
+  watch: {
+    routes(val) {
+      console.log('路由', val)
+    }
   }
 }
 </script>

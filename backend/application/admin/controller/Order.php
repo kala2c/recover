@@ -25,7 +25,7 @@ class Order extends Base
         $pagenum = Request::param('pagenum', '1');
 
         $area = AreaModel::field('id')
-                        ->where('admin_id', $this->user_info['uid'])
+                        ->where('administrator_id', $this->user_info['uid'])
                         ->select();
         $area_list = [];
         foreach ($area as $value) {

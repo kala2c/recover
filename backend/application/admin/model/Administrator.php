@@ -6,8 +6,36 @@ use app\common\model\Base;
 
 class Administrator extends Base
 {
-//    public function area()
-//    {
-//        return $this->hasMany('area', 'id', 'admin_id');
-//    }
+    /**
+     * 添加新用户
+     * @param $data
+     * @return Administrator
+     */
+    public static function add($data)
+    {
+        $data['level'] = 500;
+        $data = self::addTimeField($data);
+        return self::create($data);
+    }
+
+    /**
+     * 添加新用户
+     * @param $data
+     * @return mixed
+     */
+    public static function set($data)
+    {
+        $data = self::addTimeField($data);
+        if (!isset($data['id'])) return false;
+        $id = $data['id'];
+        unset($data['id']);
+        return self::update($data, ['id' => $id]);
+    }
+    /**
+     * 关联到区域
+     */
+    public function area()
+    {
+        return $this->hasMany('area', 'id', 'admin_id');
+    }
 }

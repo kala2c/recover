@@ -59,8 +59,6 @@ export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      console.log(value)
-      console.log(validUsername(value))
       if (!validUsername(value)) {
         callback(new Error('请输入用户名'))
       } else {

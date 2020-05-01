@@ -24,7 +24,68 @@ import Layout from '@/layout'
     activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
   }
  */
-
+export const asyncRoutes = [
+  {
+    path: '/pickman',
+    component: Layout,
+    redirect: '/pickman/index',
+    name: 'Pickman',
+    meta: {
+      title: '取货员管理',
+      icon: 'nested',
+      roles: ['super']
+    },
+    children: [
+      {
+        path: '/index',
+        component: () => import('@/views/pickman/index'),
+        meta: { title: '取货员信息', roles: ['super'] }
+      },
+      {
+        path: '/apply',
+        component: () => import('@/views/pickman/apply'),
+        meta: { title: '取货员申请', roles: ['super'] }
+      }
+    ]
+  },
+  {
+    path: '/admin',
+    component: Layout,
+    redirect: '/admin/index',
+    name: 'Pickman',
+    meta: {
+      title: '负责人管理',
+      icon: 'nested',
+      roles: ['super']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/admin/index'),
+        meta: { title: '负责人信息', roles: ['super'] }
+      }
+    ]
+  },
+  {
+    path: '/area',
+    component: Layout,
+    redirect: '/area/index',
+    name: 'Area',
+    meta: {
+      title: '区域管理',
+      icon: 'tree',
+      roles: ['super']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/area/index'),
+        meta: { title: '区域管理', roles: ['super'] }
+      }
+    ]
+  },
+  { path: '*', redirect: '/404', hidden: true }
+]
 /**
  * constantRoutes
  * a base page that does not have permission requirements
@@ -102,51 +163,10 @@ export const constantRoutes = [
         meta: { title: '订单数据', icon: 'form' }
       }
     ]
-  },
-
-  {
-    path: '/pickman',
-    component: Layout,
-    redirect: '/pickman/index',
-    name: 'Pickman',
-    meta: {
-      title: '取货员管理',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: '/index',
-        component: () => import('@/views/pickman/index'),
-        meta: { title: '取货员信息' }
-      },
-      {
-        path: '/apply',
-        component: () => import('@/views/pickman/apply'),
-        meta: { title: '取货员申请' }
-      }
-    ]
-  },
-
-  {
-    path: '/area',
-    component: Layout,
-    redirect: '/area/index',
-    name: 'Area',
-    meta: {
-      title: '区域管理',
-      icon: 'tree'
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/area/index'),
-        meta: { title: '区域管理' }
-      }
-    ]
-  },
+  }
 
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  // { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({

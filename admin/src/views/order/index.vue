@@ -65,7 +65,7 @@
         <el-table-column label="地址">
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" placement="top">
-              <div slot="content">{{ scope.row.area }}<br/>{{ scope.row.address_detail }}</div>
+              <div slot="content">{{ scope.row.area }}<br>{{ scope.row.address_detail }}</div>
               <span>{{ scope.row.area }}</span>
             </el-tooltip>
           </template>
@@ -136,6 +136,7 @@ export default {
         // 当前每页显示多少条数据
         pagesize: 10
       },
+      value1: null,
       orderlist: [],
       total: 0,
       // 用于加载订单状态的取货框
