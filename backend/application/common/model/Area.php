@@ -28,44 +28,54 @@ class Area extends Base
      * 获取区域列表
      * @throws DbException
      */
-    static public function getList()
-    {
-        $list = self::with('pickman')->order('level', 'desc')->order('top_id')->select()->toArray();
-        $qu = [];
-        $jd = [];
-        $rlt = [];
-        foreach ($list as $area) {
-            if ($area['level'] == self::LEVEL_QU) {
-                $qu[$area['id']] = $area;
-            } elseif ($area['level'] == self::LEVEL_JD) {
-                if (array_key_exists($area['top_id'], $qu)) {
-                    $area['top'] = $qu[$area['top_id']];
-                }
-                $jd[$area['id']] = $area;
-            } elseif ($area['level'] == self::LEVEL_JWH) {
-                if (array_key_exists($area['top_id'], $jd)) {
-                    $area['top'] = $jd[$area['top_id']];
-                }
-                $rlt[] = $area;
-            }
-        }
-        return $rlt;
-    }
+//    static public function getList()
+//    {
+//        $list = self::with('pickman')->order('level', 'desc')->order('top_id')->select()->toArray();
+//        $qu = [];
+//        $jd = [];
+//        $rlt = [];
+//        foreach ($list as $area) {
+//            if ($area['level'] == self::LEVEL_QU) {
+//                $qu[$area['id']] = $area;
+//            } elseif ($area['level'] == self::LEVEL_JD) {
+//                if (array_key_exists($area['top_id'], $qu)) {
+//                    $area['top'] = $qu[$area['top_id']];
+//                }
+//                $jd[$area['id']] = $area;
+//            } elseif ($area['level'] == self::LEVEL_JWH) {
+//                if (array_key_exists($area['top_id'], $jd)) {
+//                    $area['top'] = $jd[$area['top_id']];
+//                }
+//                $rlt[] = $area;
+//            }
+//        }
+//        return $rlt;
+//    }
 
     /**
      * 获取树形区域列表 上级.child = 下级
      * @param string $field
      * @return array
+     * @throws DataException
+     * @throws DataNotFoundException
      * @throws DbException
      * @return mixed
      */
     const FRONTEND_INFO = 'id,level,top_id,name';
-    static public function getTree($field = '*')
+    static public function getTree($city_id)
     {
-        $list = self::field($field)->order('level')->select()->toArray();
+        $list = self::field(self::FRONTEND_INFO)
+            ->where('city_id', $city_id)
+            ->order('level')
+            ->select()->toArray();
         return self::list2tree($list);
     }
 
+    /**
+     * 将线性表转为树
+     * @param $list
+     * @return array
+     */
     static private function list2tree($list) {
         $qu = [];
         $jd = [];
@@ -94,7 +104,7 @@ class Area extends Base
      * @throws DbException
      */
     static public function getTreeWithAdmin() {
-        $list = self::with('administrator')->order('level')->select();
+        $list = self::with('administrator')->where('city_id', 1)->order('level')->select();
         return self::list2tree($list);
     }
 
@@ -191,6 +201,14 @@ class Area extends Base
     public function Pickman()
     {
         return $this->belongsToMany('Pickman', 'pickman_area');
+    }
+
+    /**
+     * 关联到城市
+     */
+    public function city()
+    {
+        return $this->belongsTo('City');
     }
 
     /**

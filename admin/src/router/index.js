@@ -67,6 +67,24 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/city',
+    component: Layout,
+    redirect: '/city/index',
+    name: 'City',
+    meta: {
+      title: '城市管理',
+      icon: 'tree',
+      roles: ['super']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/city/index'),
+        meta: { title: '城市管理', roles: ['super'] }
+      }
+    ]
+  },
+  {
     path: '/area',
     component: Layout,
     redirect: '/area/index',

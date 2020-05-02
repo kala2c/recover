@@ -210,11 +210,30 @@ level 区域级别 1为最小
 
 top_id 上级区域 如世回尧街道->芝罘区
 
+city_id 关联城市表
+
 administrator_id 辖区代理 
 
 create_time
 
 update_time
+
+#### city 城市表
+
+id 
+
+administrator_id 关联管理员
+
+name 城市名字
+
+note 城市介绍
+
+status 状态
+
+create_time 创建时间
+
+update_time 修改时间
+
 
 ##### config：系统配置
 

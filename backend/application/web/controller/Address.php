@@ -112,7 +112,7 @@ class Address extends Base
      */
     public function getArea()
     {
-        $data = AreaModel::getTree(AreaModel::FRONTEND_INFO);
+        $data = AreaModel::getTree(1);
         return success($data);
     }
 }

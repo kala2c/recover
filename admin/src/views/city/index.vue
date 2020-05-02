@@ -5,27 +5,27 @@
       <!-- 搜索与添加区域 -->
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-input v-model="queryInfo.query" placeholder="搜索管理员" clearable @clear="getAdminList">
-            <el-button slot="append" icon="el-icon-search" @click="getAdminList" />
+          <el-input v-model="queryInfo.query" placeholder="搜索城市" clearable @clear="getCityList">
+            <el-button slot="append" icon="el-icon-search" @click="getCityList" />
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" @click="addDialogVisible = true">新增管理员</el-button>
+          <el-button type="primary" @click="addDialogVisible = true">新增城市</el-button>
         </el-col>
       </el-row>
 
       <!-- 列表区域 -->
-      <el-table :data="list" border stripe>
+      <el-table :data="citylist" border stripe>
         <el-table-column type="index" />
-        <el-table-column label="登录账号" prop="username" />
-        <el-table-column label="手机号" prop="mobile" />
-        <el-table-column label="身份信息" prop="note" />
+        <el-table-column label="名字" prop="name" />
+        <el-table-column label="备注" prop="note" />
+        <el-table-column label="管理员" prop="administrator.note" />
         <el-table-column label="操作" width="200px">
           <template slot-scope="scope">
             <!-- 修改按钮 -->
             <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row)" />
-            <!-- 拉黑按钮 -->
-            <el-button type="danger" icon="el-icon-circle-close" size="mini" />
+            <!-- 禁用按钮 -->
+            <!-- <el-button type="danger" icon="el-icon-circle-close" size="mini" /> -->
           </template>
         </el-table-column>
       </el-table>
@@ -43,21 +43,18 @@
     </el-card>
 
     <!-- 添加对话框 -->
-    <el-dialog title="添加负责人" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
+    <el-dialog title="添加城市" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
       <!-- 内容主体区域 -->
       <el-form ref="addFormRef" :model="addForm" :rules="formRules" label-width="90px">
-        <el-form-item label="登录账号" prop="username">
-          <el-input v-model="addForm.username" />
+        <el-form-item label="城市名字" prop="name">
+          <el-input v-model="addForm.name" />
         </el-form-item>
-        <el-form-item label="登录密码" prop="password">
-          <el-input v-model="addForm.password" />
-        </el-form-item>
-        <el-form-item label="关联手机" prop="mobile">
-          <el-input v-model="addForm.mobile" />
-        </el-form-item>
-        <el-form-item label="身份信息" prop="note">
+        <el-form-item label="城市备注" prop="note">
           <el-input v-model="addForm.note" />
         </el-form-item>
+        <!-- <el-form-item label="关联手机" prop="mobile">
+          <el-input v-model="addForm.mobile" />
+        </el-form-item> -->
       </el-form>
       <!-- 底部区域 -->
       <span slot="footer" class="dialog-footer">
@@ -67,21 +64,15 @@
     </el-dialog>
     <!-- 修改对话框-->
     <el-dialog
-      title="修改废品信息"
+      title="修改城市信息"
       :visible.sync="editDialogVisible"
       width="40%"
     >
       <el-form ref="editFormRef" label-width="90px">
-        <el-form-item label="登录账号" prop="username">
-          <el-input v-model="editForm.username" />
+        <el-form-item label="城市名字" prop="name">
+          <el-input v-model="editForm.name" />
         </el-form-item>
-        <!-- <el-form-item label="登录密码" prop="password">
-          <el-input v-model="editForm.password" />
-        </el-form-item> -->
-        <el-form-item label="关联手机" prop="mobile">
-          <el-input v-model="editForm.mobile" />
-        </el-form-item>
-        <el-form-item label="身份信息" prop="note">
+        <el-form-item label="城市备注" prop="note">
           <el-input v-model="editForm.note" />
         </el-form-item>
       </el-form>
@@ -94,31 +85,20 @@
 </template>
 
 <script>
-import adminApi from '@/api/administrator'
+import cityApi from '@/api/city'
 export default {
   data() {
-    // 验证手机号的规则
-    var checkMobile = (rule, value, cb) => {
-      // 验证手机号的正则表达式
-      const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
-
-      if (regMobile.test(value)) {
-        return cb()
-      }
-
-      cb(new Error('请输入合法的手机号'))
-    }
-
     return {
-      // 获取废品列表的参数对象
+      // 获取列表的参数对象
       queryInfo: {
+        // 用于模糊搜索
         query: '',
         // 当前的页数
         pagenum: 1,
         // 当前每页显示多少条数据
         pagesize: 10
       },
-      list: [],
+      citylist: [],
       total: 0,
       // 控制添加废品对话框的显示与隐藏
       addDialogVisible: false,
@@ -126,72 +106,49 @@ export default {
       editDialogVisible: false,
       // 添加用户的表单数据
       addForm: {
-        username: '',
-        password: '',
-        note: '',
-        mobile: ''
+        name: '',
+        note: ''
       },
       editForm: {
         id: '',
-        username: '',
-        // password: '',
-        note: '',
-        mobile: ''
+        name: '',
+        note: ''
       },
       // 表单的验证规则对象
       formRules: {
-        username: [
-          { required: true, message: '请输入登录账号', trigger: 'blur' },
-          {
-            min: 3,
-            max: 10,
-            message: '用户名的长度在3~10个字符之间',
-            trigger: 'blur'
-          }
-        ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          {
-            min: 6,
-            max: 15,
-            message: '用户名的长度在6~15个字符之间',
-            trigger: 'blur'
-          }
+        name: [
+          { required: true, message: '请输入名字', trigger: 'blur' }
         ],
         note: [
-          { required: true, message: '请输入身份备注', trigger: 'blur' }
-        ],
-        mobile: [
-          { required: true, message: '请输入手机号', trigger: 'blur' },
-          { validator: checkMobile, trigger: 'blur' }
+          { required: true, message: '请输入备注', trigger: 'blur' }
         ]
       }
     }
   },
   created() {
-    this.getAdminList()
+    this.getCityList()
   },
   methods: {
-    async getAdminList() {
-      const data = await adminApi.getList(this.queryInfo)
+    async getCityList() {
+      const data = await cityApi.getList(this.queryInfo)
       console.log(data)
       if (data.code !== 10000) {
         return this.$message.error('获取列表失败')
       }
-      this.list = data.data.list
+      this.citylist = data.data.list
       this.total = data.data.meta.total
     },
     // 监听 pagesize 改变的事件
     handleSizeChange(newSize) {
       // console.log(newSize)
       this.queryInfo.pagesize = newSize
-      this.getAdminList()
+      this.getCityList()
     },
     // 监听 页码值 改变的事件
     handleCurrentChange(newPage) {
       console.log(newPage)
       this.queryInfo.pagenum = newPage
-      this.getAdminList()
+      this.getCityList()
     },
     // 监听添加用户对话框的关闭事件
     addDialogClosed() {
@@ -201,14 +158,14 @@ export default {
     addUser() {
       this.$refs.addFormRef.validate(async valid => {
         if (!valid) return
-        const data = await adminApi.append(this.addForm)
+        const data = await cityApi.append(this.addForm)
         if (data.code !== 10000) {
           this.$message.error('添加失败')
         }
         // 隐藏添加用户的对话框
         this.addDialogVisible = false
         // 重新获取用户列表数据
-        this.getAdminList()
+        this.getCityList()
       })
     },
     // 修改信息
@@ -217,11 +174,11 @@ export default {
       this.editDialogVisible = true
     },
     async editAdminInfo() {
-      const data = await adminApi.setInfo(this.editForm)
+      const data = await cityApi.setInfo(this.editForm)
       if (data.code !== 10000) {
         this.$message.error('修改信息失败')
       }
-      this.getAdminList()
+      this.getCityList()
       this.editDialogVisible = false
     }
   }

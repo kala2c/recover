@@ -42,8 +42,22 @@ class Administrator extends Base
      */
     public function getList()
     {
-        $page = $this->request->get('page') ?? 1;
-        $admin_list = AdminModel::pageUtil($page)->hidden(['password'])->select();
+        $param = $this->request->get();
+        $validate = Validate::make([
+            'pagenum' => 'number',
+            'pagesize' => 'number'
+        ]);
+        if (!$validate->check($param)) {
+            throw new ValidateException($validate->getError());
+        }
+        $page = $param['pagenum'] ?? 1;
+        $pageSize = $param['pagesize'] ?? 10;
+        $map = [];
+        if (isset($param['query']) && !empty($param['query'])) {
+            $query = $param['query'];
+            $map = "username like '%$query%' OR mobile like '%$query%' OR note like '%$query%'";
+        }
+        $admin_list = AdminModel::pageUtil($page, $map, $pageSize)->hidden(['password'])->select();
         return success([
             'list' => $admin_list,
             'meta' => AdminModel::pageInfo()
@@ -74,7 +88,7 @@ class Administrator extends Base
     }
 
     /**
-     * 添加负责人
+     * 修改负责人信息
      * @throws ApiException
      */
     public function set()
@@ -94,7 +108,7 @@ class Administrator extends Base
         if (!$rlt) {
             throw new ApiException(ErrorCode::INSERT_USER_RECORD_FAILED);
         }
-        return successWithMsg('添加成功');
+        return successWithMsg('修改成功');
     }
 
     //后台首页数据聚合

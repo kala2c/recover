@@ -18,7 +18,10 @@ Route::post('/admin/user/changepassword', 'admin/Administrator/changePassword');
 Route::get('/admin/admin/list', 'admin/Administrator/getList');
 Route::post('/admin/admin/append', 'admin/Administrator/append');
 Route::post('/admin/admin/setInfo', 'admin/Administrator/set');
-
+//管理员端 城市相关
+Route::get('/admin/city/list', 'admin/City/getList');
+Route::post('/admin/city/append', 'admin/City/append');
+Route::post('/admin/city/setInfo', 'admin/City/set');
 //管理员端 用户账号相关
 Route::post('/admin/user/UserList', 'admin/user/UserList');
 Route::post('/admin/user/UserInfo', 'admin/user/UserInfo');

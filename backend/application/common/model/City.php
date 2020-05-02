@@ -1,27 +1,29 @@
 <?php
 
-namespace app\admin\model;
 
-use app\common\model\Base;
+namespace app\common\model;
 
-class Administrator extends Base
+
+use think\Exception\DbException;
+
+class City extends Base
 {
+
     /**
-     * 添加新用户
+     * 添加城市
      * @param $data
-     * @return Administrator
+     * @return mixed
      */
     public static function add($data)
     {
-        $data['level'] = 500;
         $data = self::addTimeField($data);
         return self::create($data);
     }
 
     /**
-     * 添加新用户
+     * 修改城市
      * @param $data
-     * @return mixed
+     * @return City|bool
      */
     public static function set($data)
     {
@@ -31,11 +33,16 @@ class Administrator extends Base
         unset($data['id']);
         return self::update($data, ['id' => $id]);
     }
+
     /**
-     * 关联到区域
+     * 通过城市描述获取城市
+     * @param string $str
+     * @throws DbException
+     * @return mixed
      */
-    public function area()
+    public function getCityByText($str = "")
     {
-        return $this->hasMany('area', 'id', 'admin_id');
+        // 处理$name
+        return self::where(['name' => 'name'])->find();
     }
 }

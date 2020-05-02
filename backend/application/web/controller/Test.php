@@ -13,11 +13,10 @@ use think\exception\DbException;
 class Test extends Controller
 {
     /**
-     * @throws DbException
+     * 测试接口
      */
     public function index()
     {
-        $area = Area::getList();
-        return success($area);
+        return '';
     }
 }
