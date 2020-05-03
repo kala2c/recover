@@ -45,4 +45,9 @@ class City extends Base
         // 处理$name
         return self::where(['name' => 'name'])->find();
     }
+
+    public function administrator()
+    {
+        return $this->belongsTo('\\app\\admin\\model\\administrator');
+    }
 }

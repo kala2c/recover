@@ -25,7 +25,7 @@
             <!-- 修改按钮 -->
             <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row)" />
             <!-- 拉黑按钮 -->
-            <el-button type="danger" icon="el-icon-circle-close" size="mini" />
+            <!-- <el-button type="danger" icon="el-icon-circle-close" size="mini" @click="banAdmin(scope.row)" /> -->
           </template>
         </el-table-column>
       </el-table>
@@ -224,6 +224,23 @@ export default {
       this.getAdminList()
       this.editDialogVisible = false
     }
+    // banAdmin(admin) {
+    //   this.$confirm('是否要禁用此用户?', '提示', {
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //     type: 'warning'
+    //   }).then(() => {
+    //     adminApi.ban(admin.id).then(response => {
+    //       this.$message.success(response.data.message || '禁用成功')
+    //       this.getAdminList()
+    //     })
+    //   }).catch(() => {
+    //     this.$message({
+    //       type: 'info',
+    //       message: '取消操作'
+    //     })
+    //   })
+    // }
   }
 }
 </script>

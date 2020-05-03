@@ -36,6 +36,6 @@ class Administrator extends Base
      */
     public function area()
     {
-        return $this->hasMany('area', 'id', 'admin_id');
+        return $this->hasMany('\\app\\common\\model\\Area');
     }
 }

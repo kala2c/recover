@@ -30,7 +30,7 @@
 <script>
 import api from '@/api/collect'
 import store from '@/store'
-import { NavBar, AddressList } from 'vant'
+import { NavBar, AddressList, Toast } from 'vant'
 export default {
   components: {
     VanNavBar: NavBar,
@@ -43,7 +43,7 @@ export default {
       cbPath: '',
       addButtonText: '新增地址',
       addressId: '0',
-      chosenAddressIndex: 0,
+      chosenAddressIndex: null,
       chosenAddressItem: null,
       // 地址原信息
       addressInfoList: [],
@@ -63,8 +63,12 @@ export default {
     onConfirm() {
       if (this.isChosen) {
         const address = this.addressInfoList[this.chosenAddressIndex]
-        store.dispatch('orderForm/setAddress', address)
-        this.goBack()
+        if (address) {
+          store.dispatch('orderForm/setAddress', address)
+          this.goBack()
+        } else {
+          Toast('请选择一个地址')
+        }
       } else {
         this.onAdd()
       }

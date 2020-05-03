@@ -40,22 +40,22 @@ export const asyncRoutes = [
         path: '/index',
         component: () => import('@/views/pickman/index'),
         meta: { title: '取货员信息', roles: ['super'] }
-      },
-      {
-        path: '/apply',
-        component: () => import('@/views/pickman/apply'),
-        meta: { title: '取货员申请', roles: ['super'] }
       }
+      // {
+      //   path: '/apply',
+      //   component: () => import('@/views/pickman/apply'),
+      //   meta: { title: '取货员申请', roles: ['super'] }
+      // }
     ]
   },
   {
     path: '/admin',
     component: Layout,
     redirect: '/admin/index',
-    name: 'Pickman',
+    name: 'Admin',
     meta: {
       title: '负责人管理',
-      icon: 'nested',
+      icon: 'user',
       roles: ['super']
     },
     children: [
@@ -66,24 +66,24 @@ export const asyncRoutes = [
       }
     ]
   },
-  {
-    path: '/city',
-    component: Layout,
-    redirect: '/city/index',
-    name: 'City',
-    meta: {
-      title: '城市管理',
-      icon: 'tree',
-      roles: ['super']
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/city/index'),
-        meta: { title: '城市管理', roles: ['super'] }
-      }
-    ]
-  },
+  // {
+  //   path: '/city',
+  //   component: Layout,
+  //   redirect: '/city/index',
+  //   name: 'City',
+  //   meta: {
+  //     title: '城市管理',
+  //     icon: 'table',
+  //     roles: ['super']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/city/index'),
+  //       meta: { title: '城市管理', roles: ['super'] }
+  //     }
+  //   ]
+  // },
   {
     path: '/area',
     component: Layout,

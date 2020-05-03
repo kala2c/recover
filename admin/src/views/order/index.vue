@@ -170,7 +170,7 @@ export default {
     this.getOrderList()
   },
   methods: {
-    // 获取用户列表
+    // 获取列表
     async getOrderList() {
       const data = await orderApi.getOrderList(this.queryInfo)
       if (data.code !== 10000) {
@@ -213,7 +213,7 @@ export default {
     async deleteOrder(id) {
       const data = await orderApi.deleteOrder({ 'id': id })
       if (data.code !== 10000) {
-        return this.$message.error('取消订单失败！')
+        return this.$message.error('取消订单失败')
       }
       this.$message({
         type: 'success',
@@ -237,7 +237,7 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消取消订单'
+          message: '取消操作'
         })
       })
     }

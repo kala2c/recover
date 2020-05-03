@@ -52,12 +52,13 @@ class Administrator extends Base
         }
         $page = $param['pagenum'] ?? 1;
         $pageSize = $param['pagesize'] ?? 10;
-        $map = [];
+        $top_id = $this->self->id;
+        $map = "top_id=$top_id";
         if (isset($param['query']) && !empty($param['query'])) {
             $query = $param['query'];
-            $map = "username like '%$query%' OR mobile like '%$query%' OR note like '%$query%'";
+            $map .= " AND (username like '%$query%' OR mobile like '%$query%' OR note like '%$query%')";
         }
-        $admin_list = AdminModel::pageUtil($page, $map, $pageSize)->hidden(['password'])->select();
+        $admin_list = AdminModel::pageUtil($page, $map, $pageSize)->with(['area'])->hidden(['password'])->select();
         return success([
             'list' => $admin_list,
             'meta' => AdminModel::pageInfo()

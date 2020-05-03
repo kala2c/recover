@@ -1,5 +1,5 @@
 <template>
-  
+  <div class="apply">申请</div>
 </template>
 <script>
 

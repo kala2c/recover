@@ -36,7 +36,7 @@ class City extends Base
             $query = $param['query'];
             $map = "name like '%$query%' OR note like '%$query%'";
         }
-        $city_list = CityModel::pageUtil($page, $map, $pageSize)->hidden(['password'])->select();
+        $city_list = CityModel::pageUtil($page, $map, $pageSize)->with(['administrator'])->select();
         return success([
             'list' => $city_list,
             'meta' => CityModel::pageInfo()

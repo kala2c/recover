@@ -37,9 +37,11 @@ feedback: 用户反馈
 
 ------
 
-##### admin：管理员信息表
+##### administrator：管理员信息表
 
 id :（int）主键，自增
+
+top_id: 上级管理员
 
 username ：（varchar）管理员账号
 
@@ -48,6 +50,8 @@ password：（varchar）管理员密码
 moible:（varchar）管理员手机号（考虑以后做通过手机验证码修改密码）
 
 permission:（varchar）权限
+
+level: 管理员级别
 
 note：（varchar）备注
 
