@@ -56,6 +56,16 @@ level: 管理员级别
 note：（varchar）备注
 
 
+##### index_page 首页数据表（banner）
+
+id
+
+name
+
+type
+
+url
+
 
 ##### pickman：取货员信息表
 

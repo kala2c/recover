@@ -31,6 +31,7 @@
               删除
             </el-button>
             <el-button
+              :disabled="data.level < 3"
               type="text"
               size="mini"
               @click="setAdmin(node, data)"

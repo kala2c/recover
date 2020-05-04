@@ -5,13 +5,21 @@ const getUserList = (params) => request({
   method: 'get',
   params
 })
-const getUserInfo = (params) => request({
-  url: '/admin/user/UserInfo',
-  method: 'get',
-  params
+
+const lock = (data) => request({
+  url: '/admin/user/lock',
+  method: 'post',
+  data
+})
+
+const unlock = (data) => request({
+  url: '/admin/user/unlock',
+  method: 'post',
+  data
 })
 
 export default {
   getUserList,
-  getUserInfo
+  lock,
+  unlock
 }

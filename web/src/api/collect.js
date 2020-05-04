@@ -12,6 +12,10 @@ const getLocation = () => request({
   url: 'web/user/location'
 })
 
+const getBannerList = () => request({
+  url: 'web/collect/banner'
+})
+
 const submitFeedback = (data) => request({
   url: '/collect/feedback',
   method: 'post',
@@ -80,6 +84,7 @@ const getOrderList = (params) => request({
 export default {
   getSdkConf,
   getLocation,
+  getBannerList,
   submitFeedback,
   getUserInfo,
   getAddressById,

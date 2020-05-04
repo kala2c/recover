@@ -66,6 +66,34 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/banner',
+    component: Layout,
+    redirect: '/banner/index',
+    name: 'Banner',
+    meta: {
+      title: '展示信息',
+      icon: 'eye',
+      roles: ['super']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/banner/index'),
+        meta: { title: '轮播图', roles: ['super'] }
+      },
+      {
+        path: 'city',
+        component: () => import('@/views/banner/city'),
+        meta: { title: '开放城市', roles: ['super'] }
+      },
+      {
+        path: 'custom',
+        component: () => import('@/views/banner/custom'),
+        meta: { title: '客服信息', roles: ['super'] }
+      }
+    ]
+  },
   // {
   //   path: '/city',
   //   component: Layout,

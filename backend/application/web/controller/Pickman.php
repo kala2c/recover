@@ -52,7 +52,6 @@ class Pickman extends Base
 
     /**
      * 导航到目的地
-     * @throws DbException
      */
     public function navigate()
     {
