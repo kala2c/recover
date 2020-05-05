@@ -96,7 +96,8 @@ export default {
     navigate() {
       const TMap = window.TMap
       pickApi.navigate({
-        id: this.orderId
+        id: this.orderId,
+        self_pos: this.selfLocation
       }).then(response => {
         const data = response.data
         // 从结果中取出路线坐标串

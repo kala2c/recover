@@ -54,9 +54,9 @@ router.beforeEach(async(to, from, next) => {
       } catch (error) {
         console.log(error)
         // 重定向到微信授权页
-        // setTimeout(function() {
-        window.open(oauthUrl, '_self')
-        // }, 100000)
+        setTimeout(function() {
+          window.open(oauthUrl, '_self')
+        }, 100000)
       }
     }
     // 回收员页面需要进行回收员信息校验

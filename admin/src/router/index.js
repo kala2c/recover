@@ -81,17 +81,12 @@ export const asyncRoutes = [
         path: 'index',
         component: () => import('@/views/banner/index'),
         meta: { title: '轮播图', roles: ['super'] }
-      },
-      {
-        path: 'city',
-        component: () => import('@/views/banner/city'),
-        meta: { title: '开放城市', roles: ['super'] }
-      },
-      {
-        path: 'custom',
-        component: () => import('@/views/banner/custom'),
-        meta: { title: '客服信息', roles: ['super'] }
       }
+      // {
+      //   path: 'custom',
+      //   component: () => import('@/views/banner/custom'),
+      //   meta: { title: '客服信息', roles: ['super'] }
+      // }
     ]
   },
   // {

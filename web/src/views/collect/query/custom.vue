@@ -9,7 +9,13 @@
       border
       @click-left="$router.go(-1)"
     />
-    <div class="tex">可以放微信号手机号等</div>
+    <div class="text-block">
+      <img class="qrcode" src="http://static.c2wei.cn/qr.png" alt="">
+      <h4>客服一</h4>
+      <br>
+      <img class="qrcode" src="http://static.c2wei.cn/qr.png" alt="">
+      <h4>客服二</h4>
+    </div>
   </div>
 </template>
 
@@ -21,3 +27,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.text-block {
+  padding: 16px 32px;
+  text-align: center;
+  .qrcode {
+    width: 260px;
+  }
+}
+</style>
