@@ -66,6 +66,7 @@ Route::get('/web/collect/banner', 'web/Index/getBannerList');
 //用户信息
 Route::get('/web/user/info', 'web/User/info');
 Route::get('/web/user/location', 'web/User/getLocation');
+Route::get('/web/pickman/list', 'web/User/getPickmanList');
 // 提交反馈
 Route::post('/collect/feedback', 'web/FeedBack/create');
 // 地址相关

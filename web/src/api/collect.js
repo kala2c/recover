@@ -2,18 +2,22 @@
 import request from '@/utils/request'
 
 const getSdkConf = (url) => request({
-  url: 'wx/sdkconf',
+  url: '/wx/sdkconf',
   params: {
     url: url
   }
 })
 
 const getLocation = () => request({
-  url: 'web/user/location'
+  url: '/web/user/location'
 })
 
 const getBannerList = () => request({
-  url: 'web/collect/banner'
+  url: '/web/collect/banner'
+})
+
+const getPickmanList = () => request({
+  url: '/web/pickman/list'
 })
 
 const submitFeedback = (data) => request({
@@ -85,6 +89,7 @@ export default {
   getSdkConf,
   getLocation,
   getBannerList,
+  getPickmanList,
   submitFeedback,
   getUserInfo,
   getAddressById,

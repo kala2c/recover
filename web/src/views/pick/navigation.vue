@@ -8,11 +8,12 @@
 <script>
 import api from '@/api/index'
 import pickApi from '@/api/pick'
+import store from '@/store'
 
 export default {
   data() {
     return {
-      selfLocation: '37.520755,121.357534',
+      selfLocation: '',
       map: null,
       orderId: null,
       markerLayer: null,
@@ -64,12 +65,13 @@ export default {
     },
     async getLocation() {
       const wx = window.wx
+      const that = this
       await api.getWxsdkConf({
         url: location.href.split('#')[0]
       }).then(res => {
         const data = res.data
         wx.config({
-          debug: true,
+          debug: false,
           appId: data.appId,
           timestamp: data.timestamp,
           nonceStr: data.nonceStr,
@@ -85,7 +87,8 @@ export default {
               // const longitude = res.longitude
               // const speed = res.speed
               // const accuracy = res.accuracy
-              this.selfLocation = res.latitude + ',' + res.longitude
+              that.selfLocation = res.latitude + ',' + res.longitude
+              that.navigate()
             }
           })
         })
@@ -114,6 +117,9 @@ export default {
         }
         // 显示路线
         this.displayPolyline(pl)
+        store.dispatch('loading/close')
+      }).catch(() => {
+        store.dispatch('loading/close')
       })
     },
     displayPolyline(pl) {
@@ -126,13 +132,13 @@ export default {
     }
   },
   created() {
-    console.log(this.$route)
     this.orderId = this.$route.query.id
   },
   mounted() {
+    store.dispatch('loading/open')
     this.getLocation()
     this.initMap()
-    this.navigate()
+    // this.navigate()
   },
   activated() {
     const id = this.$route.query.id

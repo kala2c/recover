@@ -10,6 +10,11 @@ import Loading from '@/components/Loading'
 export default {
   components: {
     Loading
+  },
+  mounted() {
+    const VConsole = window.VConsole
+    const vConsole = new VConsole()
+    console.log(vConsole)
   }
 }
 </script>
