@@ -88,6 +88,7 @@ export default {
               // const speed = res.speed
               // const accuracy = res.accuracy
               that.selfLocation = res.latitude + ',' + res.longitude
+              that.initMap()
               that.navigate()
             }
           })
@@ -137,7 +138,7 @@ export default {
   mounted() {
     store.dispatch('loading/open')
     this.getLocation()
-    this.initMap()
+    // this.initMap()
     // this.navigate()
   },
   activated() {

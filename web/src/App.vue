@@ -12,9 +12,9 @@ export default {
     Loading
   },
   mounted() {
-    const VConsole = window.VConsole
-    const vConsole = new VConsole()
-    console.log(vConsole)
+    // const VConsole = window.VConsole
+    // const vConsole = new VConsole()
+    // console.log(vConsole)
   }
 }
 </script>
