@@ -5,7 +5,7 @@ import { getToken } from '@/utils/auth'
 import Qs from 'querystring'
 
 // const baseURL = 'http://127.0.0.9/'
-const baseURL = 'http://127.0.0.1:7000/'
+const baseURL = 'http://127.0.0.1:8080/'
 // const baseURL = '/'
 // 创建一个axios实例
 const service = axios.create({
@@ -20,9 +20,9 @@ service.interceptors.request.use(
   config => {
     // 在请求发送前做点事情
     // 修改默认的content-type axios默认会发送json格式
-    config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+    // config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
     // 转换data格式 axios默认发送的为json格式
-    config.data = Qs.stringify(config.data)
+    // config.data = Qs.stringify(config.data)
     if (store.getters.token) {
       // 在请求头中携带token
       // Authorization 是携带token的请求头

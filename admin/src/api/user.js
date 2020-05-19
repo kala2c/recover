@@ -1,12 +1,12 @@
 import request from '@/utils/request'
 
 const getUserList = (params) => request({
-  url: '/admin/user/UserList',
+  url: '/user/login/',
   method: 'get',
   params
 })
 const getUserInfo = (params) => request({
-  url: '/admin/user/UserInfo',
+  url: '/user/info/',
   method: 'get',
   params
 })
