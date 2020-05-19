@@ -65,6 +65,9 @@ class Login extends Controller
                 'status' => User::STATUS_NORMAL
             ]);
         }
+        if ($user->status != User::STATUS_NORMAL) {
+            throw new ApiException(ErrorCode::USER_LOCKED);
+        }
         $uid = $user->id;
         $nickname = $user_info['nickname'];
         $avatar = $user_info['headimgurl'];

@@ -19,7 +19,7 @@ class Administrator extends Base
     }
 
     /**
-     * 添加新用户
+     * 修改信息
      * @param $data
      * @return mixed
      */

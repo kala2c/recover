@@ -13,9 +13,10 @@ class ErrorCode
     const LOGIN_EXPIRED = 10005;
     const UNAUTHORIZED = 10006;
     const TIME_OUT = 10007;
+    const WX_AUTH_ERROR = 10008;
     const ACCOUNT_PASSWORD_ERROR = 10009;
 //    const = 1008; 单点登录
-    const WX_AUTH_ERROR = 10008;
+    const USER_LOCKED = 10010;
 
     /*************DB 操作错误代码**************/
     const LOST_CONNECT = 20000;
@@ -30,6 +31,9 @@ class ErrorCode
     const WX_OAUTH_FAILED = 30005;
     const WX_GET_INFO_FAILED = 30006;
     const GET_LOCATION_FAILED = 30007;
+    const LOCK_USER_FAILED = 30008;
+    const UNLOCK_USER_FAILED = 30009;
+
 
     /*************Feedback 错误代码**********/
     const INSERT_FEEDBACK_FAILED = 40001;
@@ -79,6 +83,10 @@ class ErrorCode
     const AREA_NOT_EXISTS = 90004;
     const AREA_LEVEL_LOW = 90005;
 
+    const SET_INDEX_PAGE_INFO_FAILED = 100001;
+    const DEL_INDEX_PAGE_INFO_FAILED = 100002;
+
+
 
 
 
@@ -91,6 +99,7 @@ class ErrorCode
         self::LOGIN_EXPIRED => '登录过期 请重新登录',
         self::UNAUTHORIZED => '未登录 请先登录',
         self::ACCOUNT_PASSWORD_ERROR => '账号或密码错误',
+        self::USER_LOCKED => '账户已被封停',
 
         self::LOST_CONNECT => '失去DB连接',
         self::CONFIG_ERROR => 'DB配置错误',
@@ -103,6 +112,8 @@ class ErrorCode
         self::WX_OAUTH_FAILED => '微信授权失败',
         self::WX_GET_INFO_FAILED => '获取微信信息失败',
         self::GET_LOCATION_FAILED => '获取位置信息失败',
+        self::LOCK_USER_FAILED => '禁用用户失败',
+        self::UNLOCK_USER_FAILED => '解除禁用失败',
 
         self::INSERT_FEEDBACK_FAILED => '保存反馈信息失败',
 
@@ -135,6 +146,9 @@ class ErrorCode
         self::DELETE_AREA_FAILED => '删除地区失败',
         self::SET_AREA_ADMIN_FAILED => '变更地区管理员失败',
         self::AREA_NOT_EXISTS => '地区不存在',
-        self::AREA_LEVEL_LOW => '该地区级别低 无法添加下级'
+        self::AREA_LEVEL_LOW => '该地区级别低 无法添加下级',
+
+        self::SET_INDEX_PAGE_INFO_FAILED => '设置展示信息数据失败',
+        self::DEL_INDEX_PAGE_INFO_FAILED => '删除展示信息数据失败',
     ];
 }

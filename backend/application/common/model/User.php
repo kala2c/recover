@@ -11,13 +11,23 @@ class User extends Base
 
     static public $STATUS_MSG = [
         self::STATUS_NORMAL => '正常',
-        self::STATUS_FORBIDDEN => '用户已封禁'
+        self::STATUS_FORBIDDEN => '已封禁'
     ];
+
+    public function getStatusTextAttr($value, $row)
+    {
+        return self::$STATUS_MSG[$row['status']];
+    }
 
     static public function addUser($data)
     {
         $data = self::addTimeField($data);
         return self::create($data);
+    }
+
+    public function address()
+    {
+        return $this->hasMany('Address');
     }
 
     public function OrderMaster()

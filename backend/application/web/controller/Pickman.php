@@ -8,8 +8,10 @@ use app\common\error\ErrorCode;
 use app\common\exception\ApiException;
 use app\common\model\OrderMaster as OrderMasterModel;
 use app\common\model\Pickman as PickmanModel;
+use app\common\model\User as UserModel;
 use \Requests;
 use think\Exception\DbException;
+use think\facade\Cache;
 
 class Pickman extends Base
 {
@@ -52,7 +54,6 @@ class Pickman extends Base
 
     /**
      * 导航到目的地
-     * @throws DbException
      */
     public function navigate()
     {
@@ -63,7 +64,16 @@ class Pickman extends Base
         // 获得目的地坐标
         $target_info = $this->address2location($detail);
         $target_location = $target_info['location']['lat'].','.$target_info['location']['lng'];
-        $self_location = '37.520755,121.357534';
+        if (isset($param['self_pos']) && !empty($param['self_pos'])) {
+            $self_location = $param['self_pos'];
+        } else {
+            $user = UserModel::get($this->user_info['uid']);
+            $openid = $user->openid;
+            $self_location = Cache::get("$openid.location");
+            if (!$self_location) {
+                $self_location = '37.520755,121.357534';
+            }
+        }
         $key = config('secret.qqMap.key');
         $way_list = ['driving', 'bicycling', 'transit', 'walking'];
         $way = 'driving';

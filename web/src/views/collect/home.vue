@@ -134,6 +134,11 @@ export default {
       //   })
       // })
     },
+    getBanner() {
+      api.getBannerList().then(response => {
+        this.bannerList = response.data
+      })
+    },
     toPage(item) {
       const path = item.path
       if (path) {
@@ -145,6 +150,7 @@ export default {
   },
   async created() {
     this.getLocation()
+    this.getBanner()
   },
   async mounted() {
     const res = await api.getLocation()

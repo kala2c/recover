@@ -37,6 +37,23 @@ class Administrator extends Base
     }
 
     /**
+     * 获取管理员信息
+     * @param Request $request
+     * @return mixed
+     */
+    public function info(Request $request)
+    {
+        $admin = $this->self;
+        return success([
+            'roles' => explode(',', $admin['permission']),
+            'introduction' => $admin['note'],
+            'avatar' => 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+            'name' => $admin['username'],
+        ]);
+
+    }
+
+    /**
      * 获取负责人列表
      * @throws DbException
      */
@@ -81,6 +98,7 @@ class Administrator extends Base
         if (!$validate->check($data)) {
             throw new ValidateException($validate->getError());
         }
+        $data['top_id'] = $this->self->id;
         $rlt = AdminModel::add($data);
         if (!$rlt) {
             throw new ApiException(ErrorCode::INSERT_USER_RECORD_FAILED);

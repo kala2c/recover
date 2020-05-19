@@ -12,7 +12,7 @@
 //管理员端 管理员账号相关
 Route::post('/admin/user/login', 'admin/Login/login');
 Route::post('/admin/user/logout', 'admin/Login/logout');
-Route::get('/admin/user/info', 'admin/User/info');
+Route::get('/admin/user/info', 'admin/Administrator/info');
 Route::post('/admin/user/changepassword', 'admin/Administrator/changePassword');
 //管理员端 管理员相关
 Route::get('/admin/admin/list', 'admin/Administrator/getList');
@@ -24,7 +24,8 @@ Route::post('/admin/city/append', 'admin/City/append');
 Route::post('/admin/city/setInfo', 'admin/City/set');
 //管理员端 用户账号相关
 Route::post('/admin/user/UserList', 'admin/user/UserList');
-Route::post('/admin/user/UserInfo', 'admin/user/UserInfo');
+Route::post('/admin/user/lock', 'admin/User/lock');
+Route::post('/admin/user/unlock', 'admin/User/unlock');
 //管理员端 废品相关
 Route::get('/admin/waste/WasteList', 'admin/waste/WasteList');
 Route::get('/admin/waste/WasteInfo', 'admin/waste/WasteInfo');
@@ -43,6 +44,11 @@ Route::get('/admin/area/adminlist','admin/area/getAdminList');
 Route::post('/admin/area/append','admin/area/append');
 Route::post('/admin/area/remove','admin/area/remove');
 Route::post('/admin/area/setAdmin','admin/area/setAdmin');
+// 管理员端 banner图等
+Route::get('/admin/banner/list','admin/IndexPage/getBannerList');
+Route::post('/admin/banner/append','admin/IndexPage/addBanner');
+Route::post('/admin/banner/delete','admin/IndexPage/delBanner');
+
 //工具相关
 Route::get('/admin/dashboard', 'admin/Administrator/dashboard');
 //微信接入相关
@@ -55,9 +61,12 @@ Route::get('/wx/oauth', 'web/Login/oauth');
 Route::get('/wx/sdkconf', 'index/Wx/sdkConf');
 /* 微信端 接口路由*/
 
+
+Route::get('/web/collect/banner', 'web/Index/getBannerList');
 //用户信息
 Route::get('/web/user/info', 'web/User/info');
 Route::get('/web/user/location', 'web/User/getLocation');
+Route::get('/web/pickman/list', 'web/User/getPickmanList');
 // 提交反馈
 Route::post('/collect/feedback', 'web/FeedBack/create');
 // 地址相关

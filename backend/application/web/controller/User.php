@@ -65,6 +65,16 @@ class User extends Base
     }
 
     /**
+     * 获取附近回收员
+     * @throws DbException
+     */
+    public function getPickmanList()
+    {
+        $list = PickmanModel::with(['area'])->where('status', 0)->limit(0, 10)->select();
+        return success($list);
+    }
+
+    /**
      * 获取用户地址
      */
     public function getLocation()
