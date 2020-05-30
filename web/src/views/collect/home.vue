@@ -132,8 +132,13 @@ export default {
               // const longitude = res.longitude
               // const speed = res.speed
               // const accuracy = res.accuracy
-              that.selfLocation = res.latitude + ',' + res.longitude
-              console.log(res)
+              const selfLocation = res.latitude + ',' + res.longitude
+              api.getTextLoc({
+                location: selfLocation
+              }).then(response => {
+                const data = response.data
+                this.location = data.address || data.errMsg || '无法获取位置信息'
+              })
             }
           })
         })
@@ -144,6 +149,8 @@ export default {
     getBanner() {
       api.getBannerList().then(response => {
         this.bannerList = response.data
+
+        console.log(this.bannerList)
       })
     },
     toPage(item) {
@@ -160,9 +167,9 @@ export default {
     this.getBanner()
   },
   async mounted() {
-    const res = await api.getLocation()
-    const data = res.data
-    this.location = data.address || data.errMsg || '无法获取位置信息'
+    // const res = await api.getLocation()
+    // const data = res.data
+    // this.location = data.address || data.errMsg || '无法获取位置信息'
   }
 }
 </script>

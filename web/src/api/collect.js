@@ -12,6 +12,11 @@ const getLocation = () => request({
   url: '/web/user/location'
 })
 
+const getTextLoc = (params) => request({
+  params,
+  url: '/web/user/textloc'
+})
+
 const getBannerList = () => request({
   url: '/web/collect/banner'
 })
@@ -88,6 +93,7 @@ const getOrderList = (params) => request({
 export default {
   getSdkConf,
   getLocation,
+  getTextLoc,
   getBannerList,
   getPickmanList,
   submitFeedback,

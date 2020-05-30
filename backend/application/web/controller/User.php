@@ -74,6 +74,29 @@ class User extends Base
         return success($list);
     }
 
+    public function getTextLoc()
+    {
+        $location = $this->request->get('location');
+        $user = UserModel::get($this->user_info['uid']);
+        $openid = $user->openid;
+        $address = Cache::get("$openid.address");
+        if (!$address) {
+            $data = $this->pos2address($location, $openid);
+            return success($data);
+        } else {
+            $address = json_decode($address, true);
+            list($new_lat, $new_lng) = explode(',', $location);
+            $old_lat = $address['location']['lat'];
+            $old_lng = $address['location']['lng'];
+//            地址变化时才会重新获取
+            if (abs($new_lat-$old_lat) > 0.01 || abs($new_lng-$old_lng) > 0.01) {
+                $data = $this->pos2address($location, $openid);
+                $address = $data;
+            }
+            return success($address);
+        }
+    }
+
     /**
      * 获取用户地址
      */

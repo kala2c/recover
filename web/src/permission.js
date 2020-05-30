@@ -7,8 +7,8 @@ import { getToken, setToken } from '@/utils/auth'
 // 生成微信授权链接
 function createOauthUrl(state) {
   const params = {
-    appid: 'wxb06bf22b4b5e6a5d',
-    redirect_uri: encodeURI('http://zhys-api.hihigher.com/wx/oauth'),
+    appid: 'wx44f968a029d95080',
+    redirect_uri: encodeURI('http://zyhs-api.hihigher.com/wx/oauth'),
     response_type: 'code',
     scope: 'snsapi_userinfo',
     state: state
