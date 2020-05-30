@@ -4,8 +4,9 @@ import store from '@/store'
 import { getToken } from '@/utils/auth'
 import Qs from 'querystring'
 
-const baseURL = 'http://testwx.c2wei.cn/'
+// const baseURL = 'http://testwx.c2wei.cn/'
 // const baseURL = 'http://localhost:7000'
+const baseURL = 'http://zhys-api.hihigher.com'
 // 创建一个axios实例
 const service = axios.create({
   baseURL, // url = baseURL + request url

@@ -176,7 +176,7 @@ class Order extends Base
             ],
         ];
         // 接单页面
-        $url = "http://testwx2.c2wei.cn/#/pick/take?refresh=1";
+        $url = config('secret.wx.takeOrderUrl');
         // 根据回收员openid发送通知
         $wx = new Wx();
         foreach ($pickmen as $pickman) {

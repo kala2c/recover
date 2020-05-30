@@ -8,7 +8,7 @@ import { getToken, setToken } from '@/utils/auth'
 function createOauthUrl(state) {
   const params = {
     appid: 'wxb06bf22b4b5e6a5d',
-    redirect_uri: encodeURI('http://testwx.c2wei.cn/wx/oauth'),
+    redirect_uri: encodeURI('http://zhys-api.hihigher.com/wx/oauth'),
     response_type: 'code',
     scope: 'snsapi_userinfo',
     state: state

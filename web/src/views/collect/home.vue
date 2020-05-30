@@ -54,6 +54,7 @@
 import Banner from '@/components/Banner'
 import FootBar from '@/views/collect/components/FootBar'
 import api from '@/api/collect'
+import sysApi from '@/api/index'
 import { Icon, Toast } from 'vant'
 export default {
   components: {
@@ -108,31 +109,37 @@ export default {
   },
   methods: {
     async getLocation() {
-      // const wx = window.wx
-      // // const url = encodeURIComponent(location.href.split('#')[0])
-      // const url = window.location.origin
-      // const response = await api.getSdkConf(url)
-      // const data = response.data
-      // wx.config({
-      //   debug: true,
-      //   appId: data.appId,
-      //   timestamp: data.timestamp,
-      //   nonceStr: data.nonceStr,
-      //   signature: data.signature,
-      //   jsApiList: ['getLocation']
-      // })
-      // wx.ready(() => {
-      //   wx.getLocation({
-      //     type: 'gcj102',
-      //     success: function (res) {
-      //       console.log(res, 'location')
-      //       // const latitude = res.latitude
-      //       // const longitude = res.longitude
-      //       // const speed = res.speed
-      //       // const accuracy = res.accuracy
-      //     }
-      //   })
-      // })
+      const wx = window.wx
+      const that = this
+      await sysApi.getWxsdkConf({
+        url: location.href.split('#')[0]
+      }).then(res => {
+        const data = res.data
+        wx.config({
+          debug: false,
+          appId: data.appId,
+          timestamp: data.timestamp,
+          nonceStr: data.nonceStr,
+          signature: data.signature,
+          jsApiList: ['getLocation']
+        })
+        wx.ready(() => {
+          wx.getLocation({
+            type: 'gcj02',
+            success: function (res) {
+              console.log(res, 'location')
+              // const latitude = res.latitude
+              // const longitude = res.longitude
+              // const speed = res.speed
+              // const accuracy = res.accuracy
+              that.selfLocation = res.latitude + ',' + res.longitude
+              console.log(res)
+            }
+          })
+        })
+      }).catch(res => {
+        console.log(res)
+      })
     },
     getBanner() {
       api.getBannerList().then(response => {
