@@ -4,7 +4,15 @@
       <van-icon name="location-o" />
       {{location}}
     </div>
-    <banner :bannerList="bannerList"></banner>
+    <!-- <banner :bannerList="bannerList"></banner> -->
+    <van-swipe class="banner-swipe" :autoplay="3000" indicator-color="white">
+      <van-swipe-item
+        v-for="banner in bannerList"
+        :key="banner.id"
+      >
+        <div class="img" :style="'background-image: url('+banner.url+')'"></div>
+      </van-swipe-item>
+    </van-swipe>
     <div class="grid">
       <div v-for="item in pageList" :key="item.id" class="grid-item">
         <div class="grid-item-content" @click="toPage(item)">
@@ -51,16 +59,18 @@
 </template>
 
 <script>
-import Banner from '@/components/Banner'
+// import Banner from '@/components/Banner'
 import FootBar from '@/views/collect/components/FootBar'
 import api from '@/api/collect'
 import sysApi from '@/api/index'
-import { Icon, Toast } from 'vant'
+import { Icon, Toast, Swipe, SwipeItem } from 'vant'
 export default {
   components: {
     VanIcon: Icon,
-    Banner,
-    FootBar
+    // Banner,
+    FootBar,
+    VanSwipe: Swipe,
+    VanSwipeItem: SwipeItem
   },
   data() {
     return {
@@ -127,7 +137,7 @@ export default {
           wx.getLocation({
             type: 'gcj02',
             success: function (res) {
-              console.log(res, 'location')
+              // console.log(res, 'location')
               // const latitude = res.latitude
               // const longitude = res.longitude
               // const speed = res.speed
@@ -137,20 +147,19 @@ export default {
                 location: selfLocation
               }).then(response => {
                 const data = response.data
-                this.location = data.address || data.errMsg || '无法获取位置信息'
+                that.location = data.address || data.errMsg || '无法获取位置信息'
               })
             }
           })
         })
       }).catch(res => {
-        console.log(res)
+        // console.log(res)
       })
     },
     getBanner() {
       api.getBannerList().then(response => {
         this.bannerList = response.data
-
-        console.log(this.bannerList)
+        // console.log(this.bannerList)
       })
     },
     toPage(item) {
@@ -184,6 +193,19 @@ export default {
     line-height: 30px;
     font-size: 15px;
     background-color: #fff;
+  }
+  .banner-swipe {
+    .van-swipe-item {
+      width: 100%;
+      height: 180px;
+      .img {
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+      }
+    }
   }
   .grid {
     display: flex;
