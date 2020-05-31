@@ -24,5 +24,8 @@ return [
     ],
     'qqMap' => [
         'key' => 'NGLBZ-PFLAJ-N2AFY-FYYM3-IKZS7-MABJT'
+    ],
+    'gdMap' => [
+        'key' => 'b69bffd760e45373603cd0bb0e73604c'
     ]
 ];

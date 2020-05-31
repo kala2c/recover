@@ -59,7 +59,8 @@ export default {
   methods: {
     onConfirm(value, index) {
       if (this.type === 'area') {
-        const area = this.areaTable[index[0]].children[index[1]].children[index[2]]
+        // const area = this.areaTable[index[0]].children[index[1]].children[index[2]]
+        const area = this.areaTable[index[0]].children[index[1]]
         this.$emit('confirm', value, area.id)
       } else if (this.type === 'time') {
         this.$emit('confirm', value)

@@ -117,8 +117,15 @@ export default {
       this.formData.area_id = areaId || 0
     },
     async getLocation() {
+      // const that = this
+      api.getStreet({
+        location: '37.521572,121.374378'
+      }).then(response => {
+        const data = response.data
+        console.log(data)
+        // that.location = data.address || data.errMsg || '无法获取位置信息'
+      })
       const wx = window.wx
-      const that = this
       await sysApi.getWxsdkConf({
         url: location.href.split('#')[0]
       }).then(res => {
@@ -136,11 +143,11 @@ export default {
             type: 'gcj02',
             success: function (res) {
               const selfLocation = res.latitude + ',' + res.longitude
-              api.getAreaLoc({
+              api.getStreet({
                 location: selfLocation
               }).then(response => {
                 const data = response.data
-                that.location = data.address || data.errMsg || '无法获取位置信息'
+                console.log(data)
               })
             }
           })
@@ -214,6 +221,7 @@ export default {
       })
     } else {
       this.getLocation()
+      console.log('地址')
     }
   }
 }
