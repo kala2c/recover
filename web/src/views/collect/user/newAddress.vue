@@ -45,6 +45,7 @@
       :title="pickerTitle"
       :type="pickerType"
       :toggle="pickerShow"
+      :area="areaSelected"
       @confirm="onConfirm"
       @cancel="pickerShow = !pickerShow"
     />
@@ -74,6 +75,7 @@ export default {
       switchChecked: true,
       switchDisabled: true,
       submitDisabled: false,
+      areaSelected: '',
       isEdit: false,
       cbPath: '',
       formData: {
@@ -111,20 +113,16 @@ export default {
       this.pickerType = 'area'
       this.pickerShow = !this.pickerShow
     },
-    onConfirm(value, areaId) {
-      this.pickerShow = !this.pickerShow
+    onConfirm(value, areaId, isShow) {
+      // 判断是不是自动填入 自动填入时不需要改变展示状态
+      if (!isShow) {
+        this.pickerShow = !this.pickerShow
+      }
       this.formData.area = value && value.join('-')
       this.formData.area_id = areaId || 0
     },
     async getLocation() {
-      // const that = this
-      api.getStreet({
-        location: '37.521572,121.374378'
-      }).then(response => {
-        const data = response.data
-        console.log(data)
-        // that.location = data.address || data.errMsg || '无法获取位置信息'
-      })
+      const that = this
       const wx = window.wx
       await sysApi.getWxsdkConf({
         url: location.href.split('#')[0]
@@ -147,7 +145,17 @@ export default {
                 location: selfLocation
               }).then(response => {
                 const data = response.data
-                console.log(data)
+                const areaInfo = data.regeocode && data.regeocode.addressComponent
+                if (!areaInfo) {
+                  Toast('自动获取位置失败')
+                } else {
+                  const { city, district, township, streetNumber } = areaInfo
+                  console.log(city, district, township)
+                  const detail = streetNumber.street + streetNumber.number
+                  // this.formData.area = district + '-' + township
+                  that.areaSelected = district + '-' + township
+                  that.formData.detail = detail || ''
+                }
               })
             }
           })
@@ -221,7 +229,6 @@ export default {
       })
     } else {
       this.getLocation()
-      console.log('地址')
     }
   }
 }

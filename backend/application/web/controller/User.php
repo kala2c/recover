@@ -206,8 +206,10 @@ class User extends Base
     private function pos2addressGaode($location, $openid)
     {
         $key = config('secret.gdMap.key');
-
+        $latlng = explode(',', $location);
+        $location = $latlng[1].','.$latlng[0];
         $api = "https://restapi.amap.com/v3/geocode/geo?key=$key&location=$location";
+//        $api = "https://restapi.amap.com/v3/geocode/regeo?output=xml&location=116.310003,39.991957&key=<用户的key>";
 
         $response = \Requests::get($api);
         $data = json_decode($response->body, true);

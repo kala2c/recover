@@ -33,6 +33,10 @@ export default {
     toggle: {
       type: Boolean,
       default: false
+    },
+    area: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -54,6 +58,22 @@ export default {
   watch: {
     toggle() {
       this.pickerShow = !this.pickerShow
+    },
+    area(val) {
+      const area = val.split('-')
+      let id = null
+      this.areaTable.forEach(district => {
+        if (district.text === area[0]) {
+          district.children.forEach(street => {
+            if (street.text === area[1]) {
+              id = street.id
+            }
+          })
+        }
+      })
+      if (id) {
+        this.$emit('confirm', area, id, true)
+      }
     }
   },
   methods: {
