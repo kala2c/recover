@@ -83,6 +83,9 @@ export default {
         id: 1,
         name: '取货中'
       }, {
+        id: 2,
+        name: '回收中'
+      }, {
         id: 3,
         name: '已完成'
       }],

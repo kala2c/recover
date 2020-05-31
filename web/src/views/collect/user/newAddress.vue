@@ -54,6 +54,7 @@
 <script>
 import store from '@/store'
 import api from '@/api/collect'
+import sysApi from '@/api/index'
 import { NavBar, Toast, Field, Cell, Button, Switch } from 'vant'
 import Picker from '@/views/collect/components/Picker'
 export default {
@@ -114,6 +115,39 @@ export default {
       this.pickerShow = !this.pickerShow
       this.formData.area = value && value.join('-')
       this.formData.area_id = areaId || 0
+    },
+    async getLocation() {
+      const wx = window.wx
+      const that = this
+      await sysApi.getWxsdkConf({
+        url: location.href.split('#')[0]
+      }).then(res => {
+        const data = res.data
+        wx.config({
+          debug: false,
+          appId: data.appId,
+          timestamp: data.timestamp,
+          nonceStr: data.nonceStr,
+          signature: data.signature,
+          jsApiList: ['getLocation']
+        })
+        wx.ready(() => {
+          wx.getLocation({
+            type: 'gcj02',
+            success: function (res) {
+              const selfLocation = res.latitude + ',' + res.longitude
+              api.getAreaLoc({
+                location: selfLocation
+              }).then(response => {
+                const data = response.data
+                that.location = data.address || data.errMsg || '无法获取位置信息'
+              })
+            }
+          })
+        })
+      }).catch(res => {
+        // console.log(res)
+      })
     },
     onSubmit() {
       if (!this.formData.name) {
@@ -178,6 +212,8 @@ export default {
         }
         store.dispatch('loading/close')
       })
+    } else {
+      this.getLocation()
     }
   }
 }
