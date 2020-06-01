@@ -13,6 +13,7 @@ use think\exception\ValidateException;
 use think\facade\Validate;
 use app\common\model\User as UserModel;
 use app\common\model\Pickman as PickmanModel;
+use think\response\Json;
 
 class User extends Base
 {
@@ -74,6 +75,39 @@ class User extends Base
         return success($list);
     }
 
+    /**
+     * 将前台传过来的经纬度解析为文字地址描述
+     * 高德地图接口 含有街道办事处信息
+     * @return Json
+     */
+    public function getStreetInfo()
+    {
+        $location = $this->request->get('location');
+        $user = UserModel::get($this->user_info['uid']);
+        $openid = $user->openid;
+//        $address = Cache::get("$openid.addressGd");
+//        if (!$address) {
+            $data = $this->pos2addressGaode($location, $openid);
+            return success($data);
+//        } else {
+//            $address = json_decode($address, true);
+//            list($new_lat, $new_lng) = explode(',', $location);
+//            $old_lat = $address['location']['lat'];
+//            $old_lng = $address['location']['lng'];
+//            地址变化时才会重新获取
+//            if (abs($new_lat-$old_lat) > 0.01 || abs($new_lng-$old_lng) > 0.01) {
+//                $data = $this->pos2address($location, $openid);
+//                $address = $data;
+//            }
+//            return success($address);
+//        }
+    }
+
+    /**
+     * 将前台传过来的经纬度解析为文字地址描述
+     * 腾讯地图接口 不含街道办事处信息
+     * @return Json
+     */
     public function getTextLoc()
     {
         $location = $this->request->get('location');
@@ -138,6 +172,7 @@ class User extends Base
     }
 
     /**
+     * 腾讯地图接口
      * 将缓存的经纬度转换为文字坐标
      * @param $location string 经纬坐标 36.108678,149.585123
      * @param $openid string openid
@@ -157,6 +192,30 @@ class User extends Base
         $address = $data['result'];
         if ($address) {
             Cache::set("$openid.address", json_encode($address));
+        }
+        return $address;
+    }
+
+    /**
+     * 高德地图接口
+     * 将经纬度转换为文字坐标
+     * @param $location string 经纬坐标 36.108678,149.585123
+     * @param $openid string openid
+     * @return mixed
+     */
+    private function pos2addressGaode($location, $openid)
+    {
+        $key = config('secret.gdMap.key');
+        $latlng = explode(',', $location);
+        $location = $latlng[1].','.$latlng[0];
+        $api = "https://restapi.amap.com/v3/geocode/geo?key=$key&location=$location";
+//        $api = "https://restapi.amap.com/v3/geocode/regeo?output=xml&location=116.310003,39.991957&key=<用户的key>";
+
+        $response = \Requests::get($api);
+        $data = json_decode($response->body, true);
+        $address = $data['result'];
+        if ($address) {
+            Cache::set("$openid.addressGd", json_encode($address));
         }
         return $address;
     }

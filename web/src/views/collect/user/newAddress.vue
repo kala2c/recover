@@ -45,6 +45,7 @@
       :title="pickerTitle"
       :type="pickerType"
       :toggle="pickerShow"
+      :area="areaSelected"
       @confirm="onConfirm"
       @cancel="pickerShow = !pickerShow"
     />
@@ -54,6 +55,7 @@
 <script>
 import store from '@/store'
 import api from '@/api/collect'
+import sysApi from '@/api/index'
 import { NavBar, Toast, Field, Cell, Button, Switch } from 'vant'
 import Picker from '@/views/collect/components/Picker'
 export default {
@@ -73,6 +75,7 @@ export default {
       switchChecked: true,
       switchDisabled: true,
       submitDisabled: false,
+      areaSelected: '',
       isEdit: false,
       cbPath: '',
       formData: {
@@ -110,10 +113,56 @@ export default {
       this.pickerType = 'area'
       this.pickerShow = !this.pickerShow
     },
-    onConfirm(value, areaId) {
-      this.pickerShow = !this.pickerShow
+    onConfirm(value, areaId, isShow) {
+      // 判断是不是自动填入 自动填入时不需要改变展示状态
+      if (!isShow) {
+        this.pickerShow = !this.pickerShow
+      }
       this.formData.area = value && value.join('-')
       this.formData.area_id = areaId || 0
+    },
+    async getLocation() {
+      const that = this
+      const wx = window.wx
+      await sysApi.getWxsdkConf({
+        url: location.href.split('#')[0]
+      }).then(res => {
+        const data = res.data
+        wx.config({
+          debug: false,
+          appId: data.appId,
+          timestamp: data.timestamp,
+          nonceStr: data.nonceStr,
+          signature: data.signature,
+          jsApiList: ['getLocation']
+        })
+        wx.ready(() => {
+          wx.getLocation({
+            type: 'gcj02',
+            success: function (res) {
+              const selfLocation = res.latitude + ',' + res.longitude
+              api.getStreet({
+                location: selfLocation
+              }).then(response => {
+                const data = response.data
+                const areaInfo = data.regeocode && data.regeocode.addressComponent
+                if (!areaInfo) {
+                  Toast('自动获取位置失败')
+                } else {
+                  const { city, district, township, streetNumber } = areaInfo
+                  console.log(city, district, township)
+                  const detail = streetNumber.street + streetNumber.number
+                  // this.formData.area = district + '-' + township
+                  that.areaSelected = district + '-' + township
+                  that.formData.detail = detail || ''
+                }
+              })
+            }
+          })
+        })
+      }).catch(res => {
+        // console.log(res)
+      })
     },
     onSubmit() {
       if (!this.formData.name) {
@@ -178,6 +227,8 @@ export default {
         }
         store.dispatch('loading/close')
       })
+    } else {
+      this.getLocation()
     }
   }
 }

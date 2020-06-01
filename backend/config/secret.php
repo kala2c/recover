@@ -6,11 +6,11 @@
 return [
     'wx' => [
         // 状元回收公众号
-        'appId' => 'wx44f968a029d95080',
-        'appSecret' => '4a647f6e5da2cf654ad47eebfb82b6bd',
+//        'appId' => 'wx44f968a029d95080',
+//        'appSecret' => '4a647f6e5da2cf654ad47eebfb82b6bd',
         // 陈禄伟的测试公众号
-//        'appId' => 'wxb06bf22b4b5e6a5d',
-//        'appSecret' => '5199d77fa9ea333cfc2692553b733c12',
+        'appId' => 'wxb06bf22b4b5e6a5d',
+        'appSecret' => '5199d77fa9ea333cfc2692553b733c12',
         //李烁的测试公众号
 //        'appId' => 'wx3df1334ac159289e',
 //        'appSecret' => 'edef45c25b7dfb55584fec8471c1c2a4',
@@ -24,5 +24,8 @@ return [
     ],
     'qqMap' => [
         'key' => 'NGLBZ-PFLAJ-N2AFY-FYYM3-IKZS7-MABJT'
+    ],
+    'gdMap' => [
+        'key' => 'b69bffd760e45373603cd0bb0e73604c'
     ]
 ];

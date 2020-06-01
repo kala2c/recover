@@ -2,13 +2,19 @@ import router from '@/router'
 import Qs from 'querystring'
 import store from '@/store'
 import { getToken, setToken } from '@/utils/auth'
+import { baseURL } from '@/utils/request'
 // import { Toast } from 'vant'
 
+// const baseUrl = baseURL
 // 生成微信授权链接
 function createOauthUrl(state) {
   const params = {
+    // 状元回收公众号
     appid: 'wx44f968a029d95080',
-    redirect_uri: encodeURI('http://zyhs-api.hihigher.com/wx/oauth'),
+    // 陈禄伟的测试号
+    // appid: 'wxb06bf22b4b5e6a5d',
+    // redirect_uri: encodeURI('http://zyhs-api.hihigher.com/wx/oauth'),
+    redirect_uri: encodeURI(baseURL + '/wx/oauth'),
     response_type: 'code',
     scope: 'snsapi_userinfo',
     state: state
@@ -54,9 +60,9 @@ router.beforeEach(async(to, from, next) => {
       } catch (error) {
         console.log(error)
         // 重定向到微信授权页
-        setTimeout(function() {
-          window.open(oauthUrl, '_self')
-        }, 100000)
+        // setTimeout(function() {
+        window.open(oauthUrl, '_self')
+        // }, 100000)
       }
     }
     // 回收员页面需要进行回收员信息校验
