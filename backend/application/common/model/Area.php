@@ -127,6 +127,7 @@ class Area extends Base
         $data = [
             'top_id' => $top_id,
             'name' => $name,
+            'city_id' => 1,
             'administrator_id' => $top_area->administrator_id,
             'level' => $top_area->level-self::LEVEL_STEP
         ];

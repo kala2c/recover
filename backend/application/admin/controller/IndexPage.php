@@ -30,7 +30,7 @@ class IndexPage extends Base
     {
         $image = $this->request->file('file');
 
-        $info = $image->move('./public/uploads/');
+        $info = $image->move('./uploads/');
 
         $url = $info->getSaveName();
 
