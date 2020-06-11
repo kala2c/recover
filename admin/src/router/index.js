@@ -26,26 +26,21 @@ import Layout from '@/layout'
  */
 export const asyncRoutes = [
   {
-    path: '/pickman',
+    path: '/depot',
     component: Layout,
-    redirect: '/pickman/index',
+    redirect: '/depot/index',
     name: 'Pickman',
     meta: {
-      title: '取货员管理',
+      title: '回收站点管理',
       icon: 'nested',
       roles: ['super']
     },
     children: [
       {
         path: '/index',
-        component: () => import('@/views/pickman/index'),
-        meta: { title: '取货员信息', roles: ['super'] }
+        component: () => import('@/views/depot/index'),
+        meta: { title: '站点信息', roles: ['super'] }
       }
-      // {
-      //   path: '/apply',
-      //   component: () => import('@/views/pickman/apply'),
-      //   meta: { title: '取货员申请', roles: ['super'] }
-      // }
     ]
   },
   {
@@ -89,6 +84,29 @@ export const asyncRoutes = [
       // }
     ]
   },
+  // {
+  //   path: '/pickman',
+  //   component: Layout,
+  //   redirect: '/pickman/index',
+  //   name: 'Pickman',
+  //   meta: {
+  //     title: '取货员管理',
+  //     icon: 'nested',
+  //     roles: ['super']
+  //   },
+  //   children: [
+  //     {
+  //       path: '/index',
+  //       component: () => import('@/views/pickman/index'),
+  //       meta: { title: '取货员信息', roles: ['super'] }
+  //     }
+  //     // {
+  //     //   path: '/apply',
+  //     //   component: () => import('@/views/pickman/apply'),
+  //     //   meta: { title: '取货员申请', roles: ['super'] }
+  //     // }
+  //   ]
+  // },
   // {
   //   path: '/city',
   //   component: Layout,

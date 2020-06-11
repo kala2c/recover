@@ -38,6 +38,10 @@ Route::post('/admin/order/CompleteOrder','admin/order/CompleteOrder');
 Route::get('/admin/pickman/PickmanList','admin/pickman/PickmanList');
 Route::post('/admin/pickman/PickmanStatus','admin/pickman/PickmanStatus');
 Route::post('/admin/pickman/setArea','admin/pickman/setArea');
+//管理员端 站点相关
+Route::get('/admin/depot/depotList','admin/Depot/depotList');
+//Route::post('/admin/depot/PickmanStatus','admin/depot/PickmanStatus');
+Route::post('/admin/depot/setArea','admin/depot/setArea');
 // 管理员端 地区相关
 Route::get('/admin/area/list','admin/area/getList');
 Route::get('/admin/area/adminlist','admin/area/getAdminList');
@@ -83,6 +87,17 @@ Route::post('/collect/order', 'web/Order/set');
 Route::post('/collect/cancelorder', 'web/Order/cancel');
 Route::get('/collect/order', 'web/Order/get');
 Route::get('/collect/orders', 'web/Order/getList');
+
+// 回收点信息
+Route::get('/depot/info', 'web/Depot/info');
+Route::post('/depot/signin', 'web/User/depotSignIn');
+// 回收点订单相关
+Route::get('/depot/takeorders', 'web/TakeOrder/getTakeOrders');
+Route::post('/depot/deliveredorder', 'web/TakeOrder/delivered');
+Route::get('/depot/orders', 'web/TakeOrder/getList');
+Route::post('/depot/order/take', 'web/TakeOrder/takeOrder');
+Route::get('/depot/navigate', 'web/Pickman/navigate');
+
 // 取货员信息
 Route::get('/pickman/info', 'web/Pickman/info');
 Route::post('/pickman/signup', 'web/User/addPickman');

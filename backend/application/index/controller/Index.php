@@ -27,8 +27,9 @@ class Index extends Controller
 //                $user->save();
 //            }
         }
-    }
 
+        return 'hello 状元回收';
+    }
     public function wxCheck()
     {
         $signature = Request::param('signature');

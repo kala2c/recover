@@ -4,6 +4,7 @@ import pickman from './modules/pickman'
 import loading from './modules/loading'
 import user from './modules/user'
 import orderForm from './modules/orderForm'
+import depot from './modules/depot'
 Vue.use(Vuex)
 
 const getters = {
@@ -14,6 +15,8 @@ const getters = {
   avatar: state => state.user.avatar,
   pickman: state => state.pickman.info,
   pickmanErr: state => state.pickman.errMsg,
+  depot: state => state.depot.info,
+  depotErr: state => state.depot.errMsg,
   loading: state => state.loading.show
 }
 
@@ -23,6 +26,7 @@ export default new Vuex.Store({
     pickman,
     loading,
     user,
-    orderForm
+    orderForm,
+    depot
   }
 })
