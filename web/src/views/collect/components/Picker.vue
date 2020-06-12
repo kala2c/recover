@@ -2,6 +2,7 @@
   <div class="picker-wrap">
     <van-popup v-model="pickerShow" position="bottom">
       <van-picker
+        ref="picker"
         :title="title"
         show-toolbar
         class="picker"
@@ -61,26 +62,32 @@ export default {
     },
     area(val) {
       const area = val.split('-')
-      let id = null
-      this.areaTable.forEach(district => {
+      let id1 = null
+      let id2 = null
+      this.areaTable.forEach((district, index1) => {
         if (district.text === area[0]) {
-          district.children.forEach(street => {
+          // id1 = district.id
+          id1 = index1
+          district.children.forEach((street, index2) => {
             if (street.text === area[1]) {
-              id = street.id
+              // id2 = street.id
+              id2 = index2
             }
           })
         }
       })
-      if (id) {
-        this.$emit('confirm', area, id, true)
+      if (id1 && id2) {
+        this.$refs.picker.setColumnIndex(0, id1)
+        this.$refs.picker.setColumnIndex(1, id2)
+        // this.$emit('confirm', area, id, true)
       }
     }
   },
   methods: {
     onConfirm(value, index) {
       if (this.type === 'area') {
-        // const area = this.areaTable[index[0]].children[index[1]].children[index[2]]
-        const area = this.areaTable[index[0]].children[index[1]]
+        const area = this.areaTable[index[0]].children[index[1]].children[index[2]]
+        // const area = this.areaTable[index[0]].children[index[1]]
         this.$emit('confirm', value, area.id)
       } else if (this.type === 'time') {
         this.$emit('confirm', value)

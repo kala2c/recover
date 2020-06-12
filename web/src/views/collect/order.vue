@@ -78,14 +78,16 @@ export default {
       active: 0,
       tabList: [{
         id: 0,
-        name: '待取货'
-      }, {
-        id: 1,
-        name: '取货中'
+        name: '待服务'
       }, {
         id: 3,
         name: '已完成'
-      }],
+      }
+      //  {
+      //   id: 1,
+      //   name: '取货中'
+      // }
+      ],
       statusTable: null
     }
   },

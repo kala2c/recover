@@ -13,11 +13,11 @@ use think\exception\ValidateException;
 use think\facade\Validate;
 
 /**
- * 取货员接单 历史订单信息等
+ * 回收站接单 历史订单信息等
  * Class TakeOrder
  * @package app\web\controller
  */
-class TakeOrder extends Pickman
+class DepotOrder extends Depot
 {
 
     /**
@@ -39,7 +39,7 @@ class TakeOrder extends Pickman
         }
         $page = $param['page'] ?? 1;
         // 获取回收员负责的区域
-        $area_list = $this->pickman->area;
+        $area_list = $this->depot->area;
         $area_id_list = [];
         foreach ($area_list as $area) {
             $area_id_list[] = $area->id;
@@ -86,9 +86,9 @@ class TakeOrder extends Pickman
             throw new ValidateException($validate->getError());
         }
         $page = $param['page'] ?? 1;
-        $pickman_id = $this->pickman->id;
+        $depot_id = $this->depot->id;
         $map = [
-            'pickman_id' => $pickman_id,
+            'depot_id' => $depot_id,
             'status' => $param['status']
         ];
         $list = OrderMasterModel::pageUtil($page, $map)
@@ -103,16 +103,12 @@ class TakeOrder extends Pickman
     }
 
     /**
-     * 接单
+     * 处理订单
      * @throws ApiException
      * @throws DataException
      */
     public function takeOrder()
     {
-        // 审查账号审核是否通过
-        if ($this->pickman->status != PickmanModel::STATUS_NORMAL) {
-            throw new ApiException(ErrorCode::PICKMAN_WAIT_AUDIT);
-        }
         $data = $this->request->post();
         $validate = Validate::make([
             'order_id' => 'require|number'
@@ -124,7 +120,7 @@ class TakeOrder extends Pickman
             throw new ValidateException($validate->getError());
         }
         $rlt = OrderMasterModel::
-        setPickman($data['order_id'], $this->pickman);
+        setDepot($data['order_id'], $this->depot);
         if (!$rlt) {
             throw new ApiException(ErrorCode::TAKE_ORDER_FAILED);
         }

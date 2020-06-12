@@ -92,11 +92,11 @@ Route::get('/collect/orders', 'web/Order/getList');
 Route::get('/depot/info', 'web/Depot/info');
 Route::post('/depot/signin', 'web/User/depotSignIn');
 // 回收点订单相关
-Route::get('/depot/takeorders', 'web/TakeOrder/getTakeOrders');
-Route::post('/depot/deliveredorder', 'web/TakeOrder/delivered');
-Route::get('/depot/orders', 'web/TakeOrder/getList');
-Route::post('/depot/order/take', 'web/TakeOrder/takeOrder');
-Route::get('/depot/navigate', 'web/Pickman/navigate');
+Route::get('/depot/takeorders', 'web/DepotOrder/getTakeOrders');
+//Route::post('/depot/deliveredorder', 'web/TakeOrder/delivered');
+Route::get('/depot/orders', 'web/DepotOrder/getList');
+Route::post('/depot/order/take', 'web/DepotOrder/takeOrder');
+//Route::get('/depot/navigate', 'web/Pickman/navigate');
 
 // 取货员信息
 Route::get('/pickman/info', 'web/Pickman/info');

@@ -21,8 +21,8 @@ class OrderMaster extends Base
 
     static public $STATUS_MSG = [
         self::STATUS_CANCEL => '已取消',
-        self::STATUS_WAIT => '待取货',
-        self::STATUS_GOING => '取货中',
+        self::STATUS_WAIT => '待服务',
+        self::STATUS_GOING => '服务中',
         self::STATUS_RECYCLING => '回收中',
         self::STATUS_SUCCESS => '已完成'
     ];
@@ -127,6 +127,17 @@ class OrderMaster extends Base
         return self::update($data, ['id' => $order_id]);
     }
 
+    public static function setDepot($order_id, $depot)
+    {
+        $order = OrderMaster::get($order_id);
+        if (!$order) {
+            throw new DataException(ErrorCode::ORDER_NOT_EXIST);
+        }
+        $data = ['depot_id' => $depot->id, 'status' => self::STATUS_SUCCESS];
+        $data = self::addTimeField($data, false);
+        return self::update($data, ['id' => $order_id]);
+    }
+
     /**
      * 标记订单已送到
      * @param $order_id
@@ -168,7 +179,6 @@ class OrderMaster extends Base
     /*
     * 关联到user
     */
-
     public function User()
     {
         return $this->belongsTo('User');
