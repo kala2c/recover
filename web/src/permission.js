@@ -10,10 +10,9 @@ import { baseURL } from '@/utils/request'
 function createOauthUrl(state) {
   const params = {
     // 状元回收公众号
-    appid: 'wx44f968a029d95080',
+    // appid: 'wx44f968a029d95080',
     // 陈禄伟的测试号
-    // appid: 'wxb06bf22b4b5e6a5d',
-    // redirect_uri: encodeURI('http://zyhs-api.hihigher.com/wx/oauth'),
+    appid: 'wxb06bf22b4b5e6a5d',
     redirect_uri: encodeURI(baseURL + '/wx/oauth'),
     response_type: 'code',
     scope: 'snsapi_userinfo',
@@ -61,33 +60,34 @@ router.beforeEach(async(to, from, next) => {
         console.log(error)
         // 重定向到微信授权页
         // setTimeout(function() {
+        // console.log(oauthUrl)
         window.open(oauthUrl, '_self')
         // }, 100000)
       }
     }
     // 回收员页面需要进行回收员信息校验
-    if (path.length > 1 && path[1] === 'pick') {
-      const whiteList = ['signup', 'error']
+    if (path.length > 1 && path[1] === 'depot') {
+      const whiteList = ['signin', 'error']
       // 白名单页面直接通过 即申请、错误页面
       if (whiteList.indexOf(path[2]) !== -1) {
         next()
       } else {
         // 非白名单页面进行身份检查
-        if (!store.getters.pickman.realname) {
+        if (!store.getters.depot.phone) {
           try {
-            await store.dispatch('pickman/getInfo')
+            await store.dispatch('depot/getInfo')
             next()
           } catch (error) {
             console.log(error)
-            // 没有注册
-            if (error.message === '80005') {
-              next('/pick/signup')
+            // 回收点不存在
+            if (error.message === '110005' || error.message === '110009') {
+              next('/depot/signin')
               return
             }
             // 账号已封停
-            if (error.message === '80006') {
-              store.dispatch('pickman/setErr', '账号已封禁')
-              next('/pick/error')
+            if (error.message === '110006') {
+              store.dispatch('depot/setErr', '账号已封禁')
+              next('/depot/error')
               return
             }
             // 正在审核中

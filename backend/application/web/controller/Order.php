@@ -64,7 +64,7 @@ class Order extends Base
             throw new ApiException(ErrorCode::INSERT_ORDER_FAILED);
         }
         // 通知回收员
-        $this->notifyPickman($rlt);
+//        $this->notifyPickman($rlt);
         return successWithMsg('成功');
     }
 

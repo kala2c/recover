@@ -13,6 +13,7 @@ use think\exception\ValidateException;
 use think\facade\Validate;
 use app\common\model\User as UserModel;
 use app\common\model\Pickman as PickmanModel;
+use app\admin\model\Administrator as AdminModel;
 use think\response\Json;
 
 class User extends Base
@@ -63,6 +64,43 @@ class User extends Base
             throw new ApiException(ErrorCode::INSERT_PICKMAN_FAILED);
         }
         return successWithMsg('申请成功');
+    }
+
+
+    /**
+     * 回收点登录
+     * @throws
+     */
+    public function depotSignIn()
+    {
+        $data = $this->request->post();
+        $validate = Validate::make([
+            'username' => 'require',
+            'password' => 'require'
+        ])->message([
+            'username.require' => '请填写用户名',
+            'password.require' => '请填写密码'
+        ]);
+        if (!$validate->check($data)) {
+            throw new ValidateException($validate->getError());
+        }
+        $depot = AdminModel::where('username', $data['username'])->whereOr('mobile', $data['username'])->find();
+        if (!$depot) {
+            throw new ApiException(ErrorCode::DEPOT_NOT_EXISTS);
+        }
+        if ($depot->password != $data['password']) {
+            throw new ApiException(ErrorCode::ACCOUNT_PASSWORD_ERROR);
+        }
+        $openid = $this->user_info['openid'];
+        if ($depot->level != AdminModel::LEVEL_DEPOT) {
+            throw new ApiException(ErrorCode::DEPOT_NOT_EXISTS);
+        }
+        $depot->openid = $openid;
+        if ($depot->save()) {
+            return successWithMsg('登录成功');
+        } else {
+            throw new ApiException(ErrorCode::UPDATE_DEPOT_FAILED);
+        }
     }
 
     /**

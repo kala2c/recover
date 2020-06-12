@@ -1,5 +1,11 @@
 <template>
   <div class="order">
+    <van-nav-bar
+      title="我的订单"
+      fixed
+      placeholder
+      border
+    />
     <van-tabs v-model="active" color="#59c261" sticky>
       <van-tab
         v-for="tab in tabList"
@@ -19,9 +25,10 @@
               <p class="text address">{{item.address_detail}}</p>
               <p class="text note">备注：{{item.note || '未填写备注'}}</p>
             </div>
-            <template v-if="!activeStatus" #footer>
+            <template v-if="item.status === 1" #footer>
               <div class="panel-btn-wrap">
-                <van-button @click="onCancel(item)" size="small" type="danger">取消</van-button>
+                <van-button @click="toNav(item)" size="small" type="info">导航</van-button>
+                <van-button @click="onDelivered(item)" size="small" type="primary">送达</van-button>
               </div>
             </template>
           </van-panel>
@@ -31,19 +38,17 @@
               round block
               :loading="loading"
               :disabled="!hasNext"
+              v-if="hasNext"
               loading-text="加载中..."
               @click="loadMore"
             >
-              <span v-if="hasNext">加载更多</span>
-              <span v-else>没有更多了</span>
+              <span>加载更多</span>
             </van-button>
+            <span v-else>没有更多了</span>
           </div>
         </van-pull-refresh>
         <div v-show="!orderList.length && !loading" class="empty">
           <p>您的{{tab.name}}订单为空</p>
-          <p>
-            <router-link class="link" to="/collect/subscribe">点我马上下单</router-link>
-          </p>
         </div>
       </van-tab>
     </van-tabs>
@@ -52,19 +57,19 @@
 </template>
 
 <script>
-import { Tabs, Tab, PullRefresh, Button, Panel, Toast, Dialog } from 'vant'
-import FootBar from '@/views/collect/components/FootBar'
-import api from '@/api/collect'
+import { Tabs, Tab, PullRefresh, Button, Panel, NavBar, Toast, Dialog } from 'vant'
+import FootBar from '@/views/depot/components/FootBar'
+import api from '@/api/pick'
 import store from '@/store'
 
 export default {
   components: {
+    VanNavBar: NavBar,
     VanTabs: Tabs,
     VanTab: Tab,
     VanPullRefresh: PullRefresh,
     // VanList: List,
     VanButton: Button,
-    // VanCell: Cell,
     VanPanel: Panel,
     FootBar
   },
@@ -77,14 +82,8 @@ export default {
       hasNext: true,
       active: 0,
       tabList: [{
-        id: 0,
-        name: '待取货'
-      }, {
-        id: 1,
-        name: '取货中'
-      }, {
         id: 3,
-        name: '已完成'
+        name: '已处理的订单'
       }],
       statusTable: null
     }
@@ -102,7 +101,6 @@ export default {
   },
   watch: {
     active() {
-      this.orderList = []
       this.onRefresh()
     }
   },
@@ -128,8 +126,8 @@ export default {
         store.dispatch('loading/close')
         this.loading = false
         this.statusTable = data.status
-        // this.orderList = this.orderList.concat(data.orderList)
-        this.concatList(data.orderList)
+        this.concatList(data.list)
+        // this.orderList = this.orderList.concat(data.list)
         this.refreshing = false
         if (this.page >= data.pageMax) {
           this.hasNext = false
@@ -144,23 +142,32 @@ export default {
         this.orderList = this.orderList.concat(list)
       }
     },
-    onCancel(order) {
+    onDelivered(order) {
       Dialog.confirm({
-        title: '取消接单',
-        message: '真的要取消订单吗'
+        title: '确认送达',
+        message: '确定标记为送达吗'
       }).then(() => {
-        api.cancelOrder({
+        api.deliveredOrder({
           order_id: order.id
         }).then(response => {
-          Toast(response.data.message || '取消成功')
+          Toast(response.data.message || '标记成功')
           this.onRefresh()
         })
       }).catch(() => {
       })
+    },
+    toNav(item) {
+      this.$router.push({ path: '/pick/navigation', query: { id: item.id } })
     }
   },
   created() {
     this.loadOrderList()
+  },
+  activated() {
+    const refresh = this.$route.query.refresh
+    if (refresh === 1) {
+      this.onRefresh()
+    }
   }
 }
 </script>
@@ -196,10 +203,16 @@ export default {
   }
   .panel-btn-wrap {
     text-align: right;
+    button {
+      margin-left: 10px;
+    }
   }
 }
 .load-btn-wrap {
   height: 40px;
+  line-height: 40px;
   padding: 10px 16px;
+  font-size: 12px;
+  text-align: center;
 }
 </style>

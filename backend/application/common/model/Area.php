@@ -92,9 +92,9 @@ class Area extends Base
                 }
                 $qu[$area['top_id']][] = $area;
             }
-//            elseif ($area['level'] == self::LEVEL_JWH) {
-//                $jd[$area['top_id']][] = $area;
-//            }
+            elseif ($area['level'] == self::LEVEL_JWH) {
+                $jd[$area['top_id']][] = $area;
+            }
         }
         return $rlt;
     }
