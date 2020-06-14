@@ -55,6 +55,7 @@ class Area extends Base
     /**
      * 获取树形区域列表 上级.child = 下级
      * @param string $field
+     * @param bool $area 是否只选择两级 默认否
      * @return array
      * @throws DataException
      * @throws DataNotFoundException
@@ -62,17 +63,21 @@ class Area extends Base
      * @return mixed
      */
     const FRONTEND_INFO = 'id,level,top_id,name';
-    static public function getTree($city_id)
+    static public function getTree($city_id, $area = false)
     {
         $list = self::field(self::FRONTEND_INFO)
             ->where('city_id', $city_id)
             ->order('level')
             ->select()->toArray();
-        return self::list2tree($list);
+        if ($area) {
+            return self::list2tree($list);
+        } else {
+            return self::list2tree2($list);
+        }
     }
 
     /**
-     * 将线性表转为树
+     * 将线性表转为树 三级 区-街道-小区
      * @param $list
      * @return array
      */
@@ -94,6 +99,31 @@ class Area extends Base
             }
             elseif ($area['level'] == self::LEVEL_JWH) {
                 $jd[$area['top_id']][] = $area;
+            }
+        }
+        return $rlt;
+    }
+    
+    /**
+     * 将线性表转为树 二级 区-街道
+     * @param $list
+     * @return array
+     */
+    static private function list2tree2($list) {
+        $qu = [];
+        $jd = [];
+        $rlt = [];
+        foreach ($list as $area) {
+            if ($area['level'] == self::LEVEL_QU) {
+                if (array_key_exists($area['id'], $qu)) {
+                    $area['child'] = $qu[$area['id']];
+                }
+                $rlt[] = $area;
+            } elseif ($area['level'] == self::LEVEL_JD) {
+                if (array_key_exists($area['id'], $jd)) {
+                    $area['child'] = $jd[$area['id']];
+                }
+                $qu[$area['top_id']][] = $area;
             }
         }
         return $rlt;

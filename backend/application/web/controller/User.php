@@ -32,6 +32,27 @@ class User extends Base
             'avatar' => $avatar
         ]);
     }
+    
+    public function custom()
+    {
+        return success([
+            [
+                'id' => 1,
+                'name' => '客服一',
+                'url' => 'http://static.c2wei.cn/qr.png'
+            ],
+            [
+                'id' => 2,
+                'name' => '客服二',
+                'url' => 'http://static.c2wei.cn/qr.png'
+            ]
+        ]);
+    }
+    
+    public function selfCommunity()
+    {
+        
+    }
 
     /**
      * 回收员申请

@@ -112,7 +112,18 @@ class Address extends Base
      */
     public function getArea()
     {
-        $data = AreaModel::getTree(1);
+        $data = AreaModel::getTree(1, true);
+        return success($data);
+    }
+    
+    /**
+     * 获取小区
+     */
+    public function getCommunity()
+    {
+        $param = $this->request->get();
+        $street_id = $param['street_id'];
+        $data = AreaModel::where('top_id', $street_id)->select();
         return success($data);
     }
 }

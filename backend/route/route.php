@@ -73,12 +73,18 @@ Route::get('/web/user/location', 'web/User/getLocation');
 Route::get('/web/user/textloc', 'web/User/getTextLoc');
 Route::get('/web/user/street', 'web/User/getStreetInfo');
 Route::get('/web/pickman/list', 'web/User/getPickmanList');
+
+Route::get('/collect/selfCommunity', 'web/User/selfCommunity');
+Route::get('/collect/custom', 'web/User/custom');
+
+
 // 提交反馈
 Route::post('/collect/feedback', 'web/FeedBack/create');
 // 地址相关
 Route::get('/collect/address', 'web/Address/get');
 Route::get('/collect/addresses', 'web/Address/getList');
 Route::get('/collect/area', 'web/Address/getArea');
+Route::get('/collect/community', 'web/Address/getCommunity');
 Route::post('/collect/address/set', 'web/Address/set');
 Route::post('/collect/address/default', 'web/Address/setDefault');
 // 订单相关
