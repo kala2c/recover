@@ -13,7 +13,7 @@ use think\exception\ValidateException;
 use think\facade\Validate;
 use app\common\model\User as UserModel;
 use app\common\model\Pickman as PickmanModel;
-use app\admin\model\Administrator as AdminModel;
+use app\common\model\Depot as DepotModel;
 use think\response\Json;
 
 class User extends Base
@@ -84,7 +84,7 @@ class User extends Base
         if (!$validate->check($data)) {
             throw new ValidateException($validate->getError());
         }
-        $depot = AdminModel::where('username', $data['username'])->whereOr('mobile', $data['username'])->find();
+        $depot = DepotModel::where('username', $data['username'])->whereOr('mobile', $data['username'])->find();
         if (!$depot) {
             throw new ApiException(ErrorCode::DEPOT_NOT_EXISTS);
         }
@@ -92,9 +92,6 @@ class User extends Base
             throw new ApiException(ErrorCode::ACCOUNT_PASSWORD_ERROR);
         }
         $openid = $this->user_info['openid'];
-        if ($depot->level != AdminModel::LEVEL_DEPOT) {
-            throw new ApiException(ErrorCode::DEPOT_NOT_EXISTS);
-        }
         $depot->openid = $openid;
         if ($depot->save()) {
             return successWithMsg('登录成功');
