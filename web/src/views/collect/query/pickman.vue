@@ -36,16 +36,21 @@
 </template>
 
 <script>
-import { NavBar } from 'vant'
+import { NavBar, CellGroup, Cell } from 'vant'
 import api from '@/api/collect'
 
 export default {
   components: {
-    VanNavBar: NavBar
+    VanNavBar: NavBar,
+    VanCell: Cell,
+    VanCellGroup: CellGroup
   },
   data() {
     return {
       depot: {
+        area: null,
+        note: '',
+        mobile: ''
       }
     }
   },
