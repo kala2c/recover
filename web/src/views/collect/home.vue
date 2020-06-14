@@ -100,13 +100,13 @@ export default {
           id: 2,
           path: '/collect/query/city',
           icon: 'http://static.c2wei.cn/collect-icon/city.png',
-          name: '服务城市'
+          name: '服务范围'
         },
         {
           id: 3,
           path: '/collect/query/pickman',
           icon: 'http://static.c2wei.cn/collect-icon/pickman.png',
-          name: '附近回收员'
+          name: '附近回收点'
         },
         {
           id: 4,

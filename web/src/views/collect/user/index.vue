@@ -58,7 +58,7 @@ export default {
         id: 5,
         icon: 'http://static.c2wei.cn/collect-icon/place.png',
         path: '/collect/user/address',
-        name: '收货地址'
+        name: '回收地址'
       }, {
         id: 6,
         icon: 'http://static.c2wei.cn/collect-icon/feedback.png',

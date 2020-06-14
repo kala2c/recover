@@ -51,14 +51,14 @@ class Address extends Base
             'phone' => 'require',
             'area' => 'require',
             'area_id' => 'require',
-            'detail' => 'require'
+//            'detail' => 'require'
         ], [
             'id.number' => 'id格式不正确',
             'name.require' => '名字不可缺少',
             'phone.require' => '联系方式不可缺少',
             'area.require' => '地区不可缺少',
             'area_id.require' => '地区不可缺少',
-            'detail.require' => '地址详细信息不可缺少',
+//            'detail.require' => '地址详细信息不可缺少',
         ]);
         if (!$validate->check($data)) {
             throw new ValidateException($validate->getError());

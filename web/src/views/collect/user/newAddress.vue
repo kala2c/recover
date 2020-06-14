@@ -25,11 +25,16 @@
           <p class="cell-text">{{formData.area}}</p>
         </template>
       </van-cell>
-      <van-field
+      <!-- <van-cell title="选择站点" is-link @click="depotPickerShow = true">
+        <template #default>
+          <p class="cell-text">{{formData.depot}}</p>
+        </template>
+      </van-cell> -->
+      <!-- <van-field
         label="详细地址"
         v-model="formData.detail"
-        placeholder="填写街道-小区-门牌号"
-      />
+        placeholder="填写到门牌号"
+      /> -->
       <div class="default-switch form-ctrl" v-if="isEdit">
         <div class="label">设为默认</div>
         <van-switch v-model="switchChecked" :disabled="switchDisabled" />
@@ -40,6 +45,16 @@
         </van-button>
       </div>
     </div>
+    <van-popup v-model="depotPickerShow" position="bottom">
+      <van-picker
+        title="选择回收站点"
+        show-toolbar
+        class="picker"
+        :columns="depotList"
+        @confirm="onConfirm"
+        @cancel="depotPickerShow = false"
+        />
+    </van-popup>
     <picker
       ref="picker"
       :title="pickerTitle"
@@ -56,8 +71,8 @@
 import store from '@/store'
 import api from '@/api/collect'
 import sysApi from '@/api/index'
-import { NavBar, Toast, Field, Cell, Button, Switch } from 'vant'
-import Picker from '@/views/collect/components/Picker'
+import { NavBar, Picker, Toast, Field, Cell, Button, Switch, Popup } from 'vant'
+import MyPicker from '@/views/collect/components/Picker'
 export default {
   components: {
     VanNavBar: NavBar,
@@ -65,16 +80,20 @@ export default {
     VanCell: Cell,
     VanButton: Button,
     VanSwitch: Switch,
-    Picker: Picker
+    Picker: MyPicker,
+    VanPicker: Picker,
+    VanPopup: Popup
   },
   data() {
     return {
       pickerTitle: '选择地区',
       pickerShow: false,
       pickerType: 'area',
+      depotPickerShow: false,
       switchChecked: true,
       switchDisabled: true,
       submitDisabled: false,
+      depotList: [],
       areaSelected: '',
       isEdit: false,
       cbPath: '',
@@ -149,12 +168,13 @@ export default {
                 if (!areaInfo) {
                   Toast('自动获取位置失败')
                 } else {
-                  const { city, district, township, streetNumber } = areaInfo
+                  const { city, district, township } = areaInfo
+                  // const { city, district, township, streetNumber } = areaInfo
                   console.log(city, district, township)
-                  const detail = streetNumber.street + streetNumber.number
+                  // const detail = streetNumber.street + streetNumber.number
                   // this.formData.area = district + '-' + township
                   that.areaSelected = district + '-' + township
-                  that.formData.detail = detail || ''
+                  // that.formData.detail = detail || ''
                 }
               })
             }
@@ -177,10 +197,10 @@ export default {
         Toast('请选择地区')
         return false
       }
-      if (!this.formData.detail) {
-        Toast('请输入详细地址')
-        return false
-      }
+      // if (!this.formData.detail) {
+      //   Toast('请输入详细地址')
+      //   return false
+      // }
       const data = {
         name: this.formData.name,
         phone: this.formData.phone,

@@ -6,11 +6,10 @@ use app\common\error\ErrorCode;
 use app\common\exception\ApiException;
 use app\common\exception\DataException;
 use app\common\model\Area as AreaModel;
-use app\common\model\pivot\Pickman_Area;
 use think\Exception\DbException;
 use think\exception\ValidateException;
 use think\facade\Request;
-use app\admin\model\Administrator as AdminModel;
+use app\common\model\Depot as DepotModel;
 use think\facade\Validate;
 
 class Depot extends Base
@@ -45,12 +44,12 @@ class Depot extends Base
         $pagenum = Request::param('pagenum', '1');
         //获取站点信息
         if ($status) {
-            $query = AdminModel::pageUtil($pagenum, [['username', 'like', $username], ['mobile', 'like', $mobile], ['status', '=', $status], ['level', '=', AdminModel::LEVEL_DEPOT]], $pagesize)->with(['area'])->select();
+            $query = DepotModel::pageUtil($pagenum, [['username', 'like', $username], ['mobile', 'like', $mobile], ['status', '=', $status]], $pagesize)->with(['area'])->select();
         } else {
-            $query = AdminModel::pageUtil($pagenum, [['username', 'like', $username], ['mobile', 'like', $mobile], ['level', '=', AdminModel::LEVEL_DEPOT]], $pagesize)->with(['area'])->select();
+            $query = DepotModel::pageUtil($pagenum, [['username', 'like', $username], ['mobile', 'like', $mobile]], $pagesize)->with(['area'])->select();
         }
         //获取用户总数的数量
-        $count = AdminModel::pageInfo()['total'];
+        $count = DepotModel::pageInfo()['total'];
         return success([
             'depotlist' => $query,
             'total' => $count
@@ -76,10 +75,7 @@ class Depot extends Base
         if (!$validate->check($data)) {
             throw new ValidateException($validate->getError());
         }
-        $data['top_id'] = $this->self->id;
-        $data['level'] = AdminModel::LEVEL_DEPOT;
-        $data['permission'] = 'depot';
-        $rlt = AdminModel::add($data);
+        $rlt = DepotModel::add($data);
         if (!$rlt) {
             throw new ApiException(ErrorCode::INSERT_USER_RECORD_FAILED);
         }
@@ -92,7 +88,7 @@ class Depot extends Base
     {
         $id = Request::param('id');
         $status = Request::param('status');
-        $depot = AdminModel::get($id);
+        $depot = DepotModel::get($id);
         $depot->status = $status;
         $depot->save();
         return success();
@@ -115,12 +111,8 @@ class Depot extends Base
         // 站点id和修改后的地区id
         $area_id = $data['area_id'];
         $depot_id = $data['depot_id'];
-        $depot = AdminModel::where('level', AdminModel::LEVEL_DEPOT)->with(['area'])->get($depot_id);
-        if (count($depot['area']) > 0) {
-            $old_area = $depot['area'][0]['id'];
-            AreaModel::update(['administrator_id' => $depot['top_id']], ['id' => $old_area]);
-        }
-        $rlt = AreaModel::setAdmin($area_id, $depot_id);
+        $depot = DepotModel::with(['area'])->get($depot_id);
+        $rlt = DepotModel::update(['area_id' => $area_id], ['id' => $depot_id]);
         if (!$rlt) {
             throw new ApiException(ErrorCode::SET_AREA_ADMIN_FAILED);
         }

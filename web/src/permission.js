@@ -10,9 +10,9 @@ import { baseURL } from '@/utils/request'
 function createOauthUrl(state) {
   const params = {
     // 状元回收公众号
-    // appid: 'wx44f968a029d95080',
+    appid: 'wx44f968a029d95080',
     // 陈禄伟的测试号
-    appid: 'wxb06bf22b4b5e6a5d',
+    // appid: 'wxb06bf22b4b5e6a5d',
     redirect_uri: encodeURI(baseURL + '/wx/oauth'),
     response_type: 'code',
     scope: 'snsapi_userinfo',

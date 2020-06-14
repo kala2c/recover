@@ -2,6 +2,8 @@
   <div class="take">
     <van-nav-bar
       title="未处理订单"
+      right-text="刷新"
+      @click-right="onRefresh"
       fixed
       placeholder
       border
@@ -103,6 +105,7 @@ export default {
       }).then(response => {
         const data = response.data
         store.dispatch('loading/close')
+        console.log(data)
         this.loading = false
         this.statusTable = data.status
         this.concatList(data.list)
@@ -130,7 +133,7 @@ export default {
         api.takeOrder({
           order_id: order.id
         }).then(response => {
-          Toast(response.data.message || '接单成功')
+          Toast(response.data.message || '处理成功')
           store.dispatch('loading/close')
           setTimeout(() => {
             this.onRefresh()

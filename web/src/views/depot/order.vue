@@ -1,11 +1,11 @@
 <template>
   <div class="order">
-    <van-nav-bar
+    <!-- <van-nav-bar
       title="我的订单"
       fixed
       placeholder
       border
-    />
+    /> -->
     <van-tabs v-model="active" color="#59c261" sticky>
       <van-tab
         v-for="tab in tabList"
@@ -57,14 +57,14 @@
 </template>
 
 <script>
-import { Tabs, Tab, PullRefresh, Button, Panel, NavBar, Toast, Dialog } from 'vant'
+import { Tabs, Tab, PullRefresh, Button, Panel, Toast, Dialog } from 'vant'
 import FootBar from '@/views/depot/components/FootBar'
-import api from '@/api/pick'
+import api from '@/api/depot'
 import store from '@/store'
 
 export default {
   components: {
-    VanNavBar: NavBar,
+    // VanNavBar: NavBar,
     VanTabs: Tabs,
     VanTab: Tab,
     VanPullRefresh: PullRefresh,
@@ -157,7 +157,7 @@ export default {
       })
     },
     toNav(item) {
-      this.$router.push({ path: '/pick/navigation', query: { id: item.id } })
+      this.$router.push({ path: '/depot/navigation', query: { id: item.id } })
     }
   },
   created() {
@@ -166,6 +166,7 @@ export default {
   activated() {
     const refresh = this.$route.query.refresh
     if (refresh === 1) {
+      this.list = []
       this.onRefresh()
     }
   }
