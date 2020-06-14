@@ -18,9 +18,14 @@
             <p class="cell-text right">{{depot.mobile}}</p>
           </template>
         </van-cell>
-        <van-cell title="备注：">
+        <van-cell title="身份信息：">
           <template #default>
             <p class="cell-text right">{{depot.note}}</p>
+          </template>
+        </van-cell>
+        <van-cell title="所属小区：">
+          <template #default>
+            <p class="cell-text right">{{depot.area && depot.area.name || '未分配区域'}}</p>
           </template>
         </van-cell>
       </van-cell-group>

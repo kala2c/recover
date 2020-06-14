@@ -25,11 +25,11 @@
           <p class="cell-text">{{formData.area}}</p>
         </template>
       </van-cell>
-      <!-- <van-cell title="选择站点" is-link @click="depotPickerShow = true">
+      <van-cell title="选择小区" is-link @click="communityPickerShow = true">
         <template #default>
-          <p class="cell-text">{{formData.depot}}</p>
+          <p class="cell-text">{{communityName}}</p>
         </template>
-      </van-cell> -->
+      </van-cell>
       <!-- <van-field
         label="详细地址"
         v-model="formData.detail"
@@ -45,14 +45,14 @@
         </van-button>
       </div>
     </div>
-    <van-popup v-model="depotPickerShow" position="bottom">
+    <van-popup v-model="communityPickerShow" position="bottom">
       <van-picker
-        title="选择回收站点"
+        title="选择小区"
         show-toolbar
         class="picker"
-        :columns="depotList"
-        @confirm="onConfirm"
-        @cancel="depotPickerShow = false"
+        :columns="communityCols"
+        @confirm="onChoseCommunity"
+        @cancel="communityPickerShow = false"
         />
     </van-popup>
     <picker
@@ -89,11 +89,15 @@ export default {
       pickerTitle: '选择地区',
       pickerShow: false,
       pickerType: 'area',
-      depotPickerShow: false,
+      communityPickerShow: false,
       switchChecked: true,
       switchDisabled: true,
       submitDisabled: false,
-      depotList: [],
+      communityList: [],
+      communityCols: [],
+      communityChosenIndex: 0,
+      street: '',
+      areaId: 0,
       areaSelected: '',
       isEdit: false,
       cbPath: '',
@@ -105,6 +109,14 @@ export default {
         area_id: '',
         detail: ''
       }
+    }
+  },
+  computed: {
+    communityName() {
+      return this.communityList[this.communityChosenIndex] && this.communityList[this.communityChosenIndex].name
+    },
+    area() {
+      return this.street + '-' + this.communityName
     }
   },
   watch: {
@@ -121,6 +133,19 @@ export default {
           store.dispatch('loading/close')
         })
       }
+    },
+    areaId(val) {
+      console.log(api)
+      api.getCommunity({ street_id: val }).then(response => {
+        const data = response.data
+        this.communityList = data
+        this.communityList.forEach(item => {
+          this.communityCols.push(item.name)
+        })
+      })
+    },
+    area(val) {
+      this.formData.area = val
     }
   },
   methods: {
@@ -128,7 +153,7 @@ export default {
       this.$router.replace({ path: this.cbPath || '/collect/user/address' })
     },
     openAreaPicker() {
-      this.pickerTitle = '选择地区'
+      this.pickerTitle = '选择街道'
       this.pickerType = 'area'
       this.pickerShow = !this.pickerShow
     },
@@ -137,8 +162,14 @@ export default {
       if (!isShow) {
         this.pickerShow = !this.pickerShow
       }
-      this.formData.area = value && value.join('-')
-      this.formData.area_id = areaId || 0
+      this.street = value && value.join('-')
+      this.areaId = areaId || 0
+    },
+    onChoseCommunity(value, communityIndex) {
+      console.log(value, communityIndex)
+      this.communityChosenIndex = communityIndex
+      this.formData.area_id = this.communityList[communityIndex].id || 0
+      console.log(this.formData)
     },
     async getLocation() {
       const that = this

@@ -10,20 +10,41 @@
       @click-left="$router.go(-1)"
     />
     <div class="text-block">
-      <img class="qrcode" src="http://static.c2wei.cn/qr.png" alt="">
-      <h4>客服一</h4>
-      <br>
-      <img class="qrcode" src="http://static.c2wei.cn/qr.png" alt="">
-      <h4>客服二</h4>
+      <div
+        class="wrap"
+        v-for="custom in customList"
+        :key="custom.id"
+      >
+        <img class="qrcode" :src="custom.url" alt="">
+        <h4>{{custom.name}}</h4>
+        <br>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { NavBar } from 'vant'
+import api from '@/api/collect'
 export default {
   components: {
     VanNavBar: NavBar
+  },
+  data() {
+    return {
+      customList: [
+        {
+          id: 1,
+          name: '客服一',
+          url: 'http://static.c2wei.cn/qr.png'
+        }
+      ]
+    }
+  },
+  created() {
+    api.getCustom().then(response => {
+      this.customList = response.data
+    })
   }
 }
 </script>
@@ -32,8 +53,10 @@ export default {
 .text-block {
   padding: 16px 32px;
   text-align: center;
-  .qrcode {
-    width: 260px;
+  .wrap {
+    .qrcode {
+      width: 260px;
+    }
   }
 }
 </style>

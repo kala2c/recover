@@ -10,32 +10,27 @@
       @click-left="$router.go(-1)"
     />
     <div class="text-block">
-      <h4 style="padding-bottom: 18px;">目前已开放烟台多个地区</h4>
-      <p
-        v-for="qu in areaTable"
-        :key="qu.id"
-      >
-      {{ qu.name }}
-      <br>
-      <span v-if="qu.child.length > 0">
-        <span
-          v-for="item1 in qu.child"
-          :key="item1.id"
-        >
-        {{item1.name}}:
-        <span v-if="item1.child.length > 0">
-          <span
-            v-for="item2 in item1.child"
-            :key="item2.id"
-          >
-          {{ item2.name }} &nbsp;
-          </span>
-        </span>
-        <br>
-        </span>
-        <br>
-      </span>
-      </p>
+      <h4 style="padding-bottom: 18px;">距离您最近的回收点为</h4>
+      <van-cell-group>
+        <van-cell
+          title="手机号">
+          <template #default>
+            <p class="cell-text right">{{depot.mobile}}</p>
+          </template>
+        </van-cell>
+        <van-cell
+          title="小区">
+          <template #default>
+            <p class="cell-text right">{{depot.area && depot.area.name}}</p>
+          </template>
+        </van-cell>
+        <van-cell
+          title="位置信息">
+          <template #default>
+            <p class="cell-text right">{{depot.note}}</p>
+          </template>
+        </van-cell>
+      </van-cell-group>
     </div>
   </div>
 </template>
@@ -50,12 +45,13 @@ export default {
   },
   data() {
     return {
-      areaTable: []
+      depot: {
+      }
     }
   },
   created() {
-    api.getAreaTable().then(response => {
-      this.areaTable = response.data
+    api.getSelfCommunity().then(response => {
+      this.depot = response.data
     })
   }
 }
@@ -64,5 +60,15 @@ export default {
 <style scoped>
 .text-block {
   padding: 15px 32px;
+}
+.cell-text {
+  text-align: left;
+  color: #323233;
+}
+.cell-text.right {
+  text-align: right;
+}
+.text-block {
+  padding-top: 15px;
 }
 </style>

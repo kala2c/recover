@@ -1,72 +1,65 @@
 <template>
   <div class="order">
-    <!-- <van-nav-bar
-      title="我的订单"
+    <van-nav-bar
+      title="已处理订单"
+      right-text="刷新"
+      @click-right="onRefresh"
       fixed
       placeholder
       border
-    /> -->
-    <van-tabs v-model="active" color="#59c261" sticky>
-      <van-tab
-        v-for="tab in tabList"
-        :key="tab.id"
-        :title="tab.name">
-        <van-pull-refresh v-show="!!orderList.length" v-model="refreshing" @refresh="onRefresh">
-          <van-panel
-            class="panel"
-            v-for="item in orderList"
-            :key="item.id"
-            :title="item.waste.name+' | '+item.waste_number+item.waste.unit"
-            :desc="item.pick_fast === '1' ? '尽快上门' : '预约时间:' + item.pick_time"
-            :status="statusMsg(item.status)"
-          >
-            <div class="panel-content">
-              <p class="text address">{{item.username}} {{item.phone}}</p>
-              <p class="text address">{{item.address_detail}}</p>
-              <p class="text note">备注：{{item.note || '未填写备注'}}</p>
-            </div>
-            <template v-if="item.status === 1" #footer>
-              <div class="panel-btn-wrap">
-                <van-button @click="toNav(item)" size="small" type="info">导航</van-button>
-                <van-button @click="onDelivered(item)" size="small" type="primary">送达</van-button>
-              </div>
-            </template>
-          </van-panel>
-          <div class="load-btn-wrap">
-            <van-button
-              plain hairline type="primary"
-              round block
-              :loading="loading"
-              :disabled="!hasNext"
-              v-if="hasNext"
-              loading-text="加载中..."
-              @click="loadMore"
-            >
-              <span>加载更多</span>
-            </van-button>
-            <span v-else>没有更多了</span>
-          </div>
-        </van-pull-refresh>
-        <div v-show="!orderList.length && !loading" class="empty">
-          <p>您的{{tab.name}}订单为空</p>
+    />
+    <van-pull-refresh v-show="!!orderList.length" v-model="refreshing" @refresh="onRefresh">
+      <van-panel
+        class="panel"
+        v-for="item in orderList"
+        :key="item.id"
+        :title="item.waste.name+' | '+item.waste_number+item.waste.unit"
+        :desc="item.pick_fast === '1' ? '尽快上门' : '预约时间:' + item.pick_time"
+        :status="statusMsg(item.status)"
+      >
+        <div class="panel-content">
+          <p class="text address">{{item.username}} {{item.phone}}</p>
+          <p class="text address">{{item.address_detail}}</p>
+          <p class="text note">备注：{{item.note || '未填写备注'}}</p>
         </div>
-      </van-tab>
-    </van-tabs>
+        <!-- <template v-if="item.status === 1" #footer>
+          <div class="panel-btn-wrap">
+            <van-button @click="toNav(item)" size="small" type="info">导航</van-button>
+            <van-button @click="onDelivered(item)" size="small" type="primary">送达</van-button>
+          </div>
+        </template> -->
+      </van-panel>
+      <div class="load-btn-wrap">
+        <van-button
+          plain hairline type="primary"
+          round block
+          :loading="loading"
+          :disabled="!hasNext"
+          v-if="hasNext"
+          loading-text="加载中..."
+          @click="loadMore"
+        >
+          <span>加载更多</span>
+        </van-button>
+        <span v-else>没有更多了</span>
+      </div>
+    </van-pull-refresh>
+    <div v-show="!orderList.length && !loading" class="empty">
+      <p>您的已处理订单为空</p>
+    </div>
     <foot-bar></foot-bar>
   </div>
 </template>
 
 <script>
-import { Tabs, Tab, PullRefresh, Button, Panel, Toast, Dialog } from 'vant'
+import { NavBar, PullRefresh, Button, Panel } from 'vant'
 import FootBar from '@/views/depot/components/FootBar'
 import api from '@/api/depot'
 import store from '@/store'
 
 export default {
   components: {
-    // VanNavBar: NavBar,
-    VanTabs: Tabs,
-    VanTab: Tab,
+    VanNavBar: NavBar,
     VanPullRefresh: PullRefresh,
     // VanList: List,
     VanButton: Button,
@@ -80,28 +73,19 @@ export default {
       refreshing: false,
       page: 1,
       hasNext: true,
-      active: 0,
-      tabList: [{
-        id: 3,
-        name: '已处理的订单'
-      }],
       statusTable: null
     }
   },
   computed: {
     activeStatus() {
-      const activeTab = this.tabList[this.active]
-      return activeTab && activeTab.id
+      // const activeTab = this.tabList[this.active]
+      // return activeTab && activeTab.id
+      return 3
     },
     statusMsg() {
       return status => {
         return this.statusTable[status]
       }
-    }
-  },
-  watch: {
-    active() {
-      this.onRefresh()
     }
   },
   methods: {
@@ -141,23 +125,6 @@ export default {
         if (this.refreshing) this.orderList = []
         this.orderList = this.orderList.concat(list)
       }
-    },
-    onDelivered(order) {
-      Dialog.confirm({
-        title: '确认送达',
-        message: '确定标记为送达吗'
-      }).then(() => {
-        api.deliveredOrder({
-          order_id: order.id
-        }).then(response => {
-          Toast(response.data.message || '标记成功')
-          this.onRefresh()
-        })
-      }).catch(() => {
-      })
-    },
-    toNav(item) {
-      this.$router.push({ path: '/depot/navigation', query: { id: item.id } })
     }
   },
   created() {

@@ -68,6 +68,11 @@ const getAreaTable = () => request({
   url: '/collect/area'
 })
 
+const getCommunity = (params) => request({
+  params: params,
+  url: '/collect/community'
+})
+
 const getOrderInfo = () => request({
   url: '/collect/orderinfo'
 })
@@ -95,6 +100,15 @@ const getOrderList = (params) => request({
   params
 })
 
+const getCustom = (params) => request({
+  url: '/collect/custom',
+  params
+})
+
+const getSelfCommunity = (params) => request({
+  url: '/collect/selfCommunity'
+})
+
 export default {
   getSdkConf,
   getLocation,
@@ -109,9 +123,12 @@ export default {
   saveAddress,
   setDefaultAddress,
   getAreaTable,
+  getCommunity,
   getOrderInfo,
   submitOrder,
   cancelOrder,
   getOrderDetail,
-  getOrderList
+  getOrderList,
+  getCustom,
+  getSelfCommunity
 }

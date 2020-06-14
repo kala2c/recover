@@ -136,6 +136,7 @@ export default {
           Toast(response.data.message || '处理成功')
           store.dispatch('loading/close')
           setTimeout(() => {
+            this.takeBtnDisabled = false
             this.onRefresh()
             this.$router.push({ path: '/depot/order', query: { refresh: 1 } })
           }, 500)

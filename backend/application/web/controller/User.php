@@ -14,6 +14,7 @@ use think\facade\Validate;
 use app\common\model\User as UserModel;
 use app\common\model\Pickman as PickmanModel;
 use app\common\model\Depot as DepotModel;
+use app\common\model\Address as AddressModel;
 use think\response\Json;
 
 class User extends Base
@@ -48,10 +49,19 @@ class User extends Base
             ]
         ]);
     }
-    
+
+    /**
+     * @throws DbException
+     */
     public function selfCommunity()
     {
-        
+        $uid = $this->user_info['uid'];
+        $address = AddressModel::getDefaultAddress($uid);
+        $area_id = $address->area_id;
+        $depot = DepotModel::with(['area'])->where('area_id', $area_id)->find();
+        unset($depot['password']);
+        unset($depot['openid']);
+        return success($depot);
     }
 
     /**

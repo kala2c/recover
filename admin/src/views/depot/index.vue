@@ -27,7 +27,7 @@
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" @click="addDialogVisible = true">新增管理员</el-button>
+          <el-button type="primary" @click="addDialogVisible = true">新增站点</el-button>
         </el-col>
         <!-- <el-col :span="5">
           <el-select v-model="queryInfo.status" placeholder="站点状态" @change="getDepotList">
@@ -47,11 +47,11 @@
         <el-table-column label="用户名" prop="username" />
         <el-table-column label="openid" prop="openid" width="300px" />
         <el-table-column label="手机" prop="mobile" />
-        <el-table-column label="备注" prop="note" />
+        <el-table-column label="身份信息" prop="note" />
         <el-table-column label="区域">
           <template slot-scope="scope">
-            <!-- 分配区域 -->
-            <span>{{ scope.row.area.length && scope.row.area[0].name || '未分配区域' }}</span>
+            <!-- 区域 -->
+            <span>{{ scope.row.area && scope.row.area.name || '未分配区域' }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="200px">
@@ -280,9 +280,7 @@ export default {
     showAreaDialog(depot) {
       this.areaDialogVisible = true
       const areaIdList = []
-      depot.area.forEach(item => {
-        areaIdList.push(item.id)
-      })
+      areaIdList.push(depot.area && depot.area.id)
       this.selectedDepotId = depot.id
       setTimeout(() => {
         this.$refs.areaTree.setCheckedKeys(areaIdList)

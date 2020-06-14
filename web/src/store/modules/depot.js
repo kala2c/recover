@@ -6,6 +6,7 @@ const state = {
     username: '',
     note: '',
     mobile: '',
+    area: '',
     permission: ''
     // status: ''
   }
@@ -29,6 +30,9 @@ const mutations = {
   },
   SET_STATUS (state, status) {
     state.info.status = status
+  },
+  SET_AREA (state, area) {
+    state.info.area = area
   }
 }
 
@@ -59,7 +63,8 @@ const actions = {
         const info = {
           username: data.username,
           mobile: data.mobile,
-          note: data.note
+          note: data.note,
+          area: data.area
         }
         dispatch('setData', info)
         resolve(data)
