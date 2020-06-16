@@ -27,7 +27,7 @@
       </van-cell>
       <van-cell title="选择小区" is-link @click="communityPickerShow = true">
         <template #default>
-          <p class="cell-text">{{communityName}}</p>
+          <p class="cell-text">{{communityName || '未选择'}}</p>
         </template>
       </van-cell>
       <!-- <van-field
@@ -116,7 +116,11 @@ export default {
       return this.communityList[this.communityChosenIndex] && this.communityList[this.communityChosenIndex].name
     },
     area() {
-      return this.street + '-' + this.communityName
+      if (this.communityName) {
+        return this.street + '-' + this.communityName
+      } else {
+        return this.street
+      }
     }
   },
   watch: {
@@ -138,6 +142,8 @@ export default {
       console.log(api)
       api.getCommunity({ street_id: val }).then(response => {
         const data = response.data
+        this.communityList = []
+        this.communityCols = []
         this.communityList = data
         this.communityList.forEach(item => {
           this.communityCols.push(item.name)
@@ -169,7 +175,7 @@ export default {
       console.log(value, communityIndex)
       this.communityChosenIndex = communityIndex
       this.formData.area_id = this.communityList[communityIndex].id || 0
-      console.log(this.formData)
+      this.communityPickerShow = false
     },
     async getLocation() {
       const that = this
@@ -205,6 +211,7 @@ export default {
                   // const detail = streetNumber.street + streetNumber.number
                   // this.formData.area = district + '-' + township
                   that.areaSelected = district + '-' + township
+                  console.log(that.areaSelected)
                   // that.formData.detail = detail || ''
                 }
               })
@@ -261,6 +268,7 @@ export default {
     const id = this.$route.query.id
     const cbPath = this.$route.query && this.$route.query.cbPath
     this.cbPath = cbPath
+    // 编辑时
     if (id) {
       store.dispatch('loading/open')
       api.getAddressById(id).then(response => {
@@ -268,7 +276,7 @@ export default {
         this.formData.id = data.id
         this.formData.name = data.name
         this.formData.phone = data.phone
-        this.formData.area = data.area
+        this.formData.area = data.area.split('-').pop().join('-')
         this.formData.area_id = data.area_id
         this.formData.detail = data.detail
         this.isEdit = true

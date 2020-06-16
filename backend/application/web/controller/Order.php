@@ -15,7 +15,7 @@ use think\Exception\DbException;
 use think\exception\ValidateException;
 use think\facade\Validate;
 use app\common\model\OrderMaster as OrderMasterModel;
-
+use app\common\model\Depot as DepotModel;
 
 /**
  * 用户下单 订单进度等
@@ -63,6 +63,8 @@ class Order extends Base
         if (!$rlt) {
             throw new ApiException(ErrorCode::INSERT_ORDER_FAILED);
         }
+        // 通知回收点
+        $this->notifyDepot($rlt);
         // 通知回收员
 //        $this->notifyPickman($rlt);
         return successWithMsg('成功');
@@ -144,6 +146,40 @@ class Order extends Base
             'status' => OrderMasterModel::$STATUS_MSG,
             'pageMax' => $pageInfo['pageMax']
         ]);
+    }
+
+
+    private function notifyDepot($order) {
+        // 根据区域信息获取到回收员信息
+        $area_id = $order->area_id;
+        if (!$area_id) return;
+        $depot = DepotModel::where('area_id', $area_id)->get();
+        // 组装模板信息
+        $template_id = config('secret.wx.templateId.newOrderNotify');
+        $data = [
+            "first" => [
+                "value" => $order->address_detail,
+                "color" => "#173177"
+            ],
+            "keywords1" => [
+                "value" => $order->waste->name,
+                "color" => "#173177"
+            ],
+            "number" => [
+                "value" => $order->waste_number,
+                "color" => "#173177"
+            ],
+            "unit" => [
+                "value" => $order->waste->unit,
+                "color" => "#173177"
+            ],
+        ];
+        // 接单页面
+        $url = config('secret.wx.takeOrderUrl');
+        // 根据回收员openid发送通知
+        $wx = new Wx();
+            $openid = $depot->openid;
+            $wx->sendMessage($openid, $template_id, $url, $data);
     }
 
     /**
