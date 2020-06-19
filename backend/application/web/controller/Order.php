@@ -153,33 +153,33 @@ class Order extends Base
         // 根据区域信息获取到回收员信息
         $area_id = $order->area_id;
         if (!$area_id) return;
-        $depot = DepotModel::where('area_id', $area_id)->get();
+        $depot = DepotModel::where('area_id', $area_id)->find();
         // 组装模板信息
         $template_id = config('secret.wx.templateId.newOrderNotify');
         $data = [
-            "first" => [
-                "value" => $order->address_detail,
-                "color" => "#173177"
-            ],
-            "keywords1" => [
-                "value" => $order->waste->name,
-                "color" => "#173177"
-            ],
-            "number" => [
-                "value" => $order->waste_number,
-                "color" => "#173177"
-            ],
-            "unit" => [
-                "value" => $order->waste->unit,
-                "color" => "#173177"
-            ],
+        //     "first" => [
+        //         "value" => $order->address_detail,
+        //         "color" => "#173177"
+        //     ],
+        //     "keywords1" => [
+        //         "value" => $order->waste->name,
+        //         "color" => "#173177"
+        //     ],
+        //     "keywords2" => [
+        //         "value" => $order->waste_number,
+        //         "color" => "#173177"
+        //     ],
+        //     "keywords3" => [
+        //         "value" => $order->waste->unit,
+        //         "color" => "#173177"
+        //     ]
         ];
         // 接单页面
         $url = config('secret.wx.takeOrderUrl');
         // 根据回收员openid发送通知
         $wx = new Wx();
-            $openid = $depot->openid;
-            $wx->sendMessage($openid, $template_id, $url, $data);
+        $openid = $depot->openid;
+        $wx->sendMessage($openid, $template_id, $url, $data);
     }
 
     /**
