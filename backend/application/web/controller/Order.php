@@ -157,22 +157,22 @@ class Order extends Base
         // 组装模板信息
         $template_id = config('secret.wx.templateId.newOrderNotify');
         $data = [
-        //     "first" => [
-        //         "value" => $order->address_detail,
-        //         "color" => "#173177"
-        //     ],
-        //     "keywords1" => [
-        //         "value" => $order->waste->name,
-        //         "color" => "#173177"
-        //     ],
-        //     "keywords2" => [
-        //         "value" => $order->waste_number,
-        //         "color" => "#173177"
-        //     ],
-        //     "keywords3" => [
-        //         "value" => $order->waste->unit,
-        //         "color" => "#173177"
-        //     ]
+            "first" => [
+                "value" => '有用户下单了',
+                "color" => "#173177"
+            ],
+            "keywords1" => [
+                "value" => $order->pick_fast == 1 ? '尽快上门' : $order->pick_time,
+                "color" => "#173177"
+            ],
+            "keywords2" => [
+                "value" => $order->waste->name.$order->waste_number.$order->waste->unit,
+                "color" => "#173177"
+            ],
+            // "keywords3" => [
+            //     "value" => ,
+            //     "color" => "#173177"
+            // ]
         ];
         // 接单页面
         $url = config('secret.wx.takeOrderUrl');
