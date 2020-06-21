@@ -29,7 +29,7 @@ export const asyncRoutes = [
     path: '/depot',
     component: Layout,
     redirect: '/depot/index',
-    name: 'Pickman',
+    name: 'Depot',
     meta: {
       title: '回收站点管理',
       icon: 'nested',
@@ -37,7 +37,7 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: '/index',
+        path: '/depot/index',
         component: () => import('@/views/depot/index'),
         meta: { title: '站点信息', roles: ['super'] }
       }

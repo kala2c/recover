@@ -22,8 +22,14 @@ const setArea = (data) => request({
   method: 'post',
   data
 })
+const searchArea = (params) => request({
+  url: '/admin/depot/searcharea',
+  method: 'get',
+  params
+})
 export default {
   getDepotList,
   append,
-  setArea
+  setArea,
+  searchArea
 }

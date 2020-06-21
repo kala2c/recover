@@ -148,7 +148,11 @@ class Order extends Base
         ]);
     }
 
-
+    /**
+     * 通知回收点
+     * @param $order
+     * @throws DbException
+     */
     private function notifyDepot($order) {
         // 根据区域信息获取到回收员信息
         $area_id = $order->area_id;
@@ -170,10 +174,10 @@ class Order extends Base
                 "value" => $order->waste->name.$order->waste_number.$order->waste->unit,
                 "color" => "#173177"
             ],
-            // "keyword3" => [
-            //     "value" => ,
-            //     "color" => "#173177"
-            // ]
+            "keyword3" => [
+                 "value" => $order->phone,
+                 "color" => "#173177"
+            ]
         ];
         // 接单页面
         $url = config('secret.wx.takeOrderUrl');

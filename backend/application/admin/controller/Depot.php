@@ -119,4 +119,31 @@ class Depot extends Base
 
         return successWithMsg('修改成功');
     }
+
+    /**
+     * 搜索区域
+     * @throws DbException
+     */
+    public function searchArea()
+    {
+        $param = $this->request->get();
+        $validate = Validate::make([
+            'key' => 'require',
+            'type' => 'require'
+        ]);
+        if (!$validate->check($param)) {
+            throw new ValidateException($validate->getError());
+        }
+        $map = [
+            ['name', 'like', '%'.$param['key'].'%'],
+        ];
+        $type = $param['type'];
+        $level = 0;
+        if ($type == 'street') $level = AreaModel::LEVEL_JD;
+        if ($type == 'community') $level = AreaModel::LEVEL_JWH;
+        array_push($map, ['level', '=', $level]);
+        $rlt = AreaModel::where($map)->limit(0, 30)->select();
+
+        return success($rlt);
+    }
 }

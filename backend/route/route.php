@@ -42,6 +42,7 @@ Route::post('/admin/pickman/setArea','admin/pickman/setArea');
 Route::get('/admin/depot/depotList','admin/Depot/depotList');
 //Route::post('/admin/depot/PickmanStatus','admin/depot/PickmanStatus');
 Route::post('/admin/depot/setArea','admin/depot/setArea');
+Route::post('/admin/depot/searcharea','admin/depot/searchArea');
 // 管理员端 地区相关
 Route::get('/admin/area/list','admin/area/getList');
 Route::get('/admin/area/adminlist','admin/area/getAdminList');

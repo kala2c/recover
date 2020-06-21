@@ -24,6 +24,18 @@ class Depot extends Base
         if ($depot) {
             throw new DataException(ErrorCode::ADMIN_EXIST);
         }
+        // 是否直接绑定小区
+        if (isset($data['area_id'])) {
+            $area = Area::get($data['area_id']);
+            if (!$area) throw new DataException(ErrorCode::AREA_NOT_EXISTS);
+        }
+        // 是否同时新增小区
+        if (isset($data['area_name'])) {
+            $top_id = $data['top_id'] ?? null;
+            if (!($top_id)) throw new DataException(ErrorCode::PARAM_ERROR);
+            $area = Area::add($top_id, $data['area_name']);
+            $data['area_id'] = $area->id;
+        }
         $data['status'] = 0;
         $data = self::addTimeField($data);
         return self::create($data);

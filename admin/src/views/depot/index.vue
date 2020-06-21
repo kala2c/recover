@@ -75,7 +75,7 @@
     </el-card>
 
     <!-- 添加对话框 -->
-    <el-dialog title="添加回收站点" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
+    <el-dialog title="添加回收站点" :visible.sync="addDialogVisible" width="40%" @close="addDialogClosed">
       <!-- 内容主体区域 -->
       <el-form ref="addFormRef" :model="addForm" :rules="formRules" label-width="90px">
         <el-form-item label="登录账号" prop="username">
@@ -90,6 +90,29 @@
         <el-form-item label="身份信息" prop="note">
           <el-input v-model="addForm.note" />
         </el-form-item>
+        <!-- <el-form-item label="绑定小区" prop="community">
+          <el-input v-model="searchCommunityKey" size="meduim" suffix-icon="el-icon-search" />
+          <div>
+            <div
+              v-for="community in communitySearchResult"
+              :key="community.id"
+            >
+              <span @click="choseCommunity(community)">{{ community.name }}</span>
+            </div>
+          </div>
+
+        </el-form-item> -->
+        <!-- <el-form-item label="选择街道" prop="community">
+          <el-input v-model="searchStreetKey" size="meduim" suffix-icon="el-icon-search" />
+          <div>
+            <div
+              v-for="street in streetSearchResult"
+              :key="street.id"
+            >
+              {{ street.name }}
+            </div>
+          </div>
+        </el-form-item> -->
       </el-form>
       <!-- 底部区域 -->
       <span slot="footer" class="dialog-footer">
@@ -158,6 +181,13 @@ export default {
         children: 'child',
         label: 'name'
       },
+      searchCommunityKey: '',
+      searchStreetKey: '',
+      communityChosen: null,
+      // 搜索小区的结果
+      communitySearchResult: [],
+      // 搜索街道的结果
+      streetSearchResult: [],
       // 添加用户的表单数据
       addForm: {
         username: '',
@@ -199,6 +229,14 @@ export default {
       nodeisChecked: false
     }
   },
+  watch: {
+    searchCommunityKey(type) {
+      this.searchArea('community')
+    },
+    searchStreetKey(type) {
+      this.searchArea('street')
+    }
+  },
   created() {
     this.getDepotList()
     areaApi.getAreaTable().then(response => {
@@ -233,6 +271,29 @@ export default {
       console.log(newPage)
       this.queryInfo.pagenum = newPage
       this.getDepotList()
+    },
+    // 监听添加回收站对话框中搜索街道/小区事件
+    searchArea(type) {
+      const key =
+        type === 'street'
+          ? this.searchStreetKey
+          : this.searchCommunityKey
+      if (!key) return
+      const params = {
+        key: key,
+        type: type
+      }
+      depotApi.searchArea(params).then(response => {
+        const data = response.data
+        if (type === 'street') {
+          this.streetSearchResult = data
+        } else {
+          this.communitySearchResult = data
+        }
+      })
+    },
+    choseCommunity(community) {
+      this.communityChosen = community
     },
     // 监听添加用户对话框的关闭事件
     addDialogClosed() {
@@ -287,6 +348,7 @@ export default {
         this.nodeisChecked = true
       }, 100)
     },
+    // 修改回收点区域
     saveArea() {
       const loading = this.$loading({
         lock: true
