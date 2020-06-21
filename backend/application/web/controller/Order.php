@@ -156,20 +156,21 @@ class Order extends Base
         $depot = DepotModel::where('area_id', $area_id)->find();
         // 组装模板信息
         $template_id = config('secret.wx.templateId.newOrderNotify');
+        $time = date('m-d H:i:s', strtotime($order->pick_time));
         $data = [
             "first" => [
                 "value" => '有用户下单了',
                 "color" => "#173177"
             ],
-            "keywords1" => [
-                "value" => $order->pick_fast == 1 ? '尽快上门' : $order->pick_time,
+            "keyword1" => [
+                "value" => $order->pick_fast == 1 ? '用户尽快上门' : '用户预约'.$time,
                 "color" => "#173177"
             ],
-            "keywords2" => [
+            "keyword2" => [
                 "value" => $order->waste->name.$order->waste_number.$order->waste->unit,
                 "color" => "#173177"
             ],
-            // "keywords3" => [
+            // "keyword3" => [
             //     "value" => ,
             //     "color" => "#173177"
             // ]
