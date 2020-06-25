@@ -42,7 +42,7 @@
         </el-col>
       </el-row>
 
-      <!-- 用户列表区域 -->
+      <!-- 订单列表区域 -->
       <el-table :data="orderlist" border stripe>
         <el-table-column type="index" />
         <el-table-column label="订单编号" prop="order_no" />
@@ -92,16 +92,13 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="140px">
+        <!-- <el-table-column label="操作" width="140px">
           <template slot-scope="scope">
-            <el-tooltip effect="dark" content="标记完成" placement="top" :enterable="false">
-              <el-button type="primary" icon="el-icon-success" size="mini" @click="complete(scope.row.id)" />
-            </el-tooltip>
-            <el-tooltip effect="dark" content="取消订单" placement="top" :enterable="false">
+            <el-tooltip effect="dark" content="删除订单" placement="top" :enterable="false">
               <el-button icon="el-icon-delete" size="mini" @click="deletebox(scope.row.id)" />
             </el-tooltip>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
 
       <!-- 分页区域 -->

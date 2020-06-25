@@ -29,6 +29,7 @@ class Administrator extends Base
         if (!isset($data['level'])) {
             $data['level'] = 500;
         }
+        $data['permission'] = 'admin';
         $data = self::addTimeField($data);
         return self::create($data);
     }

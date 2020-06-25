@@ -41,7 +41,7 @@
         </el-col> -->
       </el-row>
 
-      <!-- 用户列表区域 -->
+      <!-- 列表区域 -->
       <el-table :data="userlist" border stripe>
         <el-table-column type="index" />
         <el-table-column label="用户名" prop="username" />
@@ -76,6 +76,7 @@
 
     <!-- 添加对话框 -->
     <el-dialog title="添加回收站点" :visible.sync="addDialogVisible" width="40%" @close="addDialogClosed">
+      <p>站点新增后，默认显示地区为您负责的县（区），需手动关联到小区</p>
       <!-- 内容主体区域 -->
       <el-form ref="addFormRef" :model="addForm" :rules="formRules" label-width="90px">
         <el-form-item label="登录账号" prop="username">
@@ -117,7 +118,7 @@
       <!-- 底部区域 -->
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addUser">确 定</el-button>
+        <el-button type="primary" @click="addDepot">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -300,7 +301,7 @@ export default {
       this.$refs.addFormRef.resetFields()
     },
     // 点击按钮
-    addUser() {
+    addDepot() {
       this.$refs.addFormRef.validate(async valid => {
         if (!valid) return
         const data = await depotApi.append(this.addForm)
@@ -310,16 +311,16 @@ export default {
         // 隐藏添加用户的对话框
         this.addDialogVisible = false
         // 重新获取用户列表数据
-        this.getAdminList()
+        this.getDepotList()
       })
     },
     async depotStatus(depotid, status) {
       var query = { 'id': depotid, 'status': status }
       const data = await depotApi.setdepotStatus(query)
       if (data.code !== 10000) {
-        return this.$message.error('获取用户列表失败！')
+        return this.$message.error('获取列表失败！')
       }
-      this.$message.success('修改取货员状态成功！')
+      this.$message.success('修改状态成功！')
       this.getDepotList()
     },
     areaDialogClosed() {
@@ -338,8 +339,10 @@ export default {
       this.nodeisChecked = true
       // }
     },
+    // 显示回收点分配区域
     showAreaDialog(depot) {
       this.areaDialogVisible = true
+      // 渲染默认选中
       const areaIdList = []
       areaIdList.push(depot.area && depot.area.id)
       this.selectedDepotId = depot.id

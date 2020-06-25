@@ -12,45 +12,17 @@ use think\exception\DbException;
 
 class Area extends Base
 {
-    const LEVEL_JWH = 1;
-    const LEVEL_JD  = 2;
-    const LEVEL_QU  = 3;
+    const LEVEL_COMMUNITY = 1;
+    const LEVEL_STREET  = 2;
+    const LEVEL_COUNTY  = 3;
 
     const LEVEL_STEP = 1; // 等级步长 即上级减下级
 
     public static $LEVEL_MSG = [
-        self::LEVEL_JWH => '居委会',
-        self::LEVEL_JD => '街道',
-        self::LEVEL_QU => '区'
+        self::LEVEL_COMMUNITY => '小区',
+        self::LEVEL_STREET => '街道',
+        self::LEVEL_COUNTY => '县(区)'
     ];
-
-    /**
-     * 获取区域列表
-     * @throws DbException
-     */
-//    static public function getList()
-//    {
-//        $list = self::with('pickman')->order('level', 'desc')->order('top_id')->select()->toArray();
-//        $qu = [];
-//        $jd = [];
-//        $rlt = [];
-//        foreach ($list as $area) {
-//            if ($area['level'] == self::LEVEL_QU) {
-//                $qu[$area['id']] = $area;
-//            } elseif ($area['level'] == self::LEVEL_JD) {
-//                if (array_key_exists($area['top_id'], $qu)) {
-//                    $area['top'] = $qu[$area['top_id']];
-//                }
-//                $jd[$area['id']] = $area;
-//            } elseif ($area['level'] == self::LEVEL_JWH) {
-//                if (array_key_exists($area['top_id'], $jd)) {
-//                    $area['top'] = $jd[$area['top_id']];
-//                }
-//                $rlt[] = $area;
-//            }
-//        }
-//        return $rlt;
-//    }
 
     /**
      * 获取树形区域列表 上级.child = 下级
@@ -65,78 +37,80 @@ class Area extends Base
     const FRONTEND_INFO = 'id,level,top_id,name';
     static public function getTree($city_id, $area = false)
     {
+        if ($area) {
+            $map = ['level', 'in', [self::LEVEL_STREET, self::LEVEL_COUNTY]];
+        } else {
+            $map = [];
+        }
         $list = self::field(self::FRONTEND_INFO)
-            ->where('city_id', $city_id)
+            ->where([
+                ['city_id', '=', 1],
+                ['status', '=', 0]
+            ])
+            ->where($map)
             ->order('level')
             ->select()->toArray();
-        if ($area) {
-            return self::list2tree($list);
-        } else {
-            return self::list2tree2($list);
-        }
+
+        return self::arr2tree($list, s0);
     }
 
     /**
-     * 将线性表转为树 三级 区-街道-小区
-     * @param $list
-     * @return array
+     * 根据城市id获取区域线性表
+     * @param $city_id
+     * @return mixed
+     * @throws DbException
      */
-    static private function list2tree($list) {
-        $qu = [];
-        $jd = [];
-        $rlt = [];
-        foreach ($list as $area) {
-            if ($area['level'] == self::LEVEL_QU) {
-                if (array_key_exists($area['id'], $qu)) {
-                    $area['child'] = $qu[$area['id']];
-                }
-                $rlt[] = $area;
-            } elseif ($area['level'] == self::LEVEL_JD) {
-                if (array_key_exists($area['id'], $jd)) {
-                    $area['child'] = $jd[$area['id']];
-                }
-                $qu[$area['top_id']][] = $area;
-            }
-            elseif ($area['level'] == self::LEVEL_JWH) {
-                $jd[$area['top_id']][] = $area;
-            }
-        }
-        return $rlt;
+    static public function getList($city_id)
+    {
+        $list = self::with(['administrator'])->where('city_id', $city_id)->select()->toArray();
+        return $list;
     }
-    
+
     /**
-     * 将线性表转为树 二级 区-街道
-     * @param $list
+     * 线性表转树
+     * @param $arr
+     * @param $pid
      * @return array
      */
-    static private function list2tree2($list) {
-        $qu = [];
-        $jd = [];
-        $rlt = [];
-        foreach ($list as $area) {
-            if ($area['level'] == self::LEVEL_QU) {
-                if (array_key_exists($area['id'], $qu)) {
-                    $area['child'] = $qu[$area['id']];
+    static public function arr2tree($arr, $pid) {
+        $pid_key_text = 'top_id';
+        $primary_key_text = 'id';
+        $child_text = 'child';
+        $temp = [];
+        $treeArr = $arr;
+        foreach ($treeArr as $index => $item) {
+            if ($item[$pid_key_text] === $pid) {
+                $a2t = self::arr2tree($treeArr, $treeArr[$index][$primary_key_text]);
+                if (count($a2t) > 0) {
+                    // 递归
+                    $treeArr[$index][$child_text] = $a2t;
                 }
-                $rlt[] = $area;
-            } elseif ($area['level'] == self::LEVEL_JD) {
-                if (array_key_exists($area['id'], $jd)) {
-                    $area['child'] = $jd[$area['id']];
-                }
-                $qu[$area['top_id']][] = $area;
+                array_push($temp, $treeArr[$index]);
             }
         }
-        return $rlt;
+        return $temp;
     }
 
     /**
      * 获取带有管理员信息的地区信息
+     * @param $admin_id
      * @return array
      * @throws DbException
      */
-    static public function getTreeWithAdmin() {
-        $list = self::with('administrator')->where('city_id', 1)->order('level')->select();
-        return self::list2tree($list);
+    static public function getTreeWithAdmin($admin_id) {
+        $map = [
+            ['city_id', '=', 1],
+            ['status', '=', 0]
+        ];
+        if ($admin_id != 1) {
+            array_push($map, ['administrator_id', '=', $admin_id]);
+        }
+        $list = self::with('administrator')
+                ->where($map)
+                ->order('level')
+                ->order('id', 'desc')
+                ->select();
+        return self::arr2tree($list, 0);
     }
 
     /**
@@ -149,18 +123,19 @@ class Area extends Base
     public static function add($top_id, $name)
     {
         $top_area = self::get($top_id);
-        if (!$top_area) {
+        if (!$top_area && $top_id != 0) {
             throw new DataException(ErrorCode::AREA_NOT_EXISTS);
         }
-        if ($top_area->level <= self::LEVEL_JWH) {
+        if ($top_id != 0 && $top_area->level <= self::LEVEL_COMMUNITY) {
             throw new DataException(ErrorCode::AREA_LEVEL_LOW);
         }
+        $administrator_id = $data['admin_id'] ?? 1;
         $data = [
             'top_id' => $top_id,
             'name' => $name,
             'city_id' => 1,
-            'administrator_id' => $top_area->administrator_id,
-            'level' => $top_area->level-self::LEVEL_STEP
+            'administrator_id' => $top_id != 0 ? $top_area->administrator_id : $administrator_id,
+            'level' => $top_id != 0 ? $top_area->level-self::LEVEL_STEP : self::LEVEL_COUNTY
         ];
         $data = self::addTimeField($data);
         return self::create($data);

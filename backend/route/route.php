@@ -53,6 +53,9 @@ Route::post('/admin/area/setAdmin','admin/area/setAdmin');
 Route::get('/admin/banner/list','admin/IndexPage/getBannerList');
 Route::post('/admin/banner/append','admin/IndexPage/addBanner');
 Route::post('/admin/banner/delete','admin/IndexPage/delBanner');
+//管理员端 留言相关
+Route::get('/admin/feedback/list','admin/Feedback/getList');
+Route::post('/admin/feedback/delete','admin/Feedback/delete');
 
 //工具相关
 Route::get('/admin/dashboard', 'admin/Administrator/dashboard');

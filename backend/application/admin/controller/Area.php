@@ -20,7 +20,8 @@ class Area extends Base
      */
     public function getList()
     {
-        $areaTable = AreaModel::getTreeWithAdmin();
+        $uid = $this->user_info['uid'];
+        $areaTable = AreaModel::getTreeWithAdmin($uid);
         return success($areaTable);
     }
 
@@ -68,7 +69,7 @@ class Area extends Base
             throw new ValidateException($validate->getError());
         }
         $id = $data['id'];
-        $rlt = AreaModel::destroy($id);
+        $rlt = AreaModel::update(['status' => 1], ['id' => $id]);
         if (!$rlt) {
             throw new ApiException(ErrorCode::DELETE_AREA_FAILED);
         }
