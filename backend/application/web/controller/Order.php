@@ -29,6 +29,7 @@ class Order extends Base
      * @return mixed
      * @throws ApiException
      * @throws DataException
+     * @throws DbException
      */
     public function set()
     {
@@ -167,7 +168,7 @@ class Order extends Base
                 "color" => "#173177"
             ],
             "keyword1" => [
-                "value" => $order->pick_fast == 1 ? '用户尽快上门' : '用户预约'.$time,
+                "value" => $order->pick_fast == 1 ? '尽快上门' : '用户预约'.$time,
                 "color" => "#173177"
             ],
             "keyword2" => [
@@ -177,6 +178,10 @@ class Order extends Base
             "keyword3" => [
                  "value" => $order->phone,
                  "color" => "#173177"
+            ],
+            "remark" => [
+                "value" => $order->address_detail,
+                "color" => "#173177"
             ]
         ];
         // 接单页面

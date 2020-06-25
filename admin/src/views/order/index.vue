@@ -79,10 +79,10 @@
               <el-button type="info">已取消</el-button>
             </div>
             <div v-if="scope.row.status == 0">
-              <el-button type="danger">待取货</el-button>
+              <el-button type="danger">待服务</el-button>
             </div>
             <div v-if="scope.row.status == 1">
-              <el-button type="warning">取货中</el-button>
+              <el-button type="warning">服务中</el-button>
             </div>
             <div v-if="scope.row.status == 2">
               <el-button type="primary">回收中</el-button>

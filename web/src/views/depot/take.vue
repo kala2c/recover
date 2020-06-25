@@ -24,6 +24,7 @@
           <p class="text">时间：{{item.pick_fast ? '尽快上门' : item.pick_time}}</p>
           <p class="text">物品：{{item.waste.name+' | '+item.waste_number+item.waste.unit}}</p>
           <p class="text">备注：{{item.note || '未填写备注'}}</p>
+          <p class="text">详细地址：{{item.address_detail}}</p>
         </div>
         <template #footer>
           <div class="panel-btn-wrap">

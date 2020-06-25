@@ -46,10 +46,20 @@
           <img src="http://static.c2wei.cn/collect-icon/2.png" alt="">
         </div>
         <div class="rule-item-text">
-          单次<span class="strong">10KG</span>以上
+          单次<span class="strong">5KG</span>以上
         </div>
       </div>
     </div>
+    <van-grid square>
+        <van-grid-item
+          v-for="waste in wasteList"
+          :key="waste.id"
+          icon="photo-o"
+          :text="waste.name"
+          class="type-grid-item"
+          @click="$router.push('/collect/subscribe')"
+        />
+      </van-grid>
     <div class="one-key-btn" @click="$router.push('/collect/subscribe')">
       一键下单
     </div>
@@ -63,18 +73,21 @@
 import FootBar from '@/views/collect/components/FootBar'
 import api from '@/api/collect'
 import sysApi from '@/api/index'
-import { Icon, Toast, Swipe, SwipeItem } from 'vant'
+import { Icon, Toast, Swipe, SwipeItem, Grid, GridItem } from 'vant'
 export default {
   components: {
     VanIcon: Icon,
     // Banner,
     FootBar,
     VanSwipe: Swipe,
-    VanSwipeItem: SwipeItem
+    VanSwipeItem: SwipeItem,
+    VanGrid: Grid,
+    VanGridItem: GridItem
   },
   data() {
     return {
       location: '正在获取位置信息...',
+      wasteList: [],
       bannerList: [
         {
           id: 1,
@@ -174,6 +187,10 @@ export default {
   async created() {
     this.getLocation()
     this.getBanner()
+    api.getOrderInfo().then(response => {
+      const data = response.data
+      this.wasteList = data.waste_list
+    })
   },
   async mounted() {
     // const res = await api.getLocation()

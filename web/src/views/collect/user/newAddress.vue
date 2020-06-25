@@ -30,11 +30,11 @@
           <p class="cell-text">{{communityName || '未选择'}}</p>
         </template>
       </van-cell>
-      <!-- <van-field
+      <van-field
         label="详细地址"
         v-model="formData.detail"
         placeholder="填写到门牌号"
-      /> -->
+      />
       <div class="default-switch form-ctrl" v-if="isEdit">
         <div class="label">设为默认</div>
         <van-switch v-model="switchChecked" :disabled="switchDisabled" />
@@ -276,7 +276,10 @@ export default {
         this.formData.id = data.id
         this.formData.name = data.name
         this.formData.phone = data.phone
-        this.formData.area = data.area.split('-').pop().join('-')
+        const area = data.area.split('-')
+        area.pop()
+        this.formData.area = area.join('-')
+        console.log(data.area.split('-').pop())
         this.formData.area_id = data.area_id
         this.formData.detail = data.detail
         this.isEdit = true
