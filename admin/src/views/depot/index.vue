@@ -336,6 +336,7 @@ export default {
       this.$refs.areaTree.setCheckedKeys([])
       this.$refs.areaTree.setCheckedKeys([node.id])
       this.node = node
+      console.log(node)
       this.nodeisChecked = true
       // }
     },

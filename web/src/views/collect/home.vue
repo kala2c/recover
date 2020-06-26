@@ -58,7 +58,7 @@
     <div class="rule">
       <div class="rule-item">
         <div class="rule-item-pic">
-          <img :src="baseUrl + 'icon/rule-1.png'" alt="">
+          <img :src="baseUrl + '/icon/rule-1.png'" alt="">
         </div>
         <div class="rule-item-text">
           <span class="strong">拒绝</span>掺水
@@ -66,7 +66,7 @@
       </div>
       <div class="rule-item">
         <div class="rule-item-pic">
-          <img :src="baseUrl + 'icon/rule-2.png'" alt="">
+          <img :src="baseUrl + '/icon/rule-2.png'" alt="">
         </div>
         <div class="rule-item-text">
           <span class="strong">拒绝</span>掺杂
@@ -74,7 +74,7 @@
       </div>
       <div class="rule-item">
         <div class="rule-item-pic">
-          <img :src="baseUrl + 'icon/rule-3.png'" alt="">
+          <img :src="baseUrl + '/icon/rule-3.png'" alt="">
         </div>
         <div class="rule-item-text">
           单次<span class="strong">3KG</span>以上
