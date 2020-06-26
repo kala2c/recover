@@ -109,10 +109,21 @@ class Address extends Base
 
     /**
      * 获取区域信息
+     * 两级信息 用于地址添加编辑页
      */
-    public function getArea()
+    public function getAreaTable()
     {
-        $data = AreaModel::getTree(1, true);
+        $data = AreaModel::getTree(AreaModel::CITY_YANTAI, AreaModel::SHOW_TWO_LEVEL_AREA);
+        return success($data);
+    }
+
+    /**
+     * 获取区域信息
+     * 全部列表 用于服务范围展示
+     */
+    public function getAreaList()
+    {
+        $data = AreaModel::getTree(AreaModel::CITY_YANTAI, AreaModel::SHOW_ALL_LEVEL_AREA);
         return success($data);
     }
     
@@ -123,7 +134,11 @@ class Address extends Base
     {
         $param = $this->request->get();
         $street_id = $param['street_id'];
-        $data = AreaModel::where('top_id', $street_id)->select();
+        $data = AreaModel::
+            where('top_id', $street_id)
+            ->whereOr('id', AreaModel::OTHER_COMMUNITY_ID)
+            ->order('id', 'desc')
+            ->select();
         return success($data);
     }
 }

@@ -36,8 +36,17 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  background-color: #f8f9f9;
+  background-color: #EEFAEC;
   height: 100%;
   overflow: auto;
+}
+.van-tabs__nav,
+.van-panel,
+.van-cell-group,
+.van-address-item,
+.van-nav-bar, .van-nav-bar__placeholder,
+.form-wrap .form-ctrl,
+.van-cell {
+  background-color: #EFFAEF!important;
 }
 </style>

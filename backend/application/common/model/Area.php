@@ -24,6 +24,13 @@ class Area extends Base
         self::LEVEL_COUNTY => '县(区)'
     ];
 
+    const OTHER_COMMUNITY_ID = 1;
+    const TOP_START_ID = 0;
+    const STATUS_NORMAL = 0;
+    const STATUS_DELETE = 1;
+    const CITY_YANTAI = 1;
+    const SUPER_ADMIN_ID = 1;
+
     /**
      * 获取树形区域列表 上级.child = 下级
      * @param string $field
@@ -35,23 +42,29 @@ class Area extends Base
      * @return mixed
      */
     const FRONTEND_INFO = 'id,level,top_id,name';
+    const SHOW_TWO_LEVEL_AREA = true;
+    const SHOW_ALL_LEVEL_AREA = false;
     static public function getTree($city_id, $area = false)
     {
         if ($area) {
-            $map = ['level', 'in', [self::LEVEL_STREET, self::LEVEL_COUNTY]];
+            $map = [
+                ['level', 'in', [self::LEVEL_STREET, self::LEVEL_COUNTY]]
+            ];
         } else {
-            $map = [];
+            $map = [
+                ['id', '<>', self::OTHER_COMMUNITY_ID]
+            ];
         }
         $list = self::field(self::FRONTEND_INFO)
             ->where([
-                ['city_id', '=', 1],
-                ['status', '=', 0]
+                ['city_id', '=', self::CITY_YANTAI],
+                ['status', '=', self::STATUS_NORMAL]
             ])
             ->where($map)
             ->order('level')
             ->select()->toArray();
 
-        return self::arr2tree($list, s0);
+        return self::arr2tree($list, self::TOP_START_ID);
     }
 
     /**
@@ -99,10 +112,11 @@ class Area extends Base
      */
     static public function getTreeWithAdmin($admin_id) {
         $map = [
-            ['city_id', '=', 1],
-            ['status', '=', 0]
+            ['city_id', '=', self::CITY_YANTAI],
+            ['status', '=', self::STATUS_NORMAL]
         ];
-        if ($admin_id != 1) {
+//        如果不是超管 只能看自己代理地区
+        if ($admin_id != self::SUPER_ADMIN_ID) {
             array_push($map, ['administrator_id', '=', $admin_id]);
         }
         $list = self::with('administrator')
@@ -110,7 +124,7 @@ class Area extends Base
                 ->order('level')
                 ->order('id', 'desc')
                 ->select();
-        return self::arr2tree($list, 0);
+        return self::arr2tree($list, self::TOP_START_ID);
     }
 
     /**
@@ -123,19 +137,27 @@ class Area extends Base
     public static function add($top_id, $name)
     {
         $top_area = self::get($top_id);
-        if (!$top_area && $top_id != 0) {
+//        添加县区时不需要判断
+        if ($top_id != self::TOP_START_ID && !$top_area) {
             throw new DataException(ErrorCode::AREA_NOT_EXISTS);
         }
-        if ($top_id != 0 && $top_area->level <= self::LEVEL_COMMUNITY) {
+        if ($top_id != self::TOP_START_ID && $top_area->level <= self::LEVEL_COMMUNITY) {
             throw new DataException(ErrorCode::AREA_LEVEL_LOW);
         }
-        $administrator_id = $data['admin_id'] ?? 1;
+//        不设置管理员就是超管的
+        $administrator_id = $data['admin_id'] ?? self::SUPER_ADMIN_ID;
         $data = [
             'top_id' => $top_id,
             'name' => $name,
-            'city_id' => 1,
-            'administrator_id' => $top_id != 0 ? $top_area->administrator_id : $administrator_id,
-            'level' => $top_id != 0 ? $top_area->level-self::LEVEL_STEP : self::LEVEL_COUNTY
+            'city_id' => self::CITY_YANTAI,
+            'administrator_id' =>
+                $top_id != self::TOP_START_ID
+                    ? $top_area->administrator_id
+                    : $administrator_id,
+            'level' =>
+                $top_id != self::TOP_START_ID
+                    ? $top_area->level-self::LEVEL_STEP
+                    : self::LEVEL_COUNTY
         ];
         $data = self::addTimeField($data);
         return self::create($data);
@@ -152,16 +174,9 @@ class Area extends Base
     public static function setAdmin($area_id, $admin_id)
     {
         array_push(self::$area_id_list, $area_id);
-//        self::$area_id_list[] = $top_id;
+//        递归查找下级存储在类属性中
         self::findChild([$area_id]);
 
-//        $data = [];
-//        foreach (self::$area_id_list as $id) {
-//            array_push($data, self::addTimeField([
-//                'admin_id' => $admin_id,
-//                'id' => $id
-//            ], false));
-//        }
         $data = self::addTimeField([
             'administrator_id' => $admin_id
         ], true);

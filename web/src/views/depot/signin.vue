@@ -27,7 +27,7 @@
         :rules="[{ required: true, message: '请填写密码' }]"
       />
       <div class="submit-wrap">
-        <van-button round block type="info" native-type="submit">
+        <van-button round block type="primary" native-type="submit">
           登录
         </van-button>
       </div>
@@ -77,7 +77,7 @@ export default {
     color: #323233;
     font-size: 14px;
     line-height: 24px;
-    background-color: #fff;
+    // background-color: #fff;
     border-bottom: 1px solid #efffff;
     .label {
       width: 90px;
@@ -90,7 +90,7 @@ export default {
   width: 100%;
   padding: 10px 0;
   margin-top: 16px;
-  background-color: #fff;
+  // background-color: #fff;
   .submit-btn {
     width: 95%;
     margin: 0 auto;

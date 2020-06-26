@@ -40,7 +40,7 @@
         <van-switch v-model="switchChecked" :disabled="switchDisabled" />
       </div>
       <div class="submit-wrap">
-        <van-button class="submit-btn" round block type="info" :disabled="submitDisabled" @click="onSubmit">
+        <van-button class="submit-btn" round block type="primary" :disabled="submitDisabled" @click="onSubmit">
           提交
         </van-button>
       </div>
@@ -139,7 +139,6 @@ export default {
       }
     },
     areaId(val) {
-      console.log(api)
       api.getCommunity({ street_id: val }).then(response => {
         const data = response.data
         this.communityList = []
@@ -172,11 +171,12 @@ export default {
       this.areaId = areaId || 0
     },
     onChoseCommunity(value, communityIndex) {
-      console.log(value, communityIndex)
+      // console.log(value, communityIndex)
       this.communityChosenIndex = communityIndex
       this.formData.area_id = this.communityList[communityIndex].id || 0
       this.communityPickerShow = false
     },
+    // 获取当前位置
     async getLocation() {
       const that = this
       const wx = window.wx
@@ -235,10 +235,10 @@ export default {
         Toast('请选择地区')
         return false
       }
-      // if (!this.formData.detail) {
-      //   Toast('请输入详细地址')
-      //   return false
-      // }
+      if (!this.formData.detail) {
+        Toast('请输入详细地址')
+        return false
+      }
       const data = {
         name: this.formData.name,
         phone: this.formData.phone,

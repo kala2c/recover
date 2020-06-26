@@ -26,7 +26,7 @@
         placeholder="请输入您的问题或意见"
       />
       <div class="submit-wrap">
-        <van-button class="submit-btn" :disabled="disableButton" round block type="info" native-type="submit">
+        <van-button class="submit-btn" :disabled="disableButton" round block type="primary" native-type="submit">
           提交
         </van-button>
       </div>

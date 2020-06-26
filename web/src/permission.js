@@ -5,7 +5,6 @@ import { getToken, setToken } from '@/utils/auth'
 import { baseURL } from '@/utils/request'
 // import { Toast } from 'vant'
 
-// const baseUrl = baseURL
 // 生成微信授权链接
 function createOauthUrl(state) {
   const params = {
@@ -17,6 +16,9 @@ function createOauthUrl(state) {
     response_type: 'code',
     scope: 'snsapi_userinfo',
     state: state
+  }
+  if (process.env.NODE_ENV === 'development') {
+    params.appid = 'wxb06bf22b4b5e6a5d'
   }
   const baseUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize'
   return baseUrl + '?' + Qs.stringify(params) + '#wechat_redirect'

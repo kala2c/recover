@@ -62,32 +62,27 @@ export default {
     },
     area(val) {
       const area = val.split('-')
-      console.log(area)
-      let id1 = null
+      // let id1 = null
       let id2 = null
       const idArr = []
-      console.log(this.areaTable)
       this.areaTable.forEach((district, index1) => {
         if (district.text === area[0]) {
           // id1 = district.id
-          id1 = index1
+          // id1 = index1
           idArr.push(index1)
           district.children.forEach((street, index2) => {
             if (street.text === area[1]) {
-              // id2 = street.id
-              id2 = index2
+              id2 = street.id // 将根据街道id自动获取小区
+              // id2 = index2
               idArr.push(index2)
             }
           })
         }
       })
-      console.log(id1, id2)
       if (idArr.length > 1) {
-        console.log(id1, id2)
-        console.log(this)
         this.$refs.picker.setColumnIndex(0, idArr[0])
         this.$refs.picker.setColumnIndex(1, idArr[1])
-        this.$emit('confirm', area, idArr[1], true)
+        this.$emit('confirm', area, id2, true)
       }
     }
   },
@@ -149,7 +144,6 @@ export default {
   },
   created() {
     this.init()
-    console.log(this.timeTable)
   }
 }
 </script>

@@ -24,10 +24,41 @@
       </div>
       <!-- <div class="grid-item"></div> -->
     </div>
+    <p class="section-title">回收品类</p>
+    <div class="waste-grid">
+      <div
+        class="waste-grid-item"
+        @click="$router.push('/collect/subscribe')"
+        >
+        <div class="waste-grid-item-pic">
+          <img class="icon" :src="baseUrl + '/icon/wastes-1.png'" alt="">
+        </div>
+        <p class="waste-grid-item-text">衣服</p>
+      </div>
+      <div
+        class="waste-grid-item"
+        @click="$router.push('/collect/subscribe')"
+        >
+        <div class="waste-grid-item-pic">
+          <img class="icon" :src="baseUrl + '/icon/wastes-2.png'" alt="">
+        </div>
+        <p class="waste-grid-item-text">纸壳</p>
+      </div>
+      <div
+        class="waste-grid-item"
+        @click="$router.push('/collect/subscribe')"
+        >
+        <div class="waste-grid-item-pic">
+          <img class="icon" :src="baseUrl + '/icon/wastes-3.png'" alt="">
+        </div>
+        <p class="waste-grid-item-text">塑料</p>
+      </div>
+    </div>
+    <p class="section-title">回收要求</p>
     <div class="rule">
       <div class="rule-item">
         <div class="rule-item-pic">
-          <img src="http://static.c2wei.cn/collect-icon/0.png" alt="">
+          <img :src="baseUrl + 'icon/rule-1.png'" alt="">
         </div>
         <div class="rule-item-text">
           <span class="strong">拒绝</span>掺水
@@ -35,7 +66,7 @@
       </div>
       <div class="rule-item">
         <div class="rule-item-pic">
-          <img src="http://static.c2wei.cn/collect-icon/1.png" alt="">
+          <img :src="baseUrl + 'icon/rule-2.png'" alt="">
         </div>
         <div class="rule-item-text">
           <span class="strong">拒绝</span>掺杂
@@ -43,23 +74,13 @@
       </div>
       <div class="rule-item">
         <div class="rule-item-pic">
-          <img src="http://static.c2wei.cn/collect-icon/2.png" alt="">
+          <img :src="baseUrl + 'icon/rule-3.png'" alt="">
         </div>
         <div class="rule-item-text">
-          单次<span class="strong">5KG</span>以上
+          单次<span class="strong">3KG</span>以上
         </div>
       </div>
     </div>
-    <van-grid square>
-        <van-grid-item
-          v-for="waste in wasteList"
-          :key="waste.id"
-          icon="photo-o"
-          :text="waste.name"
-          class="type-grid-item"
-          @click="$router.push('/collect/subscribe')"
-        />
-      </van-grid>
     <div class="one-key-btn" @click="$router.push('/collect/subscribe')">
       一键下单
     </div>
@@ -73,21 +94,21 @@
 import FootBar from '@/views/collect/components/FootBar'
 import api from '@/api/collect'
 import sysApi from '@/api/index'
-import { Icon, Toast, Swipe, SwipeItem, Grid, GridItem } from 'vant'
+import { Icon, Toast, Swipe, SwipeItem } from 'vant'
+import { baseURL } from '@/utils/request'
 export default {
   components: {
     VanIcon: Icon,
     // Banner,
     FootBar,
     VanSwipe: Swipe,
-    VanSwipeItem: SwipeItem,
-    VanGrid: Grid,
-    VanGridItem: GridItem
+    VanSwipeItem: SwipeItem
   },
   data() {
     return {
       location: '正在获取位置信息...',
       wasteList: [],
+      baseUrl: baseURL,
       bannerList: [
         {
           id: 1,
@@ -106,25 +127,25 @@ export default {
         {
           id: 1,
           path: '/collect/query/price',
-          icon: 'http://static.c2wei.cn/collect-icon/price.png',
+          icon: baseURL + '/icon/price.png',
           name: '价格查询'
         },
         {
           id: 2,
           path: '/collect/query/city',
-          icon: 'http://static.c2wei.cn/collect-icon/city.png',
+          icon: baseURL + '/icon/city.png',
           name: '服务范围'
         },
         {
           id: 3,
           path: '/collect/query/pickman',
-          icon: 'http://static.c2wei.cn/collect-icon/pickman.png',
+          icon: baseURL + '/icon/pickman.png',
           name: '附近回收点'
         },
         {
           id: 4,
           path: '/collect/query/custom',
-          icon: 'http://static.c2wei.cn/collect-icon/custom.png',
+          icon: baseURL + '/icon/custom.png',
           name: '联系客服'
         }
       ]
@@ -203,13 +224,17 @@ export default {
 <style lang="scss" scoped>
 .home {
   padding-bottom: 130px;
+  .section-title {
+    padding: 5px 20px;
+    border-left: 2px solid #07c160;
+  }
   .location {
     display: flex;
     align-items: center;
     height: 30px;
     line-height: 30px;
     font-size: 15px;
-    background-color: #fff;
+    // background-color: #fff;
   }
   .banner-swipe {
     .van-swipe-item {
@@ -228,7 +253,7 @@ export default {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-    background-color: #fff;
+    // background-color: #fff;
     .grid-item {
       // flex: 1;
       box-sizing: border-box;
@@ -240,7 +265,7 @@ export default {
         align-items: center;
         border: 1px solid #eee;
         border-radius: 5px;
-        box-shadow: 2px 4px 4px 0 rgba(33, 33, 33, .17);
+        box-shadow: 1px 2px 2px 0 rgba(66, 66, 66, .17);
         .grid-item-pic {
           width: 40%;
           height: 40px;
@@ -265,10 +290,9 @@ export default {
     }
   }
   .rule {
-    margin-top: 10px;
     display: flex;
     flex-wrap: wrap;
-    background-color: #fff;
+    // background-color: #fff;
     .rule-item {
       // flex: 1;
       box-sizing: border-box;
@@ -313,4 +337,34 @@ export default {
     height: 200px;
   }
 }
+  .waste-grid {
+    display: flex;
+    flex-wrap: wrap;
+    // margin-left: 15px;
+    // margin-right: 15px;
+    border-radius: 5px;
+    // background-color: rgba(248, 250, 246);
+    .waste-grid-item {
+      // flex: 1;
+      box-sizing: border-box;
+      width: 25%;
+      height: 120px;
+      .waste-grid-item-pic {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto;
+        text-align: center;
+        .icon {
+          margin-top: 17px;
+          width: 46px;
+          height: 46px;
+        }
+      }
+      .waste-grid-item-text {
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+      }
+    }
+  }
 </style>

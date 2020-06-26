@@ -77,6 +77,7 @@
               增加
             </el-button>
             <el-button
+              v-if="data.id != 1"
               type="text"
               size="mini"
               @click="removeArea(node, data)"

@@ -159,6 +159,7 @@ class Order extends Base
         $area_id = $order->area_id;
         if (!$area_id) return;
         $depot = DepotModel::where('area_id', $area_id)->find();
+        if (!$depot) return;
         // 组装模板信息
         $template_id = config('secret.wx.templateId.newOrderNotify');
         $time = date('m-d H:i:s', strtotime($order->pick_time));
@@ -188,7 +189,8 @@ class Order extends Base
         $url = config('secret.wx.takeOrderUrl');
         // 根据回收员openid发送通知
         $wx = new Wx();
-        $openid = $depot->openid;
+        $openid = $depot->openid ?? null;
+        if (empty($openid)) return;
         $wx->sendMessage($openid, $template_id, $url, $data);
     }
 

@@ -146,7 +146,7 @@ export default {
 // }
 .van-button--danger {
   color: #fff!important;
-  background-color: #1989fa!important;
-  border: 1px solid #1989fa!important;
+  background-color: #59c261!important;
+  border: 1px solid #59c261!important;
 }
 </style>

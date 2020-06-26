@@ -68,6 +68,10 @@ const getAreaTable = () => request({
   url: '/collect/area'
 })
 
+const getAreaList = () => request({
+  url: '/collect/arealist'
+})
+
 const getCommunity = (params) => request({
   params: params,
   url: '/collect/community'
@@ -123,6 +127,7 @@ export default {
   saveAddress,
   setDefaultAddress,
   getAreaTable,
+  getAreaList,
   getCommunity,
   getOrderInfo,
   submitOrder,
