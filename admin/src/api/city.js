@@ -1,30 +1,25 @@
 import request from '@/utils/request'
 
-function getList(params) {
-  return request({
-    url: '/admin/city/list',
-    params
-  })
-}
+const getUserList = (params) => request({
+  url: '/admin/user/UserList',
+  method: 'get',
+  params
+})
 
-function append(data) {
-  return request({
-    url: '/admin/city/append',
-    method: 'post',
-    data
-  })
-}
+const lock = (data) => request({
+  url: '/admin/user/lock',
+  method: 'post',
+  data
+})
 
-function setInfo(data) {
-  return request({
-    url: '/admin/city/setInfo',
-    method: 'post',
-    data
-  })
-}
+const unlock = (data) => request({
+  url: '/admin/user/unlock',
+  method: 'post',
+  data
+})
 
 export default {
-  getList,
-  append,
-  setInfo
+  getUserList,
+  lock,
+  unlock
 }

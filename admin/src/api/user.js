@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 const getUserList = (params) => request({
-  url: '/user/login/',
+  url: '/admin/user/UserList',
   method: 'get',
   params
 })

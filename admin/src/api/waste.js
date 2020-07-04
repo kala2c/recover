@@ -5,6 +5,16 @@ const getWasteList = (params) => request({
   method: 'get',
   params
 })
+const addWaste = (params) => request({
+  url: '/admin/waste/WasteList',
+  method: 'put',
+  params
+})
+const deleteWaste = (params) => request({
+  url: '/admin/waste/WasteList',
+  method: 'delete',
+  params
+})
 const getWasteInfo = (params) => request({
   url: '/admin/waste/WasteInfo',
   method: 'get',
@@ -19,5 +29,7 @@ const setWasetInfo = (params) => request({
 export default {
   getWasteList,
   getWasteInfo,
-  setWasetInfo
+  setWasetInfo,
+  addWaste,
+  deleteWaste
 }
