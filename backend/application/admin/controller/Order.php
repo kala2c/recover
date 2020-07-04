@@ -35,9 +35,11 @@ class Order extends Base
             ['username', 'like', $username],
             ['phone', 'like', $phone],
             ['order_no', 'like', $orderno],
-            // 限制区域
-            ['area_id', 'in', $area_list]
         ];
+        // 限制区域 超级管理员不限制
+        if ($this->user_info['uid'] !== 1) {
+            array_push($map, ['area_id', 'in', $area_list]);
+        }
         //获取所有的订单信息
         $query = OrderModel::pageUtil($pagenum, $map, $pagesize)
                     ->with(['waste'])

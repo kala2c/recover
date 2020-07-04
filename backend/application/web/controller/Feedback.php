@@ -11,7 +11,7 @@ use think\exception\ValidateException;
 use think\facade\Validate;
 use \app\common\model\Feedback as FeedbackModel;
 
-class Feedback extends Controller
+class Feedback extends Base
 {
     /**
      * 新增反馈
@@ -31,6 +31,8 @@ class Feedback extends Controller
         if (!$validate->check($post)) {
             throw new ValidateException($validate->getError());
         }
+
+        $post['user_id'] = $this->user_info['uid'];
 
         $post = FeedbackModel::addTimeField($post);
 

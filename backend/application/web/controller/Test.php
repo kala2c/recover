@@ -17,6 +17,8 @@ class Test extends Controller
      */
     public function index()
     {
-        return '';
+        $a2t = Area::getList(1);
+//        dump($a2t);
+//        return $a2t;
     }
 }

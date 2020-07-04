@@ -18,9 +18,11 @@ return [
     // 数据库名
     'database'        => 'recover',
     // 用户名
-    'username'        => 'recover',
+   'username'        => 'recover',
+//     'username'        => 'root',
     // 密码
-    'password'        => 'root',
+   'password'        => 'Kb4NzeR2rSXDaimE',
+//     'password'        => 'root',
     // 端口
     'hostport'        => '3306',
     // 连接dsn

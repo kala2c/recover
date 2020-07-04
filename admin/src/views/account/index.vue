@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card">
     <div slot="header" class="clearfix">
-      <span>修改管理员密码</span>
+      <span>修改密码</span>
     </div>
     <div>
       <el-form ref="ruleForm" :model="ruleForm" status-icon :rules="rules" label-width="100px" class="demo-ruleForm">

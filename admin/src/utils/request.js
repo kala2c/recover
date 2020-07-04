@@ -4,12 +4,11 @@ import store from '@/store'
 import { getToken } from '@/utils/auth'
 import Qs from 'querystring'
 
-// export const baseURL = 'http://127.0.0.9/'
-export const baseURL = 'http://127.0.0.1:7000/'
-// const baseURL = '/'
+console.log(process.env.NODE_ENV)
+
+export const baseURL = process.env.VUE_APP_BASE_API
 // 创建一个axios实例
 const service = axios.create({
-  // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   baseURL, // url = base url + request url
   // withCredentials: true, // 在跨域请求发送cookies
   timeout: 30000 // 请求超时

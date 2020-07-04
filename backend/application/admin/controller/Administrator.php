@@ -8,6 +8,7 @@ use app\common\error\ErrorCode;
 use app\common\exception\ApiException;
 use app\common\model\OrderMaster as OrderModel;
 use app\common\model\Pickman as PickmanModel;
+use app\common\model\Depot as DepotModel;
 use app\common\model\User as UserModel;
 use app\common\model\Waste as WasteModel;
 use think\exception\DbException;
@@ -140,8 +141,8 @@ class Administrator extends Base
         //今日新增用户数
         $todayusercount = UserModel::whereTime('create_time', 'today')->count();
 
-        //配送员总数
-        $pickmancount = PickmanModel::where('status', '=', 1)->count();
+        //回收点总数
+        $depotcount = DepotModel::where('status', '=', 0)->count();
         //总成交订单数
         $allordercount = OrderModel::where('status', '=', OrderModel::STATUS_SUCCESS)->count();
         //今日成交订单数
@@ -154,7 +155,7 @@ class Administrator extends Base
             'dashboarddata' => [
                 'wastecount' => $wastecount,
                 'allusercount' => $allusercount,
-                'pickmancount' => $pickmancount,
+                'depotcount' => $depotcount,
                 'todayusercount' => $todayusercount,
                 'allordercount' => $allordercount,
                 'todayordercount' => $todayordercount

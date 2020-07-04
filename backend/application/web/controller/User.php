@@ -13,6 +13,9 @@ use think\exception\ValidateException;
 use think\facade\Validate;
 use app\common\model\User as UserModel;
 use app\common\model\Pickman as PickmanModel;
+use app\common\model\Depot as DepotModel;
+use app\common\model\Address as AddressModel;
+use think\response\Json;
 
 class User extends Base
 {
@@ -29,6 +32,36 @@ class User extends Base
             'name' => $name,
             'avatar' => $avatar
         ]);
+    }
+    
+    public function custom()
+    {
+        return success([
+            [
+                'id' => 1,
+                'name' => '客服一',
+                'url' => 'http://static.c2wei.cn/qr.png'
+            ],
+            [
+                'id' => 2,
+                'name' => '客服二',
+                'url' => 'http://static.c2wei.cn/qr.png'
+            ]
+        ]);
+    }
+
+    /**
+     * @throws DbException
+     */
+    public function selfCommunity()
+    {
+        $uid = $this->user_info['uid'];
+        $address = AddressModel::getDefaultAddress($uid);
+        $area_id = $address->area_id;
+        $depot = DepotModel::with(['area'])->where('area_id', $area_id)->find();
+        unset($depot['password']);
+        unset($depot['openid']);
+        return success($depot);
     }
 
     /**
@@ -64,6 +97,40 @@ class User extends Base
         return successWithMsg('申请成功');
     }
 
+
+    /**
+     * 回收点登录
+     * @throws
+     */
+    public function depotSignIn()
+    {
+        $data = $this->request->post();
+        $validate = Validate::make([
+            'username' => 'require',
+            'password' => 'require'
+        ])->message([
+            'username.require' => '请填写用户名',
+            'password.require' => '请填写密码'
+        ]);
+        if (!$validate->check($data)) {
+            throw new ValidateException($validate->getError());
+        }
+        $depot = DepotModel::where('username', $data['username'])->whereOr('mobile', $data['username'])->find();
+        if (!$depot) {
+            throw new ApiException(ErrorCode::DEPOT_NOT_EXISTS);
+        }
+        if ($depot->password != $data['password']) {
+            throw new ApiException(ErrorCode::ACCOUNT_PASSWORD_ERROR);
+        }
+        $openid = $this->user_info['openid'];
+        $depot->openid = $openid;
+        if ($depot->save()) {
+            return successWithMsg('登录成功');
+        } else {
+            throw new ApiException(ErrorCode::UPDATE_DEPOT_FAILED);
+        }
+    }
+
     /**
      * 获取附近回收员
      * @throws DbException
@@ -72,6 +139,62 @@ class User extends Base
     {
         $list = PickmanModel::with(['area'])->where('status', 0)->limit(0, 10)->select();
         return success($list);
+    }
+
+    /**
+     * 将前台传过来的经纬度解析为文字地址描述
+     * 高德地图接口 含有街道办事处信息
+     * @return Json
+     */
+    public function getStreetInfo()
+    {
+        $location = $this->request->get('location');
+        $user = UserModel::get($this->user_info['uid']);
+        $openid = $user->openid;
+//        $address = Cache::get("$openid.addressGd");
+//        if (!$address) {
+            $data = $this->pos2addressGaode($location, $openid);
+            return success($data);
+//        } else {
+//            $address = json_decode($address, true);
+//            list($new_lat, $new_lng) = explode(',', $location);
+//            $old_lat = $address['location']['lat'];
+//            $old_lng = $address['location']['lng'];
+//            地址变化时才会重新获取
+//            if (abs($new_lat-$old_lat) > 0.01 || abs($new_lng-$old_lng) > 0.01) {
+//                $data = $this->pos2address($location, $openid);
+//                $address = $data;
+//            }
+//            return success($address);
+//        }
+    }
+
+    /**
+     * 将前台传过来的经纬度解析为文字地址描述
+     * 腾讯地图接口 不含街道办事处信息
+     * @return Json
+     */
+    public function getTextLoc()
+    {
+        $location = $this->request->get('location');
+        $user = UserModel::get($this->user_info['uid']);
+        $openid = $user->openid;
+        $address = Cache::get("$openid.address");
+        if (!$address) {
+            $data = $this->pos2address($location, $openid);
+            return success($data);
+        } else {
+            $address = json_decode($address, true);
+            list($new_lat, $new_lng) = explode(',', $location);
+            $old_lat = $address['location']['lat'];
+            $old_lng = $address['location']['lng'];
+//            地址变化时才会重新获取
+            if (abs($new_lat-$old_lat) > 0.01 || abs($new_lng-$old_lng) > 0.01) {
+                $data = $this->pos2address($location, $openid);
+                $address = $data;
+            }
+            return success($address);
+        }
     }
 
     /**
@@ -115,6 +238,7 @@ class User extends Base
     }
 
     /**
+     * 腾讯地图接口
      * 将缓存的经纬度转换为文字坐标
      * @param $location string 经纬坐标 36.108678,149.585123
      * @param $openid string openid
@@ -134,6 +258,29 @@ class User extends Base
         $address = $data['result'];
         if ($address) {
             Cache::set("$openid.address", json_encode($address));
+        }
+        return $address;
+    }
+
+    /**
+     * 高德地图接口
+     * 将经纬度转换为文字坐标
+     * @param $location string 经纬坐标 36.108678,149.585123
+     * @param $openid string openid
+     * @return mixed
+     */
+    private function pos2addressGaode($location, $openid)
+    {
+        $key = config('secret.gdMap.key');
+        $latlng = explode(',', $location);
+        $location = $latlng[1].','.$latlng[0];
+        $api = "https://restapi.amap.com/v3/geocode/regeo?key=$key&location=$location";
+
+        $response = \Requests::get($api);
+        $data = json_decode($response->body, true);
+        $address = $data;
+        if ($address) {
+            Cache::set("$openid.addressGd", json_encode($address));
         }
         return $address;
     }

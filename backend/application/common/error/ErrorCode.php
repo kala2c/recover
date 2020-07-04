@@ -34,6 +34,9 @@ class ErrorCode
     const LOCK_USER_FAILED = 30008;
     const UNLOCK_USER_FAILED = 30009;
 
+    const ADMIN_EXIST = 30010;
+
+
 
     /*************Feedback 错误代码**********/
     const INSERT_FEEDBACK_FAILED = 40001;
@@ -76,6 +79,7 @@ class ErrorCode
     const PICKMAN_WAIT_AUDIT = 80007;
     const PICKMAN_EXISTS = 80008;
 
+
     /*************Area 地区代码**********/
     const INSERT_AREA_FAILED = 90001;
     const DELETE_AREA_FAILED = 90002;
@@ -86,6 +90,17 @@ class ErrorCode
     const SET_INDEX_PAGE_INFO_FAILED = 100001;
     const DEL_INDEX_PAGE_INFO_FAILED = 100002;
 
+
+    /*************Depot 回收点代码**********/
+    const INSERT_DEPOT_FAILED = 110001;
+    const UPDATE_DEPOT_FAILED = 110002;
+    const GET_DEPOT_FAILED = 110003;
+    const GET_DEPOT_LIST_FAILED = 110004;
+    const DEPOT_NOT_EXISTS = 110005;
+    const DEPOT_FORBIDDEN = 110006;
+    const DEPOT_WAIT_AUDIT = 110007;
+    const DEPOT_EXISTS = 110008;
+    const DEPOT_NOT_LOGIN = 110009;
 
 
 
@@ -114,6 +129,8 @@ class ErrorCode
         self::GET_LOCATION_FAILED => '获取位置信息失败',
         self::LOCK_USER_FAILED => '禁用用户失败',
         self::UNLOCK_USER_FAILED => '解除禁用失败',
+
+        self::ADMIN_EXIST => '手机号或用户名已存在',
 
         self::INSERT_FEEDBACK_FAILED => '保存反馈信息失败',
 
@@ -150,5 +167,12 @@ class ErrorCode
 
         self::SET_INDEX_PAGE_INFO_FAILED => '设置展示信息数据失败',
         self::DEL_INDEX_PAGE_INFO_FAILED => '删除展示信息数据失败',
+
+        self::INSERT_DEPOT_FAILED => '新建回收点失败',
+        self::DEPOT_NOT_EXISTS => '回收点不存在',
+        self::DEPOT_FORBIDDEN => '账号已封禁',
+        self::DEPOT_WAIT_AUDIT => '信息正在审核中',
+        self::DEPOT_EXISTS => '已经注册过回收点',
+        self::DEPOT_NOT_LOGIN => '请先登录'
     ];
 }

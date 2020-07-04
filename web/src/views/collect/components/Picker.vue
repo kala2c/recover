@@ -1,7 +1,8 @@
 <template>
   <div class="picker-wrap">
-    <van-popup v-model="pickerShow" position="bottom">
+    <van-popup v-model="pickerShow" position="bottom" :lazy-render='false'>
       <van-picker
+        ref="picker"
         :title="title"
         show-toolbar
         class="picker"
@@ -33,6 +34,10 @@ export default {
     toggle: {
       type: Boolean,
       default: false
+    },
+    area: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -54,13 +59,41 @@ export default {
   watch: {
     toggle() {
       this.pickerShow = !this.pickerShow
+    },
+    area(val) {
+      const area = val.split('-')
+      // let id1 = null
+      let id2 = null
+      const idArr = []
+      this.areaTable.forEach((district, index1) => {
+        if (district.text === area[0]) {
+          // id1 = district.id
+          // id1 = index1
+          idArr.push(index1)
+          district.children.forEach((street, index2) => {
+            if (street.text === area[1]) {
+              id2 = street.id // 将根据街道id自动获取小区
+              // id2 = index2
+              idArr.push(index2)
+            }
+          })
+        }
+      })
+      if (idArr.length > 1) {
+        this.$refs.picker.setColumnIndex(0, idArr[0])
+        this.$refs.picker.setColumnIndex(1, idArr[1])
+        this.$emit('confirm', area, id2, true)
+      }
     }
   },
   methods: {
     onConfirm(value, index) {
       if (this.type === 'area') {
-        const area = this.areaTable[index[0]].children[index[1]].children[index[2]]
+        // const area = this.areaTable[index[0]].children[index[1]].children[index[2]]
+        const area = this.areaTable[index[0]].children[index[1]]
+        console.log(value)
         this.$emit('confirm', value, area.id)
+        console.log(value)
       } else if (this.type === 'time') {
         this.$emit('confirm', value)
       }
@@ -111,7 +144,6 @@ export default {
   },
   created() {
     this.init()
-    console.log(this.timeTable)
   }
 }
 </script>

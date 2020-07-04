@@ -88,7 +88,7 @@
         placeholder="填写备注信息"
       />
       <div class="submit-wrap">
-        <van-button class="submit-btn" round block type="info" :disabled="submitDisabled" @click="onSubmit">
+        <van-button class="submit-btn" round block type="primary" :disabled="submitDisabled" @click="onSubmit">
           一键预约
         </van-button>
       </div>
@@ -294,7 +294,7 @@ export default {
   padding: 10px 16px;
   margin-top: 15px;
   // box-shadow: 0 2px 2px 0 #eee;
-  background-color: #fff;
+  // background-color: #fff;
   line-height: 1.5;
   .link {
     margin-left: 15px;
@@ -328,7 +328,7 @@ export default {
     color: #323233;
     font-size: 14px;
     line-height: 24px;
-    background-color: #fff;
+    // background-color: #fff;
     border-bottom: 1px solid #efffff;
     .label {
       width: 90px;
@@ -341,7 +341,7 @@ export default {
   width: 100%;
   padding: 10px 0;
   margin-top: 16px;
-  background-color: #fff;
+  // background-color: #fff;
   .submit-btn {
     width: 95%;
     margin: 0 auto;

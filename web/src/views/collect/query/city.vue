@@ -11,31 +11,7 @@
     />
     <div class="text-block">
       <h4 style="padding-bottom: 18px;">目前已开放烟台多个地区</h4>
-      <p
-        v-for="qu in areaTable"
-        :key="qu.id"
-      >
-      {{ qu.name }}
-      <br>
-      <span v-if="qu.child.length > 0">
-        <span
-          v-for="item1 in qu.child"
-          :key="item1.id"
-        >
-        {{item1.name}}:
-        <span v-if="item1.child.length > 0">
-          <span
-            v-for="item2 in item1.child"
-            :key="item2.id"
-          >
-          {{ item2.name }} &nbsp;
-          </span>
-        </span>
-        <br>
-        </span>
-        <br>
-      </span>
-      </p>
+      <list :tree="areaList"></list>
     </div>
   </div>
 </template>
@@ -43,19 +19,21 @@
 <script>
 import { NavBar } from 'vant'
 import api from '@/api/collect'
-
+import List from '../components/list'
 export default {
   components: {
-    VanNavBar: NavBar
+    VanNavBar: NavBar,
+    List
   },
   data() {
     return {
-      areaTable: []
+      areaList: []
     }
   },
   created() {
-    api.getAreaTable().then(response => {
-      this.areaTable = response.data
+    api.getAreaList().then(response => {
+      this.areaList = response.data
+      console.log(this.areaList)
     })
   }
 }
@@ -64,5 +42,8 @@ export default {
 <style scoped>
 .text-block {
   padding: 15px 32px;
+}
+.group {
+  padding-left: 15px;
 }
 </style>

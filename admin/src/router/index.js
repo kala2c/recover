@@ -26,26 +26,21 @@ import Layout from '@/layout'
  */
 export const asyncRoutes = [
   {
-    path: '/pickman',
+    path: '/depot',
     component: Layout,
-    redirect: '/pickman/index',
-    name: 'Pickman',
+    redirect: '/depot/index',
+    name: 'Depot',
     meta: {
-      title: '取货员管理',
+      title: '回收站点管理',
       icon: 'nested',
-      roles: ['super']
+      roles: ['super', 'admin']
     },
     children: [
       {
-        path: '/index',
-        component: () => import('@/views/pickman/index'),
-        meta: { title: '取货员信息', roles: ['super'] }
+        path: '/depot/index',
+        component: () => import('@/views/depot/index'),
+        meta: { title: '站点信息', roles: ['super', 'admin'] }
       }
-      // {
-      //   path: '/apply',
-      //   component: () => import('@/views/pickman/apply'),
-      //   meta: { title: '取货员申请', roles: ['super'] }
-      // }
     ]
   },
   {
@@ -90,6 +85,29 @@ export const asyncRoutes = [
     ]
   },
   // {
+  //   path: '/pickman',
+  //   component: Layout,
+  //   redirect: '/pickman/index',
+  //   name: 'Pickman',
+  //   meta: {
+  //     title: '取货员管理',
+  //     icon: 'nested',
+  //     roles: ['super']
+  //   },
+  //   children: [
+  //     {
+  //       path: '/index',
+  //       component: () => import('@/views/pickman/index'),
+  //       meta: { title: '取货员信息', roles: ['super'] }
+  //     }
+  //     // {
+  //     //   path: '/apply',
+  //     //   component: () => import('@/views/pickman/apply'),
+  //     //   meta: { title: '取货员申请', roles: ['super'] }
+  //     // }
+  //   ]
+  // },
+  // {
   //   path: '/city',
   //   component: Layout,
   //   redirect: '/city/index',
@@ -108,20 +126,51 @@ export const asyncRoutes = [
   //   ]
   // },
   {
+    path: '/waste',
+    component: Layout,
+    meta: { title: '废品管理', icon: 'example', roles: ['super'] },
+    children: [
+      {
+        path: 'index',
+        name: 'Waste',
+        component: () => import('@/views/waste/index'),
+        meta: { title: '废品种类', icon: 'table' }
+      }
+    ]
+  },
+  {
+    path: '/feedback',
+    component: Layout,
+    meta: { title: '意见反馈', icon: 'example', roles: ['super'] },
+    children: [
+      {
+        path: 'index',
+        name: 'feedback',
+        component: () => import('@/views/feedback/index'),
+        meta: { title: '意见反馈', icon: 'table' }
+      }
+    ]
+  },
+  {
     path: '/area',
     component: Layout,
-    redirect: '/area/index',
+    // redirect: '/area/index',
     name: 'Area',
     meta: {
       title: '区域管理',
       icon: 'tree',
-      roles: ['super']
+      roles: ['super', 'admin']
     },
     children: [
       {
         path: 'index',
         component: () => import('@/views/area/index'),
         meta: { title: '区域管理', roles: ['super'] }
+      },
+      {
+        path: 'lowadmin',
+        component: () => import('@/views/area/lowadmin'),
+        meta: { title: '区域管理', roles: ['admin'] }
       }
     ]
   },
@@ -165,20 +214,6 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: '仪表盘', icon: 'dashboard' }
     }]
-  },
-
-  {
-    path: '/waste',
-    component: Layout,
-    meta: { title: '废品管理', icon: 'example' },
-    children: [
-      {
-        path: 'index',
-        name: 'Waste',
-        component: () => import('@/views/waste/index'),
-        meta: { title: '废品种类', icon: 'table' }
-      }
-    ]
   },
   {
     path: '/user',

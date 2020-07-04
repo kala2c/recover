@@ -97,6 +97,7 @@ export default {
   },
   mounted() {
     this.bannerItemList = document.querySelectorAll('.swiper-item')
+    console.log('测试', this.bannerItemList)
     this.bindTouch()
     this.bindRoll()
   }

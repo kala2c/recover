@@ -2,18 +2,34 @@
 
 namespace app\admin\model;
 
+use app\common\error\ErrorCode;
+use app\common\exception\DataException;
 use app\common\model\Base;
+use think\db\exception\ModelNotFoundException;
+use think\exception\DbException;
 
 class Administrator extends Base
 {
+
+    const LEVEL_DEPOT = 100;
+
     /**
      * 添加新用户
      * @param $data
      * @return Administrator
+     * @throws DataException
+     * @throws DbException
      */
     public static function add($data)
     {
-        $data['level'] = 500;
+        $admin = self::where('username', $data['username'])->whereOr('mobile', $data['mobile'])->find();
+        if ($admin) {
+            throw new DataException(ErrorCode::ADMIN_EXIST);
+        }
+        if (!isset($data['level'])) {
+            $data['level'] = 500;
+        }
+        $data['permission'] = 'admin';
         $data = self::addTimeField($data);
         return self::create($data);
     }

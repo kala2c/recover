@@ -12,6 +12,16 @@ const getLocation = () => request({
   url: '/web/user/location'
 })
 
+const getTextLoc = (params) => request({
+  params,
+  url: '/web/user/textloc'
+})
+
+const getStreet = (params) => request({
+  params,
+  url: '/web/user/street'
+})
+
 const getBannerList = () => request({
   url: '/web/collect/banner'
 })
@@ -58,6 +68,15 @@ const getAreaTable = () => request({
   url: '/collect/area'
 })
 
+const getAreaList = () => request({
+  url: '/collect/arealist'
+})
+
+const getCommunity = (params) => request({
+  params: params,
+  url: '/collect/community'
+})
+
 const getOrderInfo = () => request({
   url: '/collect/orderinfo'
 })
@@ -85,9 +104,20 @@ const getOrderList = (params) => request({
   params
 })
 
+const getCustom = (params) => request({
+  url: '/collect/custom',
+  params
+})
+
+const getSelfCommunity = (params) => request({
+  url: '/collect/selfCommunity'
+})
+
 export default {
   getSdkConf,
   getLocation,
+  getTextLoc,
+  getStreet,
   getBannerList,
   getPickmanList,
   submitFeedback,
@@ -97,9 +127,13 @@ export default {
   saveAddress,
   setDefaultAddress,
   getAreaTable,
+  getAreaList,
+  getCommunity,
   getOrderInfo,
   submitOrder,
   cancelOrder,
   getOrderDetail,
-  getOrderList
+  getOrderList,
+  getCustom,
+  getSelfCommunity
 }

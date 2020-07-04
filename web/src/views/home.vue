@@ -5,7 +5,7 @@
         <router-link to="/collect">我要回收物品</router-link>
       </div>
       <div class="link-wrap">
-        <router-link to="/pick">我要当回收员</router-link>
+        <router-link to="/depot">我是回收人员</router-link>
       </div>
     </div>
   </div>

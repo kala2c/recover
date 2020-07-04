@@ -2,7 +2,52 @@
   <div>
     <!-- 卡片视图区域 -->
     <el-card>
-
+      <el-row :gutter="20">
+        <el-col :span="4">
+          <el-button type="primary" @click="addCountyDialogVisible = true">新增县(区)</el-button>
+        </el-col>
+      </el-row>
+      <el-dialog title="添加县（区）" :visible.sync="addCountyDialogVisible" width="50%" @close="addCountyDialogClose">
+        <!-- 内容主体区域 -->
+        <el-form ref="addCountyFormRef" :model="addCountyForm" label-width="90px">
+          <el-form-item label="名称" prop="name">
+            <el-input v-model="addCountyForm.name" />
+          </el-form-item>
+          <el-form-item label="代理" prop="administrator_id">
+            <el-select v-model="addCountyForm.admin_id" placeholder="请选择代理">
+              <el-option
+                label="先不设置"
+                checked
+                value="0"
+              />
+              <el-option
+                v-for="admin in adminList"
+                :key="admin.id"
+                :label="admin.note + ' ' + admin.mobile"
+                :value="admin.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <!-- 底部区域 -->
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="addCountyDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="addAreaCounty">确 定</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog title="新增地区" :visible.sync="addDialogVisible" width="50%" @close="addDialogClose">
+        <!-- 内容主体区域 -->
+        <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="90px">
+          <el-form-item label="名称" prop="name">
+            <el-input v-model="addForm.name" />
+          </el-form-item>
+        </el-form>
+        <!-- 底部区域 -->
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="addDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="addArea">确 定</el-button>
+        </span>
+      </el-dialog>
       <!-- 列表区域 -->
       <el-tree
         :data="areaTable"
@@ -16,6 +61,14 @@
           <span class="content">{{ node.label }} </span>
           <span class="button-wrap">
             <el-button
+              v-if="data.level >= 3"
+              type="text"
+              size="mini"
+              @click="setAdmin(node, data)"
+            >
+              变更负责人
+            </el-button>
+            <el-button
               v-if="data.level > 1"
               type="text"
               size="mini"
@@ -24,44 +77,23 @@
               增加
             </el-button>
             <el-button
+              v-if="data.id != 1"
               type="text"
               size="mini"
               @click="removeArea(node, data)"
             >
               删除
             </el-button>
-            <el-button
-              :disabled="data.level < 3"
-              type="text"
-              size="mini"
-              @click="setAdmin(node, data)"
-            >
-              变更负责人
-            </el-button>
             <span>{{ data.administrator.note }}</span>
           </span>
         </span>
       </el-tree>
     </el-card>
-    <el-dialog title="添加地区" :visible.sync="addDialogVisible" width="50%" @close="addDialogClose">
-      <!-- 内容主体区域 -->
-      <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="70px">
-        <el-form-item label="名称" prop="username">
-          <el-input v-model="addForm.name" />
-        </el-form-item>
-      </el-form>
-      <!-- 底部区域 -->
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="addDialogClose">取 消</el-button>
-        <el-button type="primary" @click="addArea">确 定</el-button>
-      </span>
-    </el-dialog>
-
-    <el-dialog title="设置管理员" :visible.sync="setAdminDialogVisible" width="50%" @close="setAdminDialogClose">
+    <el-dialog title="设置代理" :visible.sync="setAdminDialogVisible" width="50%" @close="setAdminDialogClose">
       <!-- 内容主体区域 -->
       <el-form ref="setAdminFormRef" label-width="70px">
-        <el-form-item label="管理员" prop="username">
-          <el-select v-model="setAdminForm.admin_id" placeholder="请选择管理员">
+        <el-form-item label="代理" prop="username">
+          <el-select v-model="setAdminForm.admin_id" placeholder="请选择代理">
             <el-option
               v-for="admin in adminList"
               :key="admin.id"
@@ -86,10 +118,15 @@ export default {
   data() {
     return {
       // 控制添加地区对话框的显示与隐藏
+      addCountyDialogVisible: false,
       addDialogVisible: false,
       // 控制修改地区信息对话框的显示与隐藏
       setAdminDialogVisible: false,
       // 表单数据
+      addCountyForm: {
+        name: '',
+        admin_id: ''
+      },
       addForm: {
         name: ''
       },
@@ -140,7 +177,23 @@ export default {
         this.expandedKeys.push(id)
       }
     },
+    // 点击按钮
+    async addAreaCounty() {
+      this.addCountyForm.top_id = 0
+      const data = await areaApi.appendArea(this.addCountyForm)
+      if (data.code !== 10000) {
+        this.$message.error('添加失败')
+      }
+      // 隐藏对话框
+      this.addCountyDialogVisible = false
+      // 重新获取列表数据
+      this.getAreaTable()
+    },
     // 添加表单关闭的事件
+    addCountyDialogClose() {
+      this.$refs.addCountyFormRef.resetFields()
+      this.addCountyDialogVisible = false
+    },
     addDialogClose() {
       this.$refs.addFormRef.resetFields()
       this.addDialogVisible = false
@@ -186,10 +239,10 @@ export default {
     },
     saveAreaAdmin() {
       if (!this.setAdminForm.admin_id) {
-        this.$message.error('请选择管理员')
+        this.$message.error('请选择代理')
         return false
       }
-      this.$confirm('该地区及下属地区将全部被变更', '变更管理员', {
+      this.$confirm('该地区及下属地区将全部被变更', '变更代理', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

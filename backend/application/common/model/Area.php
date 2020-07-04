@@ -12,49 +12,29 @@ use think\exception\DbException;
 
 class Area extends Base
 {
-    const LEVEL_JWH = 1;
-    const LEVEL_JD  = 2;
-    const LEVEL_QU  = 3;
+    const LEVEL_COMMUNITY = 1;
+    const LEVEL_STREET  = 2;
+    const LEVEL_COUNTY  = 3;
 
     const LEVEL_STEP = 1; // 等级步长 即上级减下级
 
     public static $LEVEL_MSG = [
-        self::LEVEL_JWH => '居委会',
-        self::LEVEL_JD => '街道',
-        self::LEVEL_QU => '区'
+        self::LEVEL_COMMUNITY => '小区',
+        self::LEVEL_STREET => '街道',
+        self::LEVEL_COUNTY => '县(区)'
     ];
 
-    /**
-     * 获取区域列表
-     * @throws DbException
-     */
-//    static public function getList()
-//    {
-//        $list = self::with('pickman')->order('level', 'desc')->order('top_id')->select()->toArray();
-//        $qu = [];
-//        $jd = [];
-//        $rlt = [];
-//        foreach ($list as $area) {
-//            if ($area['level'] == self::LEVEL_QU) {
-//                $qu[$area['id']] = $area;
-//            } elseif ($area['level'] == self::LEVEL_JD) {
-//                if (array_key_exists($area['top_id'], $qu)) {
-//                    $area['top'] = $qu[$area['top_id']];
-//                }
-//                $jd[$area['id']] = $area;
-//            } elseif ($area['level'] == self::LEVEL_JWH) {
-//                if (array_key_exists($area['top_id'], $jd)) {
-//                    $area['top'] = $jd[$area['top_id']];
-//                }
-//                $rlt[] = $area;
-//            }
-//        }
-//        return $rlt;
-//    }
+    const OTHER_COMMUNITY_ID = 1;
+    const TOP_START_ID = 0;
+    const STATUS_NORMAL = 0;
+    const STATUS_DELETE = 1;
+    const CITY_YANTAI = 1;
+    const SUPER_ADMIN_ID = 1;
 
     /**
      * 获取树形区域列表 上级.child = 下级
      * @param string $field
+     * @param bool $area 是否只选择两级 默认否
      * @return array
      * @throws DataException
      * @throws DataNotFoundException
@@ -62,50 +42,89 @@ class Area extends Base
      * @return mixed
      */
     const FRONTEND_INFO = 'id,level,top_id,name';
-    static public function getTree($city_id)
+    const SHOW_TWO_LEVEL_AREA = true;
+    const SHOW_ALL_LEVEL_AREA = false;
+    static public function getTree($city_id, $area = false)
     {
+        if ($area) {
+            $map = [
+                ['level', 'in', [self::LEVEL_STREET, self::LEVEL_COUNTY]]
+            ];
+        } else {
+            $map = [
+                ['id', '<>', self::OTHER_COMMUNITY_ID]
+            ];
+        }
         $list = self::field(self::FRONTEND_INFO)
-            ->where('city_id', $city_id)
+            ->where([
+                ['city_id', '=', self::CITY_YANTAI],
+                ['status', '=', self::STATUS_NORMAL]
+            ])
+            ->where($map)
             ->order('level')
             ->select()->toArray();
-        return self::list2tree($list);
+
+        return self::arr2tree($list, self::TOP_START_ID);
     }
 
     /**
-     * 将线性表转为树
-     * @param $list
+     * 根据城市id获取区域线性表
+     * @param $city_id
+     * @return mixed
+     * @throws DbException
+     */
+    static public function getList($city_id)
+    {
+        $list = self::with(['administrator'])->where('city_id', $city_id)->select()->toArray();
+        return $list;
+    }
+
+    /**
+     * 线性表转树
+     * @param $arr
+     * @param $pid
      * @return array
      */
-    static private function list2tree($list) {
-        $qu = [];
-        $jd = [];
-        $rlt = [];
-        foreach ($list as $area) {
-            if ($area['level'] == self::LEVEL_QU) {
-                if (array_key_exists($area['id'], $qu)) {
-                    $area['child'] = $qu[$area['id']];
+    static public function arr2tree($arr, $pid) {
+        $pid_key_text = 'top_id';
+        $primary_key_text = 'id';
+        $child_text = 'child';
+        $temp = [];
+        $treeArr = $arr;
+        foreach ($treeArr as $index => $item) {
+            if ($item[$pid_key_text] === $pid) {
+                $a2t = self::arr2tree($treeArr, $treeArr[$index][$primary_key_text]);
+                if (count($a2t) > 0) {
+                    // 递归
+                    $treeArr[$index][$child_text] = $a2t;
                 }
-                $rlt[] = $area;
-            } elseif ($area['level'] == self::LEVEL_JD) {
-                if (array_key_exists($area['id'], $jd)) {
-                    $area['child'] = $jd[$area['id']];
-                }
-                $qu[$area['top_id']][] = $area;
-            } elseif ($area['level'] == self::LEVEL_JWH) {
-                $jd[$area['top_id']][] = $area;
+                array_push($temp, $treeArr[$index]);
             }
         }
-        return $rlt;
+        return $temp;
     }
 
     /**
      * 获取带有管理员信息的地区信息
+     * @param $admin_id
      * @return array
      * @throws DbException
      */
-    static public function getTreeWithAdmin() {
-        $list = self::with('administrator')->where('city_id', 1)->order('level')->select();
-        return self::list2tree($list);
+    static public function getTreeWithAdmin($admin_id) {
+        $map = [
+            ['city_id', '=', self::CITY_YANTAI],
+            ['status', '=', self::STATUS_NORMAL]
+        ];
+//        如果不是超管 只能看自己代理地区
+        if ($admin_id != self::SUPER_ADMIN_ID) {
+            array_push($map, ['administrator_id', '=', $admin_id]);
+        }
+        $list = self::with('administrator')
+                ->where($map)
+                ->order('level')
+                ->order('id', 'desc')
+                ->select();
+        return self::arr2tree($list, self::TOP_START_ID);
     }
 
     /**
@@ -118,17 +137,27 @@ class Area extends Base
     public static function add($top_id, $name)
     {
         $top_area = self::get($top_id);
-        if (!$top_area) {
+//        添加县区时不需要判断
+        if ($top_id != self::TOP_START_ID && !$top_area) {
             throw new DataException(ErrorCode::AREA_NOT_EXISTS);
         }
-        if ($top_area->level <= self::LEVEL_JWH) {
+        if ($top_id != self::TOP_START_ID && $top_area->level <= self::LEVEL_COMMUNITY) {
             throw new DataException(ErrorCode::AREA_LEVEL_LOW);
         }
+//        不设置管理员就是超管的
+        $administrator_id = $data['admin_id'] ?? self::SUPER_ADMIN_ID;
         $data = [
             'top_id' => $top_id,
             'name' => $name,
-            'administrator_id' => $top_area->administrator_id,
-            'level' => $top_area->level-self::LEVEL_STEP
+            'city_id' => self::CITY_YANTAI,
+            'administrator_id' =>
+                $top_id != self::TOP_START_ID
+                    ? $top_area->administrator_id
+                    : $administrator_id,
+            'level' =>
+                $top_id != self::TOP_START_ID
+                    ? $top_area->level-self::LEVEL_STEP
+                    : self::LEVEL_COUNTY
         ];
         $data = self::addTimeField($data);
         return self::create($data);
@@ -145,16 +174,9 @@ class Area extends Base
     public static function setAdmin($area_id, $admin_id)
     {
         array_push(self::$area_id_list, $area_id);
-//        self::$area_id_list[] = $top_id;
+//        递归查找下级存储在类属性中
         self::findChild([$area_id]);
 
-//        $data = [];
-//        foreach (self::$area_id_list as $id) {
-//            array_push($data, self::addTimeField([
-//                'admin_id' => $admin_id,
-//                'id' => $id
-//            ], false));
-//        }
         $data = self::addTimeField([
             'administrator_id' => $admin_id
         ], true);

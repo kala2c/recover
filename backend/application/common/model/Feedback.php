@@ -11,6 +11,6 @@ class Feedback extends Base
      */
     public function User()
     {
-        return $this->hasOne('User');
+        return $this->belongsTo('User');
     }
 }

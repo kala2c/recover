@@ -123,7 +123,8 @@ class TakeOrder extends Pickman
         if (!$validate->check($data)) {
             throw new ValidateException($validate->getError());
         }
-        $rlt = OrderMasterModel::setPickman($data['order_id'], $this->pickman);
+        $rlt = OrderMasterModel::
+        setPickman($data['order_id'], $this->pickman);
         if (!$rlt) {
             throw new ApiException(ErrorCode::TAKE_ORDER_FAILED);
         }

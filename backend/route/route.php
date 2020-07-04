@@ -38,6 +38,11 @@ Route::post('/admin/order/CompleteOrder','admin/order/CompleteOrder');
 Route::get('/admin/pickman/PickmanList','admin/pickman/PickmanList');
 Route::post('/admin/pickman/PickmanStatus','admin/pickman/PickmanStatus');
 Route::post('/admin/pickman/setArea','admin/pickman/setArea');
+//管理员端 站点相关
+Route::get('/admin/depot/depotList','admin/Depot/depotList');
+//Route::post('/admin/depot/PickmanStatus','admin/depot/PickmanStatus');
+Route::post('/admin/depot/setArea','admin/depot/setArea');
+Route::post('/admin/depot/searcharea','admin/depot/searchArea');
 // 管理员端 地区相关
 Route::get('/admin/area/list','admin/area/getList');
 Route::get('/admin/area/adminlist','admin/area/getAdminList');
@@ -48,6 +53,9 @@ Route::post('/admin/area/setAdmin','admin/area/setAdmin');
 Route::get('/admin/banner/list','admin/IndexPage/getBannerList');
 Route::post('/admin/banner/append','admin/IndexPage/addBanner');
 Route::post('/admin/banner/delete','admin/IndexPage/delBanner');
+//管理员端 留言相关
+Route::get('/admin/feedback/list','admin/Feedback/getList');
+Route::post('/admin/feedback/delete','admin/Feedback/delete');
 
 //工具相关
 Route::get('/admin/dashboard', 'admin/Administrator/dashboard');
@@ -66,13 +74,22 @@ Route::get('/web/collect/banner', 'web/Index/getBannerList');
 //用户信息
 Route::get('/web/user/info', 'web/User/info');
 Route::get('/web/user/location', 'web/User/getLocation');
+Route::get('/web/user/textloc', 'web/User/getTextLoc');
+Route::get('/web/user/street', 'web/User/getStreetInfo');
 Route::get('/web/pickman/list', 'web/User/getPickmanList');
+
+Route::get('/collect/selfCommunity', 'web/User/selfCommunity');
+Route::get('/collect/custom', 'web/User/custom');
+
+
 // 提交反馈
 Route::post('/collect/feedback', 'web/FeedBack/create');
 // 地址相关
 Route::get('/collect/address', 'web/Address/get');
 Route::get('/collect/addresses', 'web/Address/getList');
-Route::get('/collect/area', 'web/Address/getArea');
+Route::get('/collect/area', 'web/Address/getAreaTable');
+Route::get('/collect/arealist', 'web/Address/getAreaList');
+Route::get('/collect/community', 'web/Address/getCommunity');
 Route::post('/collect/address/set', 'web/Address/set');
 Route::post('/collect/address/default', 'web/Address/setDefault');
 // 订单相关
@@ -81,6 +98,17 @@ Route::post('/collect/order', 'web/Order/set');
 Route::post('/collect/cancelorder', 'web/Order/cancel');
 Route::get('/collect/order', 'web/Order/get');
 Route::get('/collect/orders', 'web/Order/getList');
+
+// 回收点信息
+Route::get('/depot/info', 'web/Depot/info');
+Route::post('/depot/signin', 'web/User/depotSignIn');
+// 回收点订单相关
+Route::get('/depot/takeorders', 'web/DepotOrder/getTakeOrders');
+//Route::post('/depot/deliveredorder', 'web/TakeOrder/delivered');
+Route::get('/depot/orders', 'web/DepotOrder/getList');
+Route::post('/depot/order/take', 'web/DepotOrder/takeOrder');
+//Route::get('/depot/navigate', 'web/Pickman/navigate');
+
 // 取货员信息
 Route::get('/pickman/info', 'web/Pickman/info');
 Route::post('/pickman/signup', 'web/User/addPickman');

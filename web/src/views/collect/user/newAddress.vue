@@ -25,26 +25,42 @@
           <p class="cell-text">{{formData.area}}</p>
         </template>
       </van-cell>
+      <van-cell title="选择小区" is-link @click="communityPickerShow = true">
+        <template #default>
+          <p class="cell-text">{{communityName || '未选择'}}</p>
+        </template>
+      </van-cell>
       <van-field
         label="详细地址"
         v-model="formData.detail"
-        placeholder="填写街道-小区-门牌号"
+        placeholder="填写到门牌号"
       />
       <div class="default-switch form-ctrl" v-if="isEdit">
         <div class="label">设为默认</div>
         <van-switch v-model="switchChecked" :disabled="switchDisabled" />
       </div>
       <div class="submit-wrap">
-        <van-button class="submit-btn" round block type="info" :disabled="submitDisabled" @click="onSubmit">
+        <van-button class="submit-btn" round block type="primary" :disabled="submitDisabled" @click="onSubmit">
           提交
         </van-button>
       </div>
     </div>
+    <van-popup v-model="communityPickerShow" position="bottom">
+      <van-picker
+        title="选择小区"
+        show-toolbar
+        class="picker"
+        :columns="communityCols"
+        @confirm="onChoseCommunity"
+        @cancel="communityPickerShow = false"
+        />
+    </van-popup>
     <picker
       ref="picker"
       :title="pickerTitle"
       :type="pickerType"
       :toggle="pickerShow"
+      :area="areaSelected"
       @confirm="onConfirm"
       @cancel="pickerShow = !pickerShow"
     />
@@ -54,8 +70,9 @@
 <script>
 import store from '@/store'
 import api from '@/api/collect'
-import { NavBar, Toast, Field, Cell, Button, Switch } from 'vant'
-import Picker from '@/views/collect/components/Picker'
+import sysApi from '@/api/index'
+import { NavBar, Picker, Toast, Field, Cell, Button, Switch, Popup } from 'vant'
+import MyPicker from '@/views/collect/components/Picker'
 export default {
   components: {
     VanNavBar: NavBar,
@@ -63,16 +80,25 @@ export default {
     VanCell: Cell,
     VanButton: Button,
     VanSwitch: Switch,
-    Picker: Picker
+    Picker: MyPicker,
+    VanPicker: Picker,
+    VanPopup: Popup
   },
   data() {
     return {
       pickerTitle: '选择地区',
       pickerShow: false,
       pickerType: 'area',
+      communityPickerShow: false,
       switchChecked: true,
       switchDisabled: true,
       submitDisabled: false,
+      communityList: [],
+      communityCols: [],
+      communityChosenIndex: 0,
+      street: '',
+      areaId: 0,
+      areaSelected: '',
       isEdit: false,
       cbPath: '',
       formData: {
@@ -82,6 +108,18 @@ export default {
         area: '未选择',
         area_id: '',
         detail: ''
+      }
+    }
+  },
+  computed: {
+    communityName() {
+      return this.communityList[this.communityChosenIndex] && this.communityList[this.communityChosenIndex].name
+    },
+    area() {
+      if (this.communityName) {
+        return this.street + '-' + this.communityName
+      } else {
+        return this.street
       }
     }
   },
@@ -99,6 +137,20 @@ export default {
           store.dispatch('loading/close')
         })
       }
+    },
+    areaId(val) {
+      api.getCommunity({ street_id: val }).then(response => {
+        const data = response.data
+        this.communityList = []
+        this.communityCols = []
+        this.communityList = data
+        this.communityList.forEach(item => {
+          this.communityCols.push(item.name)
+        })
+      })
+    },
+    area(val) {
+      this.formData.area = val
     }
   },
   methods: {
@@ -106,14 +158,69 @@ export default {
       this.$router.replace({ path: this.cbPath || '/collect/user/address' })
     },
     openAreaPicker() {
-      this.pickerTitle = '选择地区'
+      this.pickerTitle = '选择街道'
       this.pickerType = 'area'
       this.pickerShow = !this.pickerShow
     },
-    onConfirm(value, areaId) {
-      this.pickerShow = !this.pickerShow
-      this.formData.area = value && value.join('-')
-      this.formData.area_id = areaId || 0
+    onConfirm(value, areaId, isShow) {
+      // 判断是不是自动填入 自动填入时不需要改变展示状态
+      if (!isShow) {
+        this.pickerShow = !this.pickerShow
+      }
+      this.street = value && value.join('-')
+      this.areaId = areaId || 0
+    },
+    onChoseCommunity(value, communityIndex) {
+      // console.log(value, communityIndex)
+      this.communityChosenIndex = communityIndex
+      this.formData.area_id = this.communityList[communityIndex].id || 0
+      this.communityPickerShow = false
+    },
+    // 获取当前位置
+    async getLocation() {
+      const that = this
+      const wx = window.wx
+      await sysApi.getWxsdkConf({
+        url: location.href.split('#')[0]
+      }).then(res => {
+        const data = res.data
+        wx.config({
+          debug: false,
+          appId: data.appId,
+          timestamp: data.timestamp,
+          nonceStr: data.nonceStr,
+          signature: data.signature,
+          jsApiList: ['getLocation']
+        })
+        wx.ready(() => {
+          wx.getLocation({
+            type: 'gcj02',
+            success: function (res) {
+              const selfLocation = res.latitude + ',' + res.longitude
+              api.getStreet({
+                location: selfLocation
+              }).then(response => {
+                const data = response.data
+                const areaInfo = data.regeocode && data.regeocode.addressComponent
+                if (!areaInfo) {
+                  Toast('自动获取位置失败')
+                } else {
+                  const { city, district, township } = areaInfo
+                  // const { city, district, township, streetNumber } = areaInfo
+                  console.log(city, district, township)
+                  // const detail = streetNumber.street + streetNumber.number
+                  // this.formData.area = district + '-' + township
+                  that.areaSelected = district + '-' + township
+                  console.log(that.areaSelected)
+                  // that.formData.detail = detail || ''
+                }
+              })
+            }
+          })
+        })
+      }).catch(res => {
+        // console.log(res)
+      })
     },
     onSubmit() {
       if (!this.formData.name) {
@@ -161,6 +268,7 @@ export default {
     const id = this.$route.query.id
     const cbPath = this.$route.query && this.$route.query.cbPath
     this.cbPath = cbPath
+    // 编辑时
     if (id) {
       store.dispatch('loading/open')
       api.getAddressById(id).then(response => {
@@ -168,7 +276,10 @@ export default {
         this.formData.id = data.id
         this.formData.name = data.name
         this.formData.phone = data.phone
-        this.formData.area = data.area
+        const area = data.area.split('-')
+        area.pop()
+        this.formData.area = area.join('-')
+        console.log(data.area.split('-').pop())
         this.formData.area_id = data.area_id
         this.formData.detail = data.detail
         this.isEdit = true
@@ -178,6 +289,8 @@ export default {
         }
         store.dispatch('loading/close')
       })
+    } else {
+      this.getLocation()
     }
   }
 }

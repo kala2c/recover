@@ -15,7 +15,7 @@ use think\Exception\DbException;
 use think\exception\ValidateException;
 use think\facade\Validate;
 use app\common\model\OrderMaster as OrderMasterModel;
-
+use app\common\model\Depot as DepotModel;
 
 /**
  * 用户下单 订单进度等
@@ -29,6 +29,7 @@ class Order extends Base
      * @return mixed
      * @throws ApiException
      * @throws DataException
+     * @throws DbException
      */
     public function set()
     {
@@ -39,14 +40,14 @@ class Order extends Base
             'username' => 'require',
             'phone' => 'require',
             'area' => 'require',
-            'address_detail' => 'require',
+//            'address_detail' => 'require',
 //            'pick_fast' => 'number', 1-尽快上门 2-预约时间
 //            'pick_time' => '',
 //            'note' => ''
         ], [
             'waste_id' => '请选择物品类型',
             'waste_number.require' => '请填写预估数量',
-            'address_detail.require' => '请填写取货地址',
+//            'address_detail.require' => '请填写取货地址',
             'area.require' => '请填写取货地址',
             'username.require' => '请填写联系人姓名',
             'phone.require' => '请填写联系人手机号'
@@ -63,8 +64,10 @@ class Order extends Base
         if (!$rlt) {
             throw new ApiException(ErrorCode::INSERT_ORDER_FAILED);
         }
+        // 通知回收点
+        $this->notifyDepot($rlt);
         // 通知回收员
-        $this->notifyPickman($rlt);
+//        $this->notifyPickman($rlt);
         return successWithMsg('成功');
     }
 
@@ -147,6 +150,51 @@ class Order extends Base
     }
 
     /**
+     * 通知回收点
+     * @param $order
+     * @throws DbException
+     */
+    private function notifyDepot($order) {
+        // 根据区域信息获取到回收员信息
+        $area_id = $order->area_id;
+        if (!$area_id) return;
+        $depot = DepotModel::where('area_id', $area_id)->find();
+        if (!$depot) return;
+        // 组装模板信息
+        $template_id = config('secret.wx.templateId.newOrderNotify');
+        $time = date('m-d H:i:s', strtotime($order->pick_time));
+        $data = [
+            "first" => [
+                "value" => '有用户下单了',
+                "color" => "#173177"
+            ],
+            "keyword1" => [
+                "value" => $order->pick_fast == 1 ? '尽快上门' : '用户预约'.$time,
+                "color" => "#173177"
+            ],
+            "keyword2" => [
+                "value" => $order->waste->name.$order->waste_number.$order->waste->unit,
+                "color" => "#173177"
+            ],
+            "keyword3" => [
+                 "value" => $order->phone,
+                 "color" => "#173177"
+            ],
+            "remark" => [
+                "value" => $order->address_detail,
+                "color" => "#173177"
+            ]
+        ];
+        // 接单页面
+        $url = config('secret.wx.takeOrderUrl');
+        // 根据回收员openid发送通知
+        $wx = new Wx();
+        $openid = $depot->openid ?? null;
+        if (empty($openid)) return;
+        $wx->sendMessage($openid, $template_id, $url, $data);
+    }
+
+    /**
      * 通知回收员新订单
      * @param $order
      */
@@ -176,7 +224,7 @@ class Order extends Base
             ],
         ];
         // 接单页面
-        $url = "http://testwx2.c2wei.cn/#/pick/take?refresh=1";
+        $url = config('secret.wx.takeOrderUrl');
         // 根据回收员openid发送通知
         $wx = new Wx();
         foreach ($pickmen as $pickman) {
