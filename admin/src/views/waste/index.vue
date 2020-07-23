@@ -87,15 +87,16 @@
     <el-dialog
       title="修改废品信息"
       :visible.sync="editDialogVisible"
+      :close-on-click-modal="false"
       width="40%"
     >
       <el-form ref="editFormRef" :model="editForm" :rules="wasteFormRules" label-width="70px">
         <el-form-item label="名称" prop="name">
           <el-input v-model="editForm.name" />
         </el-form-item>
-        <el-form-item label="图片" prop="image">
-          <el-input v-model="editForm.image" />
-        </el-form-item>
+<!--        <el-form-item label="图片" prop="image">-->
+<!--          <el-input v-model="editForm.image" />-->
+<!--        </el-form-item>-->
         <el-form-item label="单位" prop="unit">
           <el-input v-model="editForm.unit" />
         </el-form-item>
@@ -141,24 +142,21 @@ export default {
       wasteFormRules: {
         name: [
           { required: true, message: '请输入废品名称', trigger: 'blur' }
-        ],
-        price: [
-          { required: true, message: '请输入废品单价', trigger: 'blur' },
-          {
-            validator(rule, value, callback) {
-              var reg = /^-?\d{1,5}(?:\.\d{1,2})?$/
-              if (reg.test(value)) {
-                callback()
-              } else {
-                callback(new Error('请输入大于零小于十万且不超过两位小数的数字'))
-              }
-            },
-            trigger: 'change'
-          }
-        ],
-        unit: [
-          { required: true, message: '请输入废品单位', trigger: 'blur' }
         ]
+        // price: [
+        //   { required: true, message: '请输入废品单价', trigger: 'blur' }
+        // {
+        //   validator(rule, value, callback) {
+        //     var reg = /^-?\d{1,5}(?:\.\d{1,2})?$/
+        //     if (reg.test(value)) {
+        //       callback()
+        //     } else {
+        //       callback(new Error('请输入大于零小于十万且不超过两位小数的数字'))
+        //     }
+        //   },
+        //   trigger: 'change'
+        // }
+        // ]
       }
     }
   },

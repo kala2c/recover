@@ -38,13 +38,13 @@ class Index extends Controller
         $echostr = Request::param('echostr');
         $token = 'recover';
         //校验微信服务器的接入请求
-        $tmpArr = array($token, $timestamp, $nonce);
-        sort($tmpArr, SORT_STRING);
-        $tmpStr = implode( $tmpArr );
-        $tmpStr = sha1( $tmpStr );
-        if ($tmpStr == $signature){
-            return $echostr;
-        }
-        return '';
+//        $tmpArr = array($token, $timestamp, $nonce);
+//        sort($tmpArr, SORT_STRING);
+//        $tmpStr = implode( $tmpArr );
+//        $tmpStr = sha1( $tmpStr );
+//        if ($tmpStr == $signature){
+//            return $echostr;
+//        }
+        return $echostr;
     }
 }

@@ -29,6 +29,33 @@
       <div
         class="waste-grid-item"
         @click="$router.push('/collect/subscribe')"
+      >
+        <div class="waste-grid-item-pic">
+          <img class="icon" :src="baseUrl + '/icon/wastes-phone.png'" alt="">
+        </div>
+        <p class="waste-grid-item-text">数码产品</p>
+      </div>
+      <div
+        class="waste-grid-item"
+        @click="$router.push('/collect/subscribe')"
+      >
+        <div class="waste-grid-item-pic">
+          <img class="icon" :src="baseUrl + '/icon/wastes-fridge.png'" alt="">
+        </div>
+        <p class="waste-grid-item-text">家电产品</p>
+      </div>
+      <div
+        class="waste-grid-item"
+        @click="$router.push('/collect/subscribe')"
+      >
+        <div class="waste-grid-item-pic">
+          <img class="icon" :src="baseUrl + '/icon/wastes-3.png'" alt="">
+        </div>
+        <p class="waste-grid-item-text">金属产品</p>
+      </div>
+      <div
+        class="waste-grid-item"
+        @click="$router.push('/collect/subscribe')"
         >
         <div class="waste-grid-item-pic">
           <img class="icon" :src="baseUrl + '/icon/wastes-1.png'" alt="">
@@ -49,7 +76,7 @@
         @click="$router.push('/collect/subscribe')"
         >
         <div class="waste-grid-item-pic">
-          <img class="icon" :src="baseUrl + '/icon/wastes-3.png'" alt="">
+          <img class="icon" :src="baseUrl + '/icon/wastes-plastic.png'" alt="">
         </div>
         <p class="waste-grid-item-text">塑料</p>
       </div>

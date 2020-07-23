@@ -18,7 +18,7 @@ function createOauthUrl(state) {
     state: state
   }
   if (process.env.NODE_ENV === 'development') {
-    params.appid = 'wxb06bf22b4b5e6a5d'
+    params.appid = 'wx3df1334ac159289e'
   }
   const baseUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize'
   return baseUrl + '?' + Qs.stringify(params) + '#wechat_redirect'
