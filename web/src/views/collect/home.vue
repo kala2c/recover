@@ -28,7 +28,34 @@
     <div class="waste-grid">
       <div
         class="waste-grid-item"
-        @click="$router.push('/collect/subscribe')"
+        @click="$router.push('/collect/subscribe/1')"
+      >
+        <div class="waste-grid-item-pic">
+          <img class="icon" :src="baseUrl + '/icon/wastes-1.png'" alt="">
+        </div>
+        <p class="waste-grid-item-text">衣服</p>
+      </div>
+      <div
+        class="waste-grid-item"
+        @click="$router.push('/collect/subscribe/2')"
+      >
+        <div class="waste-grid-item-pic">
+          <img class="icon" :src="baseUrl + '/icon/wastes-2.png'" alt="">
+        </div>
+        <p class="waste-grid-item-text">纸壳</p>
+      </div>
+      <div
+        class="waste-grid-item"
+        @click="$router.push('/collect/subscribe/3')"
+      >
+        <div class="waste-grid-item-pic">
+          <img class="icon" :src="baseUrl + '/icon/wastes-plastic.png'" alt="">
+        </div>
+        <p class="waste-grid-item-text">塑料</p>
+      </div>
+      <div
+        class="waste-grid-item"
+        @click="$router.push('/collect/subscribe/4')"
       >
         <div class="waste-grid-item-pic">
           <img class="icon" :src="baseUrl + '/icon/wastes-phone.png'" alt="">
@@ -37,7 +64,7 @@
       </div>
       <div
         class="waste-grid-item"
-        @click="$router.push('/collect/subscribe')"
+        @click="$router.push('/collect/subscribe/5')"
       >
         <div class="waste-grid-item-pic">
           <img class="icon" :src="baseUrl + '/icon/wastes-fridge.png'" alt="">
@@ -46,40 +73,14 @@
       </div>
       <div
         class="waste-grid-item"
-        @click="$router.push('/collect/subscribe')"
+        @click="$router.push('/collect/subscribe/6')"
       >
         <div class="waste-grid-item-pic">
           <img class="icon" :src="baseUrl + '/icon/wastes-3.png'" alt="">
         </div>
         <p class="waste-grid-item-text">金属产品</p>
       </div>
-      <div
-        class="waste-grid-item"
-        @click="$router.push('/collect/subscribe')"
-        >
-        <div class="waste-grid-item-pic">
-          <img class="icon" :src="baseUrl + '/icon/wastes-1.png'" alt="">
-        </div>
-        <p class="waste-grid-item-text">衣服</p>
-      </div>
-      <div
-        class="waste-grid-item"
-        @click="$router.push('/collect/subscribe')"
-        >
-        <div class="waste-grid-item-pic">
-          <img class="icon" :src="baseUrl + '/icon/wastes-2.png'" alt="">
-        </div>
-        <p class="waste-grid-item-text">纸壳</p>
-      </div>
-      <div
-        class="waste-grid-item"
-        @click="$router.push('/collect/subscribe')"
-        >
-        <div class="waste-grid-item-pic">
-          <img class="icon" :src="baseUrl + '/icon/wastes-plastic.png'" alt="">
-        </div>
-        <p class="waste-grid-item-text">塑料</p>
-      </div>
+
     </div>
     <p class="section-title">回收要求</p>
     <div class="rule">

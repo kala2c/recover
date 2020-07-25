@@ -12,8 +12,9 @@ const routes = [
         component: () => import('@/views/collect/home')
       },
       {
-        path: 'subscribe',
-        component: () => import('@/views/collect/subscribe')
+        path: 'subscribe/:wastekindid',
+        component: () => import('@/views/collect/subscribe'),
+        props: true
       },
       {
         path: 'order',

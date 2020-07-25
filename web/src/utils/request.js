@@ -6,9 +6,9 @@ import Qs from 'querystring'
 
 // export const baseURL = 'http://testwx.c2wei.cn/'
 // export const baseURL = 'http://localhost:7000'
-let baseUrl = 'http://zyhs-api.hihigher.com'
+let baseUrl = 'http://recover.lixiaole.com/'
 if (process.env.NODE_ENV === 'development') {
-  baseUrl = 'http://testwx.c2wei.cn/'
+  baseUrl = 'http://recover.lixiaole.com/'
 }
 export const baseURL = baseUrl
 // 创建一个axios实例

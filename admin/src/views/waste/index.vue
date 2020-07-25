@@ -18,6 +18,7 @@
       <el-table :data="wastelist" border stripe>
         <el-table-column type="index" />
         <el-table-column label="名称" prop="name" />
+        <el-table-column label="分类" prop="wastekindname" />
         <el-table-column label="单位" prop="unit" />
         <el-table-column label="价格(元)" prop="price" />
         <el-table-column label="是否开启回收">
@@ -67,6 +68,16 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="addForm.name" />
         </el-form-item>
+        <el-form-item label="分类" prop="wastekindid">
+          <el-select v-model="addForm.wastekindid" placeholder="请选择废品分类">
+            <el-option label="衣服" value="1"></el-option>
+            <el-option label="纸壳" value="2"></el-option>
+            <el-option label="塑料" value="3"></el-option>
+            <el-option label="数码产品" value="4"></el-option>
+            <el-option label="家电产品" value="5"></el-option>
+            <el-option label="金属产品" value="6"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="单位" prop="unit">
           <el-input v-model="addForm.unit" />
         </el-form-item>
@@ -94,9 +105,16 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="editForm.name" />
         </el-form-item>
-<!--        <el-form-item label="图片" prop="image">-->
-<!--          <el-input v-model="editForm.image" />-->
-<!--        </el-form-item>-->
+        <el-form-item label="分类" prop="wastekindid">
+          <el-select v-model="editForm.wastekindid" placeholder="请选择废品分类">
+            <el-option label="衣服" value="1"></el-option>
+            <el-option label="纸壳" value="2"></el-option>
+            <el-option label="塑料" value="3"></el-option>
+            <el-option label="数码产品" value="4"></el-option>
+            <el-option label="家电产品" value="5"></el-option>
+            <el-option label="金属产品" value="6"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="单位" prop="unit">
           <el-input v-model="editForm.unit" />
         </el-form-item>
@@ -135,13 +153,17 @@ export default {
       addForm: {
         name: '',
         price: '',
-        unit: ''
+        unit: '',
+        wastekindid: ''
       },
       editForm: {},
       // 废品表单的验证规则
       wasteFormRules: {
         name: [
           { required: true, message: '请输入废品名称', trigger: 'blur' }
+        ],
+        wastekindid: [
+          { required: true, message: '请选择废品分类', trigger: 'blur' }
         ]
         // price: [
         //   { required: true, message: '请输入废品单价', trigger: 'blur' }
@@ -223,6 +245,7 @@ export default {
         this.$message.error('获取废品信息失败！')
       }
       this.editForm = data.data.wasteinfo
+      this.editForm.wastekindid = this.editForm.wastekindid.toString()
       this.editDialogVisible = true
     },
     // 修改废品信息

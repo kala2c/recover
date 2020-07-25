@@ -16,6 +16,7 @@ use think\exception\ValidateException;
 use think\facade\Validate;
 use app\common\model\OrderMaster as OrderMasterModel;
 use app\common\model\Depot as DepotModel;
+use think\facade\Request;
 
 /**
  * 用户下单 订单进度等
@@ -77,8 +78,14 @@ class Order extends Base
      */
     public function orderInfo()
     {
+        $wastekindid = Request::param('wastekindid');
         $user_id = $this->user_info['uid'];
-        $waste_list = WasteModel::all();
+        if ($wastekindid == ''){
+            $waste_list = WasteModel::all();
+        }else{
+            $waste_list = WasteModel::where('wastekindid','=',$wastekindid)->select();
+        }
+
         $default_address = AddressModel::getDefaultAddress($user_id);
 
         return success([

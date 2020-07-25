@@ -13,6 +13,7 @@ class Waste extends BaseController
 {
 
 
+    const WASTEKINDNAMELIST = ['','衣服','纸壳','塑料','数码产品','家电产品','金属产品'];
     public function WasteList()
     {
         //GET请求，获取废品列表
@@ -38,6 +39,8 @@ class Waste extends BaseController
             $waste->name = Request::param('name');
             $waste->price = Request::param('price');
             $waste->unit = Request::param('unit');
+            $waste->wastekindid = Request::param('wastekindid');
+            $waste->wastekindname = self::WASTEKINDNAMELIST[$waste->wastekindid];
             $waste->save();
             return success([
                 'wasteinfo' => $waste,
@@ -73,6 +76,8 @@ class Waste extends BaseController
             $waste->price = Request::param('price');
             $waste->unit = Request::param('unit');
             $waste->isrecover = Request::param('isrecover');
+            $waste->wastekindid = Request::param('wastekindid');
+            $waste->wastekindname = self::WASTEKINDNAMELIST[$waste->wastekindid];
             $waste->save();
             return success([
                 'wasteinfo' => $waste,

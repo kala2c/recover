@@ -237,9 +237,11 @@ export default {
     }
   },
   created() {
+    var wastekindid = this.$route.params.wastekindid
     this.formWatcher = this.orderForm
     store.dispatch('loading/open')
-    api.getOrderInfo().then(response => {
+    var params = { wastekindid: wastekindid }
+    api.getOrderInfo(params).then(response => {
       const data = response.data
       this.wasteList = data.waste_list
       this.wasteList.forEach(item => {

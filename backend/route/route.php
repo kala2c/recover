@@ -61,8 +61,6 @@ Route::post('/admin/feedback/delete','admin/Feedback/delete');
 Route::get('/admin/dashboard', 'admin/Administrator/dashboard');
 //微信接入相关
 Route::get('/admin/weixin/check', '/index/Index/wxCheck');
-
-
 //微信网页授权登录
 Route::get('/wx/oauth', 'web/Login/oauth');
 //微信js-sdk

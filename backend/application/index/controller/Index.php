@@ -10,6 +10,7 @@ class Index extends Controller
 {
     public function index()
     {
+        $echostr = Request::param('echostr');
         $xml = file_get_contents('php://input');
         $p = xml_parser_create();
         xml_parse_into_struct($p, $xml, $val, $index);
@@ -28,7 +29,7 @@ class Index extends Controller
 //            }
         }
 
-        return 'hello 状元回收';
+        echo $echostr;
     }
     public function wxCheck()
     {

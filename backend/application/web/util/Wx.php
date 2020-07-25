@@ -14,4 +14,5 @@ class Wx
         dump($appId);
         dump($appSecret);
     }
+
 }

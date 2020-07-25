@@ -77,7 +77,8 @@ const getCommunity = (params) => request({
   url: '/collect/community'
 })
 
-const getOrderInfo = () => request({
+const getOrderInfo = (params) => request({
+  params: params,
   url: '/collect/orderinfo'
 })
 
